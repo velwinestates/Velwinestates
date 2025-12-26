@@ -19,7 +19,7 @@ function DeveloperInfoPage() {
             />
           </div>
           <h1 className="company-name notranslate">Netcraft Studio</h1>
-          <p className="company-tagline notranslate">Crafting the Web Tomorrow</p>
+          <p className="company-tagline notranslate">Where Creativity Meets Technology</p>
         </div>
 
         {/* About Section */}
