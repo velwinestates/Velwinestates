@@ -461,7 +461,7 @@ function AppContent({
             <div className="footer-section">
               <h3>Contact Us</h3>
               <p>Email: uzhavarconnect2025@gmail.com</p>
-              <p>Phone: 98422 97056/ 75501 19994 </p>
+              <p>Phone: +91 81100 13838 </p>
             </div>
           </div>
 
