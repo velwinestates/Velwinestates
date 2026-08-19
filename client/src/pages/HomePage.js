@@ -31,6 +31,9 @@ function HomePage({ currentSlide, onBookProject }) {
             <Link to="/farm-details" className="btn btn-primary">   Upload My Farm Details</Link>
             {/* Book a Project button removed as requested */}
           </div>
+          <p style={{marginTop:'1em', color:'#b45309', background:'#fff7ed', border:'1px solid #fdba74', borderRadius:'8px', padding:'0.6em 1em', display:'inline-block', fontWeight:500}}>
+            Note: A visit to your land for verification is chargeable.
+          </p>
         </div>
         <div className="hero-image">
           <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Farm Management" />
