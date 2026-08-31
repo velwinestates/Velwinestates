@@ -120,6 +120,9 @@ export default function LandPage() {
     <div className="land-page">
       <section className="page-header">
         <h1><MdLandscape /> Buy/Sell Land – Uzhavar Bhoomi</h1>
+        <p style={{textAlign:'center', color:'#b45309', background:'#fff7ed', border:'1px solid #fdba74', borderRadius:'8px', padding:'0.75em 1em', maxWidth:'500px', margin:'1em auto 0', fontWeight:500}}>
+          Note: A visit to your land for verification is chargeable.
+        </p>
       </section>
       <div className="land-form-section" style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'70vh'}}>
         <h2 style={{textAlign:'center',marginBottom:'1em'}}>List Your Land for Buy/Sell</h2>

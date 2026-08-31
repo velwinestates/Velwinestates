@@ -112,6 +112,41 @@
       box-shadow: 0 0 0 0 rgba(46, 125, 50, 0);
     }
   }
+
+  @keyframes recentProjectsBlink {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7), 0 10px 25px rgba(46, 125, 50, 0.35);
+    }
+    25% {
+      opacity: 0.7;
+      transform: scale(1.04);
+      box-shadow: 0 0 0 10px rgba(46, 125, 50, 0), 0 10px 25px rgba(46, 125, 50, 0.35);
+    }
+    50% {
+      opacity: 0.95;
+      transform: scale(0.98);
+      box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.5), 0 10px 25px rgba(46, 125, 50, 0.35);
+    }
+    75% {
+      opacity: 0.7;
+      transform: scale(1.04);
+      box-shadow: 0 0 0 10px rgba(46, 125, 50, 0), 0 10px 25px rgba(46, 125, 50, 0.35);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7), 0 10px 25px rgba(46, 125, 50, 0.35);
+    }
+  }
+
+  .recent-projects-link-text {
+    display: inline-block;
+    animation: recentProjectsBlink 0.25s infinite;
+    -webkit-animation: recentProjectsBlink 0.25s infinite;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  }
   
   /* Form input styling */
   .input-field {

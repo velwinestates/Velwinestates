@@ -26,12 +26,64 @@ import DeveloperInfoPage from './pages/DeveloperInfoPage';
 import ScrollToTop from './ScrollToTop';
 import NavbarMenuDemo from './components/NavbarMenuDemo';
 import { apiUrl } from './api';
-// ...existing code...
 
-// Main projects array for carousel and other usage
-
-
-
+const seoPages = {
+  '/': {
+    title: 'Uzhavar Connect | Farm Management Services in Tamil Nadu',
+    description: 'Uzhavar Connect helps farmers with farm management, AMC, drip irrigation, fencing, planting, harvesting, inputs supply, soil testing, and buyer connect in Tamil Nadu.',
+    keywords: 'farm management, agricultural services, Tamil Nadu farming, AMC for farms, farm inputs, irrigation, fencing, crop sales'
+  },
+  '/about': {
+    title: 'About Uzhavar Connect | Trusted Farm Execution Partner',
+    description: 'Learn about Uzhavar Connect and how our farm execution team manages work from planning to execution with photo proof and transparent reporting.',
+    keywords: 'about Uzhavar Connect, farm execution, agricultural services, trusted farm partner'
+  },
+  '/manage-farm': {
+    title: 'Manage My Farm | AMC, Irrigation, Planting & Maintenance',
+    description: 'Manage your farm with Uzhavar Connect through scheduled AMC, crop care, irrigation, fencing, and on-field execution support.',
+    keywords: 'manage farm, farm AMC, irrigation services, farm maintenance, planting service'
+  },
+  '/buy-inputs': {
+    title: 'Buy Agri Inputs | Seeds, Fertilizers & Farm Supplies',
+    description: 'Buy agri inputs including fertilizers, tools, motors, and crop-support supplies for your farm with trusted delivery and support.',
+    keywords: 'buy agri inputs, farm inputs, fertilizers, seeds, irrigation items'
+  },
+  '/sell-produce': {
+    title: 'Sell My Produce | Buyer Connect & Market Support',
+    description: 'Sell your produce through Uzhavar Connect with buyer connection, market guidance, and support for better farm income.',
+    keywords: 'sell produce, farmer buyer connect, agri market, crop sales'
+  },
+  '/projects': {
+    title: 'Our Farm Projects | Recent Work & Past Projects',
+    description: 'Explore Uzhavar Connect recent projects including fencing, irrigation, tank work, polyhouse installations, and farm construction.',
+    keywords: 'farm projects, agri project work, fencing, irrigation projects, tank construction'
+  },
+  '/book-team': {
+    title: 'Book Our Team | Farm Service & Site Visit',
+    description: 'Book a professional farm team for site visits, execution planning, agriculture services, and customized project support.',
+    keywords: 'book farm team, site visit, agriculture team booking, farm service team'
+  },
+  '/farm-details': {
+    title: 'Upload My Farm Details | Request Farm Assessment',
+    description: 'Share your farm details with Uzhavar Connect to get a site assessment, project planning, and a customized execution proposal.',
+    keywords: 'farm details upload, farm assessment, agricultural consulting, site inspection'
+  },
+  '/land': {
+    title: 'Land Services | Buy, Sell & Verify Farm Land',
+    description: 'Explore land buying and selling assistance with verified farm land opportunities, soil insights, and trusted farmland guidance.',
+    keywords: 'farm land, buy land, sell land, farmland verification, agriculture land'
+  },
+  '/construction': {
+    title: 'Farm Construction Services | Tanks, Sheds & Irrigation Works',
+    description: 'Build concrete farm infrastructure such as water tanks, sheds, and irrigation-related construction works with Uzhavar Connect.',
+    keywords: 'farm construction, tank construction, shed building, irrigation construction'
+  },
+  '/our-services': {
+    title: 'Our Services | Farm AMC, Inputs, Sales & Execution',
+    description: 'Explore Uzhavar Connect services for annual maintenance, input supply, crop sales assistance, and execution support for farms.',
+    keywords: 'farm services, AMC services, agri inputs, production support, crop sales'
+  }
+};
 
 function App() {
   // Notification state for farm submission redirect
@@ -227,6 +279,37 @@ function AppContent({
 }) {
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith('/admin');
+  const seoData = seoPages[location.pathname] || seoPages['/'];
+
+  useEffect(() => {
+    document.title = seoData.title;
+
+    const updateMeta = (selector, attribute, value, isProperty = false) => {
+      const meta = document.querySelector(selector) || document.createElement('meta');
+      meta.setAttribute(isProperty ? 'property' : 'name', attribute);
+      meta.setAttribute('content', value);
+      if (!document.querySelector(selector)) {
+        document.head.appendChild(meta);
+      }
+    };
+
+    updateMeta('meta[name="description"]', 'description', seoData.description);
+    updateMeta('meta[name="keywords"]', 'keywords', seoData.keywords);
+    updateMeta('meta[property="og:title"]', 'og:title', seoData.title, true);
+    updateMeta('meta[property="og:description"]', 'og:description', seoData.description, true);
+    updateMeta('meta[property="og:type"]', 'og:type', 'website', true);
+    updateMeta('meta[property="og:url"]', 'og:url', `${window.location.origin}${location.pathname}`, true);
+    updateMeta('meta[name="twitter:title"]', 'twitter:title', seoData.title);
+    updateMeta('meta[name="twitter:description"]', 'twitter:description', seoData.description);
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', `${window.location.origin}${location.pathname}`);
+  }, [location.pathname, seoData]);
 
   // Close menu when route changes
   useEffect(() => {
@@ -328,7 +411,7 @@ function AppContent({
           <div className="navbar-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
             {/* Left side - Logo */}
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5em', fontSize: '1.1em', textDecoration: 'none' }}>
-              <img src={process.env.PUBLIC_URL + '/assert/logo.png'} alt="Uzhavar Connect Logo" className="logo-icon" style={{ height: '45px', width: 'auto' }} />
+              <img src={process.env.PUBLIC_URL + '/logo.jpeg'} alt="Uzhavar Connect Logo" className="logo-icon" style={{ height: '52px', width: 'auto', borderRadius: '50%', boxShadow: '0 6px 16px rgba(0,0,0,0.12)' }} />
               <span className="logo-text" style={{ fontWeight: 700, color: '#388e3c' }}>Uzhavar Connect</span>
             </Link>
             
