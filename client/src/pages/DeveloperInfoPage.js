@@ -13,8 +13,8 @@ function DeveloperInfoPage() {
         <div className="dev-header-card">
           <div className="dev-logo-placeholder">
             <img 
-              src={process.env.PUBLIC_URL + '/logo.jpeg'} 
-              alt="Netcraft Studio Logo" 
+              src={process.env.PUBLIC_URL + '/assert/developer-info-logo.png'} 
+              alt="Uzhavar Connect Logo" 
               className="dev-logo-img"
             />
           </div>
