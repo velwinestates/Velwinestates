@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import 'leaflet/dist/leaflet.css';
 import { Link } from 'react-router-dom';
 import { FaLeaf,FaImage, FaMapMarkerAlt, FaShoppingCart } from 'react-icons/fa';
