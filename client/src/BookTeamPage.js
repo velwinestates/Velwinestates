@@ -103,28 +103,6 @@ export default function BookTeamPage() {
         overflow: 'hidden',
       }}
     >
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          minWidth: '100%',
-          minHeight: '100%',
-          width: 'auto',
-          height: 'auto',
-          transform: 'translate(-50%, -50%)',
-          zIndex: -1,
-          objectFit: 'cover',
-          opacity: 0.45
-        }}
-      >
-        <source src={process.env.PUBLIC_URL + '/videos/farm-bg.mp4'} type="video/mp4" />
-      </video>
       <div style={{
         background: 'rgba(255,255,255,0.95)',
         padding: '2rem 2.5rem',

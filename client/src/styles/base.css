@@ -15,7 +15,7 @@ html, body {
 body {
   font-family: var(--font-family);
   color: var(--text-color);
-  background-color: transparent;
+  background: var(--bg-color);
   line-height: 1.6;
 }
 
@@ -24,6 +24,23 @@ body {
   flex-direction: column;
   min-height: 100vh;
   background: transparent;
+}
+
+main,
+.about-page,
+.projects-page,
+.join-us-page,
+.manage-farm-page,
+.buy-inputs-page,
+.sell-produce-page,
+.land-page,
+.construction-page,
+.our-services-page {
+  background: transparent;
+}
+
+.home-page {
+  background: var(--bg-color);
 }
 
 main {
@@ -37,6 +54,11 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.3;
   color: var(--text-color);
   margin-bottom: var(--spacing-md);
+}
+
+h1, h2 {
+  font-family: var(--font-display);
+  letter-spacing: 0;
 }
 
 h1 {
@@ -76,7 +98,7 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
 }
 
 section {

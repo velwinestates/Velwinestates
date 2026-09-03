@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { apiUrl, imageUrl } from './api';
+import imageUrls from './data/imageUrls';
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState(null);
@@ -221,8 +222,8 @@ export default function CompaniesPage() {
     </div>
   );
 
-  const fallbackMasala = 'https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=400&q=80';
-  const fallbackOrganics = 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80';
+  const fallbackMasala = imageUrls.produce;
+  const fallbackOrganics = imageUrls.coconut;
 
   const renderCompanyDetail = (company) => {
     const filteredProducts = company.products?.filter(product =>

@@ -47,7 +47,7 @@ const Navbar = () => {
     <nav className="navbar" style={{ minHeight: '44px', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
       <div className="navbar-container" style={{ display: 'flex', alignItems: 'center', height: '44px' }}>
         <div className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5em', fontSize: '1em' }}>
-          <img src={process.env.PUBLIC_URL + '/logo.jpeg'} alt="Uzhavar Connect Logo" className="logo-icon" style={{ height: '38px', width: 'auto', borderRadius: '50%' }} />
+          <img src={process.env.PUBLIC_URL + '/logo.jpeg'} alt="Velwin Estates Logo" className="logo-icon" style={{ height: '38px', width: 'auto', borderRadius: '50%' }} />
         </div>
 
         {/* Language Buttons - Always Visible */}

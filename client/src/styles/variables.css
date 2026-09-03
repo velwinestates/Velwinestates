@@ -3,30 +3,30 @@
 
 :root {
   /* Primary Colors */
-  --primary-color: #388e3c;
-  --primary-dark: #2e7d32;
-  --primary-light: #81c784;
+  --primary-color: #285943;
+  --primary-dark: #173c2c;
+  --primary-light: #6f9b7f;
   
   /* Secondary Colors */
-  --accent-color: #ff6d00;
-  --secondary-color: #FFA000;
-  --secondary-light: #FFD54F;
+  --accent-color: #a86b2d;
+  --secondary-color: #b98545;
+  --secondary-light: #dfc29b;
   
   /* Text Colors */
-  --text-color: #333333;
-  --text-light: #757575;
-  --text-dark: #2E2E2E;
+  --text-color: #26332c;
+  --text-light: #5d6b63;
+  --text-dark: #17221b;
   
   /* Background Colors */
-  --bg-color: #ffffff;
-  --bg-light: #f9f9f9;
-  --bg-alt: #f5f7f0;
-  --background-light: #FFFFFF;
-  --background-off-white: #F9F9F9;
-  --background-accent: #F0F7F0;
+  --bg-color: #eef3e8;
+  --bg-light: #f7f8f2;
+  --bg-alt: #dfe9d9;
+  --background-light: #f7f8f2;
+  --background-off-white: #f1f4eb;
+  --background-accent: #e5efe0;
   
   /* Border & Shadow */
-  --border-color: #e0e0e0;
+  --border-color: #d6d2c7;
   --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -35,7 +35,7 @@
   /* Border Radius */
   --radius-sm: 4px;
   --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-lg: 6px;
   
   /* Spacing */
   --spacing-xs: 4px;
@@ -46,7 +46,8 @@
   --spacing-xxl: 48px;
   
   /* Typography */
-  --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --font-display: Georgia, 'Times New Roman', serif;
   
   /* Transitions */
   --transition: all 0.3s ease;

@@ -1,0 +1,114 @@
+/* Formal public-site presentation. Developer page styling remains isolated. */
+body {
+  background: var(--bg-color);
+}
+
+.construction-notice {
+  position: relative;
+  z-index: 999;
+  width: 100%;
+  padding: 0.55rem 1rem;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border-color);
+  color: #000000;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.home-page,
+.about-page,
+.projects-page,
+.join-us-page,
+.manage-farm-page,
+.buy-inputs-page,
+.sell-produce-page,
+.land-page,
+.construction-page,
+.our-services-page {
+  color: var(--text-color);
+  background: var(--bg-color);
+}
+
+.home-page .hero-content,
+.home-page .section-heading-container,
+.about-page .about-statement,
+.about-page .about-mission,
+.about-page .team-member,
+.projects-page .gallery-project-card,
+.join-us-page .join-section,
+.manage-farm-page .tab-pane,
+.buy-inputs-page .coming-soon,
+.sell-produce-page .coming-soon,
+.construction-page .service-card,
+.our-services-page [style*="rgba(255, 255, 255"] {
+  background: var(--bg-light) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 4px 14px rgba(38, 51, 44, 0.07) !important;
+  backdrop-filter: none !important;
+}
+
+.home-page .hero-content {
+  border-left: 4px solid var(--primary-color) !important;
+}
+
+.home-page .hero-content h1,
+.page-header h1,
+.about-page h1,
+.our-services-page h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+.btn,
+button.btn,
+.home-page .recent-projects-link {
+  border-radius: var(--radius-sm) !important;
+  background: var(--primary-color) !important;
+  box-shadow: none !important;
+  text-transform: none;
+}
+
+.btn:hover,
+button.btn:hover {
+  background: var(--primary-dark) !important;
+  transform: none !important;
+}
+
+.home-page .recent-projects-link {
+  animation: none !important;
+  -webkit-animation: none !important;
+}
+
+.construction-page section[style*="linear-gradient"],
+.companies-page section[style*="linear-gradient"] {
+  background: var(--bg-alt) !important;
+}
+
+.service-card:hover,
+.feature-card:hover,
+.step-card:hover,
+.home-page .hero-image img:hover {
+  transform: none !important;
+}
+
+.phase-badge {
+  background: var(--bg-alt) !important;
+  color: var(--primary-dark) !important;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm) !important;
+}
+
+.our-services-page video {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .home-page .hero-content {
+    border-left: 0 !important;
+    border-top: 4px solid var(--primary-color) !important;
+  }
+}

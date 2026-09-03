@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import imageUrls from '../data/imageUrls';
 
 export default function OurServicesPage() {
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -12,7 +13,7 @@ export default function OurServicesPage() {
       id: 1,
       title: 'Farm Management Services',
       description: 'Comprehensive farm management and consultation services',
-      thumbnail: `${process.env.PUBLIC_URL}/assert/demo1.jpeg`,
+      thumbnail: imageUrls.farmWorkers,
       videoUrl: `${process.env.PUBLIC_URL}/videos/demo1.mp4`,
       type: 'video/mp4'
     },
@@ -20,7 +21,7 @@ export default function OurServicesPage() {
       id: 2,
       title: 'Drone Technology',
       description: 'Advanced drone services for crop monitoring and spraying',
-      thumbnail: `${process.env.PUBLIC_URL}/assert/demo2.jpeg`,
+      thumbnail: imageUrls.drone,
       videoUrl: `${process.env.PUBLIC_URL}/videos/demo2.mp4`,
       type: 'video/mp4'
     },
@@ -28,7 +29,7 @@ export default function OurServicesPage() {
       id: 3,
       title: 'Agricultural Consultation',
       description: 'Expert guidance for sustainable farming practices',
-      thumbnail: `${process.env.PUBLIC_URL}/assert/demo3.jpeg`,
+      thumbnail: imageUrls.fertilizer,
       videoUrl: `${process.env.PUBLIC_URL}/videos/demo3.mp4`,
       type: 'video/mp4'
     }
@@ -42,25 +43,25 @@ export default function OurServicesPage() {
     {
       id: 1,
       title: 'Crop Monitoring',
-      image: `${process.env.PUBLIC_URL}/assert/demo1.jpeg`,
+      image: imageUrls.drone,
       description: 'Real-time crop health monitoring with high-resolution imaging'
     },
     {
       id: 2,
       title: 'Precision Spraying',
-      image: `${process.env.PUBLIC_URL}/assert/demo2.jpeg`,
+      image: imageUrls.irrigation,
       description: 'Efficient and precise pesticide and fertilizer application'
     },
     {
       id: 3,
       title: 'Land Mapping',
-      image: `${process.env.PUBLIC_URL}/assert/demo3.jpeg`,
+      image: imageUrls.farmWorkers,
       description: 'Detailed topographical mapping and analysis'
     },
     {
       id: 4,
       title: 'Irrigation Management',
-      image: `${process.env.PUBLIC_URL}/assert/demo1.jpeg`,
+      image: imageUrls.waterTank,
       description: 'Smart irrigation monitoring and optimization'
     }
   ];
@@ -102,29 +103,6 @@ export default function OurServicesPage() {
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          minWidth: '100%',
-          minHeight: '100%',
-          width: 'auto',
-          height: 'auto',
-          transform: 'translate(-50%, -50%)',
-          zIndex: -1,
-          objectFit: 'cover',
-          opacity: 0.4,
-        }}
-      >
-        <source src={process.env.PUBLIC_URL + '/videos/farm-bg.mp4'} type="video/mp4" />
-      </video>
-
       {/* Content Wrapper */}
       <div style={{ 
         position: 'relative',
@@ -154,7 +132,7 @@ export default function OurServicesPage() {
           margin: '0 auto',
           lineHeight: 1.6
         }}>
-          Empowering farmers with cutting-edge technology and expert agricultural solutions
+          Practical agricultural services, field execution, and documented farm support.
         </p>
       </div>
 
@@ -379,7 +357,7 @@ export default function OurServicesPage() {
               <div style={{ 
                 width: '100%', 
                 height: 220, 
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                background: '#ebe8de',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -397,7 +375,7 @@ export default function OurServicesPage() {
                   onError={(e) => {
                     console.error('Failed to load drone image:', e.target.src);
                     e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: white; font-size: 3rem;">🚁</div>`;
+                    e.target.parentElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: #285943; font-size: 1rem;">Image unavailable</div>';
                   }}
                   onLoad={(e) => {
                     console.log('Successfully loaded drone image:', e.target.src);

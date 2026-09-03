@@ -8,7 +8,7 @@ const resources = {
       joinUs: {
         title: "Join Our Team",
         subtitle: "Be part of something bigger",
-        description: "Join Uzhavar Connect and help transform farming in India. We're looking for passionate individuals who want to make a difference.",
+        description: "Join Velwin Estates and help transform farming in India. We're looking for passionate individuals who want to make a difference.",
         whyJoin: "Why Join Us?",
         benefits: {
           impact: {

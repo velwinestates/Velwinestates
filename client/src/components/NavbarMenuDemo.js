@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuHeader } from './DropdownMenu';
+import { Globe, Home, Info, Building2, Wrench, Tractor, ShoppingCart, Banknote, Map, Hammer, Images, Users } from 'lucide-react';
 
 const NavbarMenuDemo = ({ currentLanguage, changeLanguage }) => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const NavbarMenuDemo = ({ currentLanguage, changeLanguage }) => {
     <DropdownMenu
       trigger={
         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          ☰ Menu
+          Menu
         </span>
       }
       align="right"
@@ -17,7 +18,7 @@ const NavbarMenuDemo = ({ currentLanguage, changeLanguage }) => {
       <DropdownMenuHeader>Navigation</DropdownMenuHeader>
       
       <DropdownMenuItem onClick={() => navigate('/')}>
-        🏠 Home
+        <><Home size={16} /> Home</>
       </DropdownMenuItem>
 
       <DropdownMenuItem 
@@ -28,19 +29,19 @@ const NavbarMenuDemo = ({ currentLanguage, changeLanguage }) => {
           fontWeight: '600'
         }}
       >
-        💻 Developer Info
+        Developer Information
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/about')}>
-        ℹ️ About
+        <><Info size={16} /> About</>
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/companies')}>
-        🏢 Our Companies
+        <><Building2 size={16} /> Our Companies</>
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/our-services')}>
-        🛠️ Our Services
+        <><Wrench size={16} /> Our Services</>
       </DropdownMenuItem>
       
       <DropdownMenuSeparator />
@@ -48,33 +49,33 @@ const NavbarMenuDemo = ({ currentLanguage, changeLanguage }) => {
       <DropdownMenuHeader>Services</DropdownMenuHeader>
       
       <DropdownMenuItem onClick={() => navigate('/manage-farm')}>
-        🚜 Manage Farm
+        <><Tractor size={16} /> Manage Farm</>
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/buy-inputs')}>
-        🛒 Buy Inputs
+        <><ShoppingCart size={16} /> Buy Inputs</>
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/sell-produce')}>
-        💰 Sell Produce
+        <><Banknote size={16} /> Sell Produce</>
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/land')}>
-        🏞️ Land
+        <><Map size={16} /> Land</>
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/construction')}>
-        🏗️ Construction
+        <><Hammer size={16} /> Construction</>
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/projects')}>
-        📸 Past Work
+        <><Images size={16} /> Past Work</>
       </DropdownMenuItem>
       
       <DropdownMenuSeparator />
       
       <DropdownMenuItem onClick={() => navigate('/join')}>
-        👥 Join Us
+        <><Users size={16} /> Join Us</>
       </DropdownMenuItem>
 
       <DropdownMenuSeparator />
@@ -91,7 +92,7 @@ const NavbarMenuDemo = ({ currentLanguage, changeLanguage }) => {
           gap: '8px'
         }}
       >
-        🌐 {currentLanguage === 'en' ? 'Switch to தமிழ்' : 'Switch to English'}
+        <><Globe size={16} /> {currentLanguage === 'en' ? 'Switch to தமிழ்' : 'Switch to English'}</>
       </DropdownMenuItem>
     </DropdownMenu>
   );

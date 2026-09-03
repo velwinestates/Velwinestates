@@ -1,6 +1,6 @@
 ﻿/* ==================== MAIN APP STYLESHEET ==================== */
 /* ==========================================================================
-/* Uzhavar Connect - Organized CSS Architecture */
+/* Velwin Estates - Organized CSS Architecture */
 
 /* Import Order:
  * 1. Variables (CSS custom properties)
@@ -47,3 +47,6 @@
 
 /* 10. Responsive & Mobile Styles (must be last to override) */
 @import './styles/responsive.css';
+
+/* 11. Formal public-site presentation */
+@import './styles/formal.css';

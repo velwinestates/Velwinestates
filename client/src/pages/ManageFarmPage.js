@@ -11,6 +11,7 @@ import {
 } from 'react-icons/gi';
 import { GiWoodenFence } from 'react-icons/gi';
 import { apiUrl } from '../api';
+import imageUrls from '../data/imageUrls';
 
 function ManageFarmPage(props) {
   const navigate = useNavigate();
@@ -96,7 +97,6 @@ function ManageFarmPage(props) {
           </button>
         </div>
         
-        <div className="tab-content">
           {activeTab === 'monthly' && (
             <div className="tab-pane">
               <h2>Monthly AMC (Annual Maintenance Contract)</h2>
@@ -167,7 +167,7 @@ function ManageFarmPage(props) {
               <p>Custom fertilizer scheduling based on crop needs and seasonal conditions.</p>
               <div className="fertilizer-content">
                 <div className="fertilizer-image">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9r6-1--iDfA2DNKl5-VDVJd6rXMKskzmw3Q&s" alt="Fertilizer Application" />
+                  <img src={imageUrls.fertilizer} alt="Fertilizer Application" />
                 </div>
                 <div className="fertilizer-info">
                   <h3>Weather-Synced Fertilizer Application</h3>
@@ -190,7 +190,7 @@ function ManageFarmPage(props) {
               <p>Maintain healthy growth and protect your crops from pests.</p>
               <div className="service-details">
                 <div className="service-image">
-                  <img src="https://naturescompanionlandscaping.com/wp-content/uploads/2024/05/General-Landscape-Maintenance.jpg" alt="Pruning & Pest Control" />
+                  <img src={imageUrls.pruning} alt="Pruning & Pest Control" />
                 </div>
                 <div className="service-text">
                   <h3>Expert Pruning Services</h3>
@@ -217,17 +217,17 @@ function ManageFarmPage(props) {
               <p>Build essential farm infrastructure with our experienced construction teams.</p>
               <div className="construction-items">
                 <div className="construction-item">
-                  <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Water Tank" />
+                  <img src={imageUrls.waterTank} alt="Water Tank" />
                   <h3>Water Tanks</h3>
                   <p>Storage solutions for irrigation needs.</p>
                 </div>
                 <div className="construction-item">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg2IXEk5YgEjt7HWuPiCCxdDdIJoDNbTpM7Q&s" alt="Storage Shed" />
+                    <img src={imageUrls.farmShed} alt="Storage Shed" />
                   <h3>Storage Sheds</h3>
                   <p>Protect equipment and harvest.</p>
                 </div>
                 <div className="construction-item">
-                  <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Farmhouse" />
+                  <img src={imageUrls.farmhouse} alt="Farmhouse" />
                   <h3>Farmhouses</h3>
                   <p>Comfortable on-farm living spaces.</p>
                 </div>
@@ -242,7 +242,7 @@ function ManageFarmPage(props) {
               <p>Track all farm activities with detailed documentation.</p>
               <div className="reports-demo">
                 <div className="reports-image">
-                  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Reports Dashboard" />
+                  <img src={imageUrls.reports} alt="Reports Dashboard" />
                 </div>
                 <div className="reports-features">
                   <h3>Our Reporting System Includes:</h3>
@@ -279,7 +279,6 @@ function ManageFarmPage(props) {
             </div>
           )}
         </div>
-      </div>
       
       <div className="farm-cta">
         <div className="cta-buttons">
@@ -335,11 +334,11 @@ function ManageFarmPage(props) {
                   <label>Project Type *</label>
                   <select name="projectType" value={projectForm.projectType} onChange={handleProjectInput} required>
                     <option value="">-- Choose Project Type --</option>
-                    <option value="Fencing">🌿 Fencing</option>
-                    <option value="Drip Irrigation">💧 Drip Irrigation</option>
-                    <option value="Plantation">🌱 Plantation</option>
-                    <option value="Land Preparation">🚜 Land Preparation</option>
-                    <option value="Other">📋 Other</option>
+                    <option value="Fencing">Fencing</option>
+                    <option value="Drip Irrigation">Drip Irrigation</option>
+                    <option value="Plantation">Plantation</option>
+                    <option value="Land Preparation">Land Preparation</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
                 <div className="form-group">

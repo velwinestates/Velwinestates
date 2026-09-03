@@ -17,6 +17,9 @@ import projects from '../data/projects';
 function HomePage({ currentSlide, onBookProject }) {
   return (
     <div className="home-page">
+      <div className="construction-notice" role="status">
+        Our website is currently under construction. We are improving the User  experience and appreciate your patience.
+      </div>
       <Link
         to="/projects"
         className="btn btn-primary recent-projects-link"
@@ -32,10 +35,8 @@ function HomePage({ currentSlide, onBookProject }) {
           fontSize: '0.9rem',
           padding: '0.8rem 1rem',
           borderRadius: '999px',
-          background: 'linear-gradient(135deg, #2e7d32 0%, #3a9a46 100%)',
-          boxShadow: '0 0 0 0 rgba(46, 125, 50, 0.7), 0 10px 25px rgba(46, 125, 50, 0.35)',
-          animation: 'recentProjectsBlink 0.25s infinite',
-          WebkitAnimation: 'recentProjectsBlink 0.25s infinite'
+          background: '#285943',
+          boxShadow: '0 3px 10px rgba(23, 60, 44, 0.18)'
         }}
       >
         <FaImage />
@@ -43,27 +44,22 @@ function HomePage({ currentSlide, onBookProject }) {
       </Link>
       <section className="hero-section">
         <div className="hero-content">
-          <h1>Manage Your Farm Like a Pro. From Soil to Sale.</h1>
-          <p style={{ color: '#388e3c', fontWeight: 'bold' }}>AMC, planting, irrigation, fencing, inputs, tank work, harvesting, buyer connect – all in one app. With photo proof.</p>
-          <div style={{marginBottom: '1em', color: 'green', fontWeight: 'bold'}}>
-          </div>
+          <span className="eyebrow">Velwin Estates</span>
+          <h1>Smart farm management for better yields and calmer decisions.</h1>
+          <p>We help farmers with land planning, annual maintenance, irrigation, fencing, inputs, crop support, and transparent execution tracking.</p>
           <div className="hero-cta">
-            <Link to="/manage-farm" className="btn btn-primary"><GiFarmTractor /> Start Managing My Farm</Link>
-            <Link to="/buy-inputs" className="btn btn-primary"><FaShoppingCart /> Buy Agri Inputs</Link>
-            <Link to="/sell-produce" className="btn btn-primary"><MdSell /> Sell My Produce</Link>
-            <Link to="/book-team" className="btn btn-primary" >Book Our Team</Link>
-            <Link to="/farm-details" className="btn btn-primary">   Upload My Farm Details</Link>
-            {/* Book a Project button removed as requested */}
+            <Link to="/manage-farm" className="btn btn-primary"><GiFarmTractor /> Manage My Farm</Link>
+            <Link to="/buy-inputs" className="btn btn-primary"><FaShoppingCart /> Buy Inputs</Link>
+            <Link to="/sell-produce" className="btn btn-primary"><MdSell /> Sell Produce</Link>
+            <Link to="/book-team" className="btn btn-primary">Book Our Team</Link>
+            <Link to="/farm-details" className="btn btn-primary">Upload Farm Details</Link>
           </div>
-          <p style={{marginTop:'1em', color:'#b45309', background:'#fff7ed', border:'1px solid #fdba74', borderRadius:'8px', padding:'0.6em 1em', display:'inline-block', fontWeight:500}}>
-            Note: A visit to your land for verification is chargeable. <br></br>
-            Site Visit Charges <br></br>
-          Up to 50 KM - ₹4,999/- <br></br>
-          50 - 100KM - ₹9,999/- <br></br>
-(Includes Travel, Field Inspection & Detailed Project Report) </p>
-        </div>
-        <div className="hero-image">
-          <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Farm Management" />
+          <p className="site-visit-note">
+            Site verification visit is chargeable. <br />
+            Up to 50 KM - ₹4,999/- <br />
+            50 - 100 KM - ₹9,999/- <br />
+            Includes travel, field inspection and project report.
+          </p>
         </div>
       </section>
 
@@ -71,8 +67,8 @@ function HomePage({ currentSlide, onBookProject }) {
       <section className="what-we-do-section">
         <div className="section-heading">
             <div className="section-heading-container">
-                <h2><FaLeaf /> We Are Uzhavar Connect – What We Do</h2>
-                <p className="tagline">We are not a consultancy. Not just labour. We are your farm's execution team – structured, documented, scheduled.</p>
+                <h2><FaLeaf /> Velwin Estates – What We Do</h2>
+                <p className="tagline">We are a field-ready execution partner for farmers who need clarity, accountability, and professional farm support.</p>
             </div>
         </div>
         <div className="services-grid">

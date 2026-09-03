@@ -245,37 +245,6 @@ export default function AdminCompaniesPage({ onLogout }) {
       padding: '2rem 1rem',
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
     }}>
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: -1,
-          opacity: 0.3
-        }}
-      >
-        <source src="/videos/farm-video.mp4" type="video/mp4" />
-        <source src="/videos/farm-video.webm" type="video/webm" />
-      </video>
-      
-      {/* Overlay for better readability */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        background: 'rgba(249, 250, 251, 0.85)',
-        zIndex: -1
-      }} />
       
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         {/* Page Header */}

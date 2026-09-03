@@ -37,38 +37,6 @@ export default function AdminDashboard() {
       background: 'rgba(255, 255, 255, 0.95)',
       position: 'relative'
     }}>
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: 0,
-          opacity: 0.3
-        }}
-      >
-        <source src="/videos/farm-bg.mp4" type="video/mp4" />
-      </video>
-      
-      {/* White Overlay */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'rgba(255, 255, 255, 0.85)',
-        pointerEvents: 'none',
-        zIndex: 1
-      }} />
-
       {/* Top Navigation Bar */}
       <nav style={{
         background: 'rgba(255, 255, 255, 0.98)',

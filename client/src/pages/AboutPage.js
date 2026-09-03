@@ -1,7 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import '../App.css';
-import founderImg from '../assert/founder.jpg'
-import adminImg from '../assert/admin.jpg'
+import imageUrls from '../data/imageUrls';
 
 function AboutPage() {
   return (
@@ -10,13 +9,13 @@ function AboutPage() {
         <div className="about-hero-content">
           <h1>Who We Are</h1>
           <div className="about-statement">
-            <p>We are Uzhavar Connect – a full-stack, no-nonsense, execution team for farmers.</p>
-            <p className="highlight">We've built farms. Not decks.</p>
-            <p className="highlight">We don't sell leads. We take responsibility.</p>
+            <p>Velwin Estates is a professional farm execution partner helping landowners and growers manage operations with clarity and accountability.</p>
+            <p className="highlight">We plan carefully, execute efficiently, and report transparently.</p>
+            <p className="highlight">From fieldwork to farm improvement, we focus on dependable results.</p>
           </div>
         </div>
         <div className="about-hero-image">
-          <img src="https://media.istockphoto.com/id/1316735334/photo/young-indian-farmer-with-agronomist-at-banana-field.jpg?s=612x612&w=0&k=20&c=SjD-Bi-oO9LsYUSB69Jphal7nB-DySGiwLb8aDnw8UI=" alt="Farm Workers" />
+          <img src={imageUrls.farmWorkers} alt="Farm Workers" />
         </div>
       </section>
       
@@ -30,12 +29,12 @@ function AboutPage() {
         <h2>Our Team</h2>
         <div className="team-grid">
           <div className="team-member">
-            <img src={founderImg} alt="Founder" />
+            <img src={imageUrls.farmerMobile} alt="Founder" />
             <h3>Velu Samy</h3>
             <p style={{ color: '#388e3c', fontWeight: 'bold' }}>Founder</p>
           </div>
           <div className="team-member">
-            <img src={adminImg} alt="Admin" />
+            <img src={imageUrls.farmWorkers} alt="Team Member" />
             <h3>Prasanth</h3>
             <p style={{ color: '#388e3c', fontWeight: 'bold' }}>Admin</p>
           </div>

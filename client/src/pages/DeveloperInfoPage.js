@@ -14,7 +14,7 @@ function DeveloperInfoPage() {
           <div className="dev-logo-placeholder">
             <img 
               src={process.env.PUBLIC_URL + '/assert/developer-info-logo.png'} 
-              alt="Uzhavar Connect Logo" 
+              alt="Velwin Estates Logo" 
               className="dev-logo-img"
             />
           </div>

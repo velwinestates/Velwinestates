@@ -1,46 +1,47 @@
-import React, { useState, useEffect } from 'react';
-import ConfirmPlan from './ConfirmPlan';
-import AdminDashboard from './admin/AdminDashboard';
-import AdminLogin from './admin/AdminLogin';
+import React, { lazy, Suspense, useState, useEffect } from 'react';
 import ProtectedRoute from './admin/ProtectedRoute';
 import { AdminAuthProvider } from './admin/AdminAuthProvider';
 import 'leaflet/dist/leaflet.css';
-import CompaniesPage from './CompaniesPage';
-import RequestQuotePage from './RequestQuotePage';
-import ProjectsPage from './ProjectsPage';
-import FarmDetailsPage from './FarmDetailsPage';
-import BookTeamPage from './BookTeamPage';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import './App.css';
-import AboutPage from './pages/AboutPage';
 import projects from './data/projects';
-import HomePage from './pages/HomePage';
-import ManageFarmPage from './pages/ManageFarmPage';
-import BuyInputsPage from './pages/BuyInputsPage';
-import SellProducePage from './pages/SellProducePage';
-import JoinUsPage from './pages/JoinUsPage';
-import LandPage from './pages/LandPage';
-import ConstructionPage from './pages/ConstructionPage';
-import OurServicesPage from './pages/OurServicesPage';
-import DeveloperInfoPage from './pages/DeveloperInfoPage';
 import ScrollToTop from './ScrollToTop';
 import NavbarMenuDemo from './components/NavbarMenuDemo';
 import { apiUrl } from './api';
 
+const ConfirmPlan = lazy(() => import('./ConfirmPlan'));
+const AdminDashboard = lazy(() => import('./admin/AdminDashboard'));
+const AdminLogin = lazy(() => import('./admin/AdminLogin'));
+const CompaniesPage = lazy(() => import('./CompaniesPage'));
+const RequestQuotePage = lazy(() => import('./RequestQuotePage'));
+const ProjectsPage = lazy(() => import('./ProjectsPage'));
+const FarmDetailsPage = lazy(() => import('./FarmDetailsPage'));
+const BookTeamPage = lazy(() => import('./BookTeamPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const HomePage = lazy(() => import('./pages/HomePage'));
+const ManageFarmPage = lazy(() => import('./pages/ManageFarmPage'));
+const BuyInputsPage = lazy(() => import('./pages/BuyInputsPage'));
+const SellProducePage = lazy(() => import('./pages/SellProducePage'));
+const JoinUsPage = lazy(() => import('./pages/JoinUsPage'));
+const LandPage = lazy(() => import('./pages/LandPage'));
+const ConstructionPage = lazy(() => import('./pages/ConstructionPage'));
+const OurServicesPage = lazy(() => import('./pages/OurServicesPage'));
+const DeveloperInfoPage = lazy(() => import('./pages/DeveloperInfoPage'));
+
 const seoPages = {
   '/': {
-    title: 'Uzhavar Connect | Farm Management Services in Tamil Nadu',
-    description: 'Uzhavar Connect helps farmers with farm management, AMC, drip irrigation, fencing, planting, harvesting, inputs supply, soil testing, and buyer connect in Tamil Nadu.',
+    title: 'Velwin Estates | Farm Management Services in Tamil Nadu',
+    description: 'Velwin Estates helps farmers with farm management, AMC, drip irrigation, fencing, planting, harvesting, inputs supply, soil testing, and buyer connect in Tamil Nadu.',
     keywords: 'farm management, agricultural services, Tamil Nadu farming, AMC for farms, farm inputs, irrigation, fencing, crop sales'
   },
   '/about': {
-    title: 'About Uzhavar Connect | Trusted Farm Execution Partner',
-    description: 'Learn about Uzhavar Connect and how our farm execution team manages work from planning to execution with photo proof and transparent reporting.',
-    keywords: 'about Uzhavar Connect, farm execution, agricultural services, trusted farm partner'
+    title: 'About Velwin Estates | Trusted Farm Execution Partner',
+    description: 'Learn about Velwin Estates and how our farm execution team manages work from planning to execution with photo proof and transparent reporting.',
+    keywords: 'about Velwin Estates, farm execution, agricultural services, trusted farm partner'
   },
   '/manage-farm': {
     title: 'Manage My Farm | AMC, Irrigation, Planting & Maintenance',
-    description: 'Manage your farm with Uzhavar Connect through scheduled AMC, crop care, irrigation, fencing, and on-field execution support.',
+    description: 'Manage your farm with Velwin Estates through scheduled AMC, crop care, irrigation, fencing, and on-field execution support.',
     keywords: 'manage farm, farm AMC, irrigation services, farm maintenance, planting service'
   },
   '/buy-inputs': {
@@ -50,12 +51,12 @@ const seoPages = {
   },
   '/sell-produce': {
     title: 'Sell My Produce | Buyer Connect & Market Support',
-    description: 'Sell your produce through Uzhavar Connect with buyer connection, market guidance, and support for better farm income.',
+    description: 'Sell your produce through Velwin Estates with buyer connection, market guidance, and support for better farm income.',
     keywords: 'sell produce, farmer buyer connect, agri market, crop sales'
   },
   '/projects': {
     title: 'Our Farm Projects | Recent Work & Past Projects',
-    description: 'Explore Uzhavar Connect recent projects including fencing, irrigation, tank work, polyhouse installations, and farm construction.',
+    description: 'Explore Velwin Estates recent projects including fencing, irrigation, tank work, polyhouse installations, and farm construction.',
     keywords: 'farm projects, agri project work, fencing, irrigation projects, tank construction'
   },
   '/book-team': {
@@ -65,7 +66,7 @@ const seoPages = {
   },
   '/farm-details': {
     title: 'Upload My Farm Details | Request Farm Assessment',
-    description: 'Share your farm details with Uzhavar Connect to get a site assessment, project planning, and a customized execution proposal.',
+    description: 'Share your farm details with Velwin Estates to get a site assessment, project planning, and a customized execution proposal.',
     keywords: 'farm details upload, farm assessment, agricultural consulting, site inspection'
   },
   '/land': {
@@ -75,12 +76,12 @@ const seoPages = {
   },
   '/construction': {
     title: 'Farm Construction Services | Tanks, Sheds & Irrigation Works',
-    description: 'Build concrete farm infrastructure such as water tanks, sheds, and irrigation-related construction works with Uzhavar Connect.',
+    description: 'Build concrete farm infrastructure such as water tanks, sheds, and irrigation-related construction works with Velwin Estates.',
     keywords: 'farm construction, tank construction, shed building, irrigation construction'
   },
   '/our-services': {
     title: 'Our Services | Farm AMC, Inputs, Sales & Execution',
-    description: 'Explore Uzhavar Connect services for annual maintenance, input supply, crop sales assistance, and execution support for farms.',
+    description: 'Explore Velwin Estates services for annual maintenance, input supply, crop sales assistance, and execution support for farms.',
     keywords: 'farm services, AMC services, agri inputs, production support, crop sales'
   }
 };
@@ -385,34 +386,14 @@ function AppContent({
           </div>
         )}
 
-        {/* Global Background Video */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="background-video"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            objectFit: 'cover',
-            zIndex: -1,
-            pointerEvents: 'none',
-            opacity: 0.45
-          }}
-        >
-          <source src={process.env.PUBLIC_URL + '/videos/farm-bg.mp4'} type="video/mp4" />
-        </video>
         {!isAdminPage && (
+        <>
         <nav className="navbar" style={{ minHeight: '70px', padding: '0 1.5em', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
           <div className="navbar-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
             {/* Left side - Logo */}
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5em', fontSize: '1.1em', textDecoration: 'none' }}>
-              <img src={process.env.PUBLIC_URL + '/logo.jpeg'} alt="Uzhavar Connect Logo" className="logo-icon" style={{ height: '52px', width: 'auto', borderRadius: '50%', boxShadow: '0 6px 16px rgba(0,0,0,0.12)' }} />
-              <span className="logo-text" style={{ fontWeight: 700, color: '#388e3c' }}>Uzhavar Connect</span>
+              <img src={process.env.PUBLIC_URL + '/logo.jpeg'} alt="Velwin Estates Logo" className="logo-icon" style={{ height: '52px', width: 'auto', borderRadius: '50%', boxShadow: '0 6px 16px rgba(0,0,0,0.12)' }} />
+              <span className="logo-text" style={{ fontWeight: 700, color: '#388e3c' }}>Velwin Estates</span>
             </Link>
             
             {/* Right side - Menu Only */}
@@ -422,11 +403,13 @@ function AppContent({
             />
           </div>
         </nav>
+        </>
         )}
 
         <ScrollToTop />
         
         <main>
+          <Suspense fallback={<div className="page-loading" role="status">Loading page...</div>}>
           <Routes>
             <Route path="/" element={<HomePage currentSlide={currentSlide} />} />
             <Route path="/farm-details" element={<FarmDetailsPage />} />
@@ -472,6 +455,7 @@ function AppContent({
               </AdminAuthProvider>
             } />
           </Routes>
+          </Suspense>
           {/* Soil Test Modal for Fertilizer Plan - only rendered in App */}
           {showSoilTestModal && (
             <div className="modal-overlay">
@@ -511,10 +495,10 @@ function AppContent({
           )}
         </main>
   <footer className="footer">
-          {/* Row 1 - Uzhavar Connect */}
+          {/* Row 1 - Velwin Estates */}
           <div className="footer-header">
-            <h2>Uzhavar Connect</h2>
-            <p>Manage Your Farm Like a Pro. From Soil to Sale.</p>
+            <h2>Velwin Estates</h2>
+            <p>Professional farm management from planning to harvest.</p>
           </div>
 
           {/* Row 2 - Three Columns */}
@@ -563,7 +547,7 @@ function AppContent({
 
           {/* Footer Bottom */}
           <div className="footer-bottom">
-            <p>&copy; {new Date().getFullYear()} Uzhavar Connect. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Velwin Estates. All rights reserved.</p>
             <p>Powered by Netcraft Studio</p>
           </div>
         </footer>

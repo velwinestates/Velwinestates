@@ -4,6 +4,7 @@ import { apiUrl } from '../api';
 import { FaUser, FaMapMarkerAlt, FaUserFriends, FaSeedling, FaTools } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import '../i18n';
+import imageUrls from '../data/imageUrls';
 
 export default function JoinUsPage() {
   const { i18n } = useTranslation();
@@ -196,7 +197,7 @@ export default function JoinUsPage() {
     return (
       <div className="join-us-page notranslate">
         <section className="page-header">
-          <h1><FaUserFriends /> {i18n.language === 'ta' ? 'உழவர் கனெக்ட்டில் சேருங்கள்' : 'Join Uzhavar Connect'}</h1>
+          <h1><FaUserFriends /> {i18n.language === 'ta' ? 'வேல்வின் எஸ்டேட்ஸில் சேருங்கள்' : 'Join Velwin Estates'}</h1>
           <p>{i18n.language === 'ta' ? 'தொடங்க உங்கள் பதிவு வகையைத் தேர்ந்தெடுக்கவும்' : 'Choose your registration type to get started'}</p>
         </section>
         
@@ -225,13 +226,13 @@ export default function JoinUsPage() {
               </div>
             </div>
             <div className="join-image">
-              <img src="https://media.istockphoto.com/id/1330214199/photo/indian-farmer-busy-using-mobile-phone-while-sitting-in-between-the-crop-seedlings-inside.jpg?s=612x612&w=0&k=20&c=PmGOwjZlQdOhETmjVwBoT4thL3mJn3VfEm5q9doj4aU=" alt="Farmer Using App" />
+              <img src={imageUrls.farmerMobile} alt="Farmer Using App" />
             </div>
           </div>
           
           <div className="join-section workers">
             <div className="join-image">
-              <img src="https://pub-b47a7c74540d40228598178154fb4b56.r2.dev/2023/10/Azure-OpenAI-Service-India-blog-hero.jpg" alt="Farm Workers" />
+              <img src={imageUrls.farmWorkers} alt="Farm Workers" />
             </div>
             <div className="join-content" style={{ textAlign: 'center' }}>
               <h2 style={{ textAlign: 'center' }}>

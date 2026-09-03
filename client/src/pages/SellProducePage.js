@@ -1,21 +1,22 @@
 import { MdSell } from "react-icons/md";
 import { FaImage,FaHandshake, FaClipboardList,FaCheckCircle,FaFileAlt } from "react-icons/fa";
+import imageUrls from '../data/imageUrls';
 
 function SellProducePage() {
   return (
     <div className="sell-produce-page">
       <section className="page-header">
         <h1><MdSell /> Sell My Produce – Uzhavar Bazaar</h1>
-        <div className="phase-badge">Phase 2 – Under Construction</div>
+        <div className="phase-badge">Service information</div>
       </section>
       
       <div className="coming-soon">
         <div className="coming-soon-image">
-          <img src="https://img.freepik.com/premium-photo/indian-vegetable-market-seller-with-lush-fresh-produce_1174497-154470.jpg" alt="Farm Fresh Produce" />
+          <img src={imageUrls.produce} alt="Farm Fresh Produce" />
         </div>
         <div className="coming-soon-content">
-          <h2>Coming Soon!</h2>
-          <p>We're creating a marketplace to connect farmers directly with buyers.</p>
+          <h2>Produce Marketing Support</h2>
+          <p>We are developing a structured service to help farmers prepare, present, and connect their produce with suitable buyers.</p>
           <div className="features-preview">
             <div className="feature">
               <FaImage className="feature-icon" />
@@ -38,7 +39,7 @@ function SellProducePage() {
               <p>APEDA / FPC / Invoice help</p>
             </div>
           </div>
-          <button className="btn btn-primary">Get Notified When Ready</button>
+          <button className="btn btn-primary">Enquire About Produce Sales</button>
         </div>
       </div>
     </div>
