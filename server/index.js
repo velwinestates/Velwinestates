@@ -27,27 +27,32 @@ const upload = multer({
 });
 
 
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null;
+
 const allowedOrigins = [
-  'https://www.uzhavarconnect.com',        // Custom production domain
-  'https://uzhavarconnect.com',            // Custom production domain (without www)
-  'https://uzhavar-gvhc.onrender.com',     // production frontend on Render (new URL)
-  'https://uzhavar-fg5p.onrender.com',
-  'http://localhost:3000',                 // CRA dev
-  'http://localhost:3001',                 // CRA dev alternate port
-  'http://localhost:4000'                  // Backend itself (for proxy)
-];
+  'https://www.uzhavarconnect.com',
+  'https://uzhavarconnect.com',
+  frontendUrl,
+  vercelUrl,
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:4000'
+].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, curl, Postman, or same-origin via proxy)
     if (!origin) return callback(null, true);
-    
+
     // Remove trailing slash for comparison
     const normalizedOrigin = origin.replace(/\/$/, '');
     const normalizedAllowedOrigins = allowedOrigins.map(o => o.replace(/\/$/, ''));
-    
-    // Allow if origin is in the allowed list
-    if (normalizedAllowedOrigins.indexOf(normalizedOrigin) === -1) {
+
+    const isAllowedVercelOrigin = normalizedOrigin.endsWith('.vercel.app') || normalizedOrigin.includes('.vercel.app');
+
+    // Allow if origin is in the allowed list or matches a Vercel preview domain
+    if (normalizedAllowedOrigins.indexOf(normalizedOrigin) === -1 && !isAllowedVercelOrigin) {
       console.warn('⚠️ CORS blocked origin:', origin);
       return callback(new Error('CORS policy does not allow access from this origin.'), false);
     }
@@ -1126,8 +1131,8 @@ if (process.env.RENDER && process.env.RENDER_EXTERNAL_URL) {
   }, 10 * 60 * 1000); // 10 minutes
 }
 
-// For local development
-if (process.env.NODE_ENV !== 'production' || process.env.RENDER) {
+// For local development or single-port production startup
+if (process.env.NODE_ENV !== 'production' || process.env.RENDER || process.env.PORT) {
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server listening on port ${PORT}`);
   });

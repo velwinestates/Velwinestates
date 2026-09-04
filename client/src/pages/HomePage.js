@@ -18,6 +18,7 @@ function HomePage({ currentSlide, onBookProject }) {
   return (
     <div className="home-page">
       <div className="construction-notice" role="status">
+       
         Our website is currently under construction. We are improving the User  experience and appreciate your patience.
       </div>
       <Link
