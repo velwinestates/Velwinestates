@@ -18,15 +18,17 @@ function HomePage({ currentSlide, onBookProject }) {
   return (
     <div className="home-page">
       <div className="construction-notice" role="status">
-       
-        Our website is currently under construction. We are improving the User  experience and appreciate your patience.
+        <span className="construction-notice-label">Site update</span>
+        <span className="construction-notice-message">
+          Our website is still under construction. Thank you for your patience while we improve your experience.
+        </span>
       </div>
       <Link
         to="/projects"
         className="btn btn-primary recent-projects-link"
         style={{
           position: 'fixed',
-          top: '90px',
+          bottom: '20px',
           right: '20px',
           zIndex: 2500,
           display: 'flex',
