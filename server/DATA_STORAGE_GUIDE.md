@@ -1,6 +1,6 @@
-# Data Storage Guide - Uzhavar Connect
+# Data Storage Guide - Velwin Estates
 
-This document explains where all form submission data is stored when users fill out forms on the Uzhavar Connect platform.
+This document explains where all form submission data is stored when users fill out forms on the Velwin Estates platform.
 
 ## 📁 Storage Locations
 
@@ -36,7 +36,7 @@ This document explains where all form submission data is stored when users fill 
 [
   {
     "receivedAt": "2025-10-15T10:30:00.000Z",
-    "toEmail": "uzhavarconnect2025@gmail.com",
+    "toEmail": "velwinestates@gmail.com",
     "subject": "Book My Team Submission from John Doe",
     "payload": {
       "name": "John Doe",
@@ -88,21 +88,21 @@ This document explains where all form submission data is stored when users fill 
 ### View All Form Submissions:
 - **Endpoint**: `GET /api/submissions`
 - **Authentication**: Requires admin key
-- **Headers**: `x-admin-key: uzhavar2025` or `?adminKey=uzhavar2025`
+- **Headers**: `x-admin-key: velwinbest@12` or `?adminKey=velwinbest@12`
 
 ### View User Registration Data:
 - **Endpoint**: `GET /api/user-data`
 - **Authentication**: Requires admin key
-- **Headers**: `x-admin-key: uzhavar2025` or `?adminKey=uzhavar2025`
+- **Headers**: `x-admin-key: velwinbest@12` or `?adminKey=velwinbest@12`
 
 ### Example Admin Request:
 ```bash
-curl -H "x-admin-key: uzhavar2025" http://localhost:4000/api/submissions
+curl -H "x-admin-key: velwinbest@12" http://localhost:4000/api/submissions
 ```
 
 ## 📧 Email Configuration
 
-- **Recipient**: uzhavarconnect2025@gmail.com
+- **Recipient**: velwinestates@gmail.com
 - **Status**: Currently storing locally (SEND_EMAILS=false)
 - **To Enable Real Emails**: 
   1. Set `SEND_EMAILS=true` in `.env`
@@ -156,6 +156,6 @@ curl -H "x-admin-key: uzhavar2025" http://localhost:4000/api/submissions
 
 ## 📞 Support
 
-All data is automatically sent to: **uzhavarconnect2025@gmail.com**
+All data is automatically sent to: **velwinestates@gmail.com**
 
 For technical support with data access or email configuration, check the server logs and ensure the backend is running on port 4000.

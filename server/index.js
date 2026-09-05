@@ -242,6 +242,10 @@ app.post('/api/companies', upload.single('logo'), async (req, res) => {
   console.log('➕ POST /api/companies - Creating new company');
   console.log('📝 Request body:', req.body);
   console.log('📝 File uploaded:', req.file ? req.file.originalname : 'none');
+
+  if (!req.file) {
+    return res.status(400).json({ error: 'A company logo file is required and must be uploaded to Cloudinary.' });
+  }
   
   let logoPath = req.body.logo || '';
   
@@ -460,6 +464,10 @@ app.post('/api/companies/:companyId/products', upload.single('image'), async (re
   console.log('➕ POST /api/companies/:companyId/products - Adding product');
   console.log('📝 Company ID:', req.params.companyId);
   console.log('📝 Request body:', req.body);
+
+  if (!req.file) {
+    return res.status(400).json({ error: 'A product image file is required and must be uploaded to Cloudinary.' });
+  }
   
   let imagePath = req.body.image || '';
   
@@ -855,6 +863,50 @@ app.post('/api/send-email', async (req, res) => {
       details: error.message,
       errorType: error.name 
     });
+  }
+});
+
+// Get saved page media overrides
+app.get('/api/site-media', async (req, res) => {
+  try {
+    if (!db.isConfigured) return res.json({});
+    const result = await db.query('SELECT page, slot, image_url FROM site_media ORDER BY page, slot');
+    const media = {};
+    result.rows.forEach(row => { media[`${row.page}.${row.slot}`] = row.image_url; });
+    res.json(media);
+  } catch (error) {
+    console.error('Error reading page media:', error.message);
+    res.status(500).json({ error: 'Failed to load page media' });
+  }
+});
+
+app.get('/api/site-media/:page', async (req, res) => {
+  try {
+    if (!db.isConfigured) return res.json({});
+    const result = await db.query('SELECT slot, image_url FROM site_media WHERE page = $1', [req.params.page]);
+    const media = {};
+    result.rows.forEach(row => { media[row.slot] = row.image_url; });
+    res.json(media);
+  } catch (error) {
+    console.error('Error reading page media:', error.message);
+    res.status(500).json({ error: 'Failed to load page media' });
+  }
+});
+
+app.put('/api/site-media/:page/:slot', upload.single('image'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'An image file is required' });
+  try {
+    const result = await uploadToCloudinary(req.file.buffer, 'uzhavar/site-media');
+    const saved = await db.query(`
+      INSERT INTO site_media (page, slot, image_url, updated_at)
+      VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+      ON CONFLICT (page, slot) DO UPDATE SET image_url = EXCLUDED.image_url, updated_at = CURRENT_TIMESTAMP
+      RETURNING image_url
+    `, [req.params.page, req.params.slot, result.secure_url]);
+    res.json({ url: saved.rows[0].image_url });
+  } catch (error) {
+    console.error('Error saving page media:', error.message);
+    res.status(500).json({ error: 'Failed to save page media' });
   }
 });
 

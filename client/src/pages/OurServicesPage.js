@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import imageUrls from '../data/imageUrls';
+import usePageMedia from '../hooks/usePageMedia';
 
 export default function OurServicesPage() {
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const media = usePageMedia('services');
+  const image = (slot, fallback) => media[slot] || fallback;
 
   // Log the PUBLIC_URL for debugging
   console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
@@ -13,7 +16,7 @@ export default function OurServicesPage() {
       id: 1,
       title: 'Farm Management Services',
       description: 'Comprehensive farm management and consultation services',
-      thumbnail: imageUrls.farmWorkers,
+      thumbnail: image('farmWorkers', imageUrls.farmWorkers),
       videoUrl: `${process.env.PUBLIC_URL}/videos/demo1.mp4`,
       type: 'video/mp4'
     },
@@ -21,7 +24,7 @@ export default function OurServicesPage() {
       id: 2,
       title: 'Drone Technology',
       description: 'Advanced drone services for crop monitoring and spraying',
-      thumbnail: imageUrls.drone,
+      thumbnail: image('drone', imageUrls.drone),
       videoUrl: `${process.env.PUBLIC_URL}/videos/demo2.mp4`,
       type: 'video/mp4'
     },
@@ -29,7 +32,7 @@ export default function OurServicesPage() {
       id: 3,
       title: 'Agricultural Consultation',
       description: 'Expert guidance for sustainable farming practices',
-      thumbnail: imageUrls.fertilizer,
+      thumbnail: image('fertilizer', imageUrls.fertilizer),
       videoUrl: `${process.env.PUBLIC_URL}/videos/demo3.mp4`,
       type: 'video/mp4'
     }
@@ -43,25 +46,25 @@ export default function OurServicesPage() {
     {
       id: 1,
       title: 'Crop Monitoring',
-      image: imageUrls.drone,
+      image: image('drone', imageUrls.drone),
       description: 'Real-time crop health monitoring with high-resolution imaging'
     },
     {
       id: 2,
       title: 'Precision Spraying',
-      image: imageUrls.irrigation,
+      image: image('irrigation', imageUrls.irrigation),
       description: 'Efficient and precise pesticide and fertilizer application'
     },
     {
       id: 3,
       title: 'Land Mapping',
-      image: imageUrls.farmWorkers,
+      image: image('farmWorkers', imageUrls.farmWorkers),
       description: 'Detailed topographical mapping and analysis'
     },
     {
       id: 4,
       title: 'Irrigation Management',
-      image: imageUrls.waterTank,
+      image: image('waterTank', imageUrls.waterTank),
       description: 'Smart irrigation monitoring and optimization'
     }
   ];

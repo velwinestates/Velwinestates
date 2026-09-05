@@ -6,11 +6,14 @@ import { useState, useEffect } from 'react';
 import '../App.css';
 import imageUrls from '../data/imageUrls';
 import projects from '../data/projects';
+import usePageMedia from '../hooks/usePageMedia';
 
 function ConstructionPage() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [folders, setFolders] = useState([]);
+  const media = usePageMedia('construction');
+  const image = (slot, fallback) => media[slot] || fallback;
 
   // Define folder categories with icons and colors
   const folderCategories = [
@@ -27,15 +30,15 @@ function ConstructionPage() {
   useEffect(() => {
     // Get all images for "All Projects" folder
     const allImages = [
-      { id: 1, src: imageUrls.construction, title: 'Construction Project 1' },
-      { id: 2, src: imageUrls.farmhouse, title: 'Construction Project 2' },
-      { id: 3, src: imageUrls.pool, title: 'Construction Project 3' },
-      { id: 4, src: imageUrls.waterTank, title: 'Construction Project 4' },
-      { id: 5, src: imageUrls.fencing, title: 'Construction Project 5' },
-      { id: 6, src: imageUrls.polyhouse, title: 'Construction Project 6' },
-      { id: 7, src: imageUrls.livestock, title: 'Construction Project 7' },
-      { id: 8, src: imageUrls.farmShed, title: 'Construction Project 8' },
-      { id: 9, src: imageUrls.irrigation, title: 'Construction Project 9' }
+      { id: 1, src: image('hero', imageUrls.construction), title: 'Construction Project 1' },
+      { id: 2, src: image('farmhouse', imageUrls.farmhouse), title: 'Construction Project 2' },
+      { id: 3, src: image('pool', imageUrls.pool), title: 'Construction Project 3' },
+      { id: 4, src: image('waterTank', imageUrls.waterTank), title: 'Construction Project 4' },
+      { id: 5, src: image('fencing', imageUrls.fencing), title: 'Construction Project 5' },
+      { id: 6, src: image('polyhouse', imageUrls.polyhouse), title: 'Construction Project 6' },
+      { id: 7, src: image('livestock', imageUrls.livestock), title: 'Construction Project 7' },
+      { id: 8, src: image('farmShed', imageUrls.farmShed), title: 'Construction Project 8' },
+      { id: 9, src: image('irrigation', imageUrls.irrigation), title: 'Construction Project 9' }
     ];
 
     const organizedFolders = [
@@ -46,7 +49,7 @@ function ConstructionPage() {
     ];
 
     setFolders(organizedFolders);
-  }, []);
+  }, [media]);
 
   return (
     <div className="construction-page">
@@ -71,7 +74,7 @@ function ConstructionPage() {
           {/* Top Request Quote button removed as requested */}
         </div>
         <div className="intro-image">
-          <img src={imageUrls.construction} alt="Farm Construction" />
+          <img src={image('hero', imageUrls.construction)} alt="Farm Construction" />
         </div>
       </section>
 
@@ -80,42 +83,42 @@ function ConstructionPage() {
         <h2>Our Construction Services</h2>
         <div className="service-cards">
           <div className="service-card">
-        <img src={imageUrls.farmhouse} alt="Farmhouse" />
+        <img src={image('farmhouse', imageUrls.farmhouse)} alt="Farmhouse" />
         <h3>Farmhouses</h3>
         <p>Elegant farm living with modern comforts.</p>
         <p>Perfect for retreats or permanent residence.</p>
       </div>
 
       <div className="service-card">
-        <img src={imageUrls.pool} alt="Swimming Pool" />
+        <img src={image('pool', imageUrls.pool)} alt="Swimming Pool" />
         <h3>Swimming Pools</h3>
         <p>Luxury pools designed for relaxation & fun.</p>
         <p>Durable, stylish, and low-maintenance.</p>
       </div>
 
       <div className="service-card">
-        <img src={imageUrls.waterTank} alt="Water Tanks" />
+        <img src={image('waterTank', imageUrls.waterTank)} alt="Water Tanks" />
         <h3>Water Tanks</h3>
         <p>Reliable storage for irrigation & livestock.</p>
         <p>Built strong, lasting through all seasons.</p>
       </div>
 
       <div className="service-card">
-        <img src={imageUrls.fencing} alt="Fencing" />
+        <img src={image('fencing', imageUrls.fencing)} alt="Fencing" />
         <h3>Fencing</h3>
         <p>Secure & durable fencing solutions.</p>
         <p>Protect crops, livestock, and property.</p>
       </div>
 
       <div className="service-card">
-        <img src={imageUrls.polyhouse} alt="Polyhouse" />
+        <img src={image('polyhouse', imageUrls.polyhouse)} alt="Polyhouse" />
         <h3>Polyhouse</h3>
         <p>Climate-controlled farming spaces.</p>
         <p>Boosts yield with advanced technology.</p>
       </div>
 
       <div className="service-card">
-        <img src={imageUrls.livestock} alt="Cow & Goat Shed" />
+        <img src={image('livestock', imageUrls.livestock)} alt="Cow & Goat Shed" />
         <h3>Cow & Goat Sheds</h3>
         <p>Hygienic, ventilated, and durable shelters.</p>
         <p>Designed for animal comfort & health.</p>

@@ -55,7 +55,7 @@ export const authHelper = {
   // Login user
   login: (username, password) => {
     // Simple authentication (in production, this should be done server-side)
-    if (username === 'admin' && password === 'uzhavar2025') {
+    if (username === 'admin' && password === 'velwinbest@12') {
       const authData = {
         authenticated: true,
         username: username

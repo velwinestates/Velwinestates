@@ -1,7 +1,7 @@
 {
   "name": "uzhavar-connect",
   "version": "1.0.0",
-  "description": "Uzhavar Connect - Agricultural Services Platform",
+  "description": "Velwin Estates - Agricultural Services Platform",
   "main": "server/index.js",
   "scripts": {
     "build": "npm install && npm install --prefix server && npm install --prefix client && npm run build --prefix client",

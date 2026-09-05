@@ -4,6 +4,7 @@ import { useAdminAuth } from './AdminAuthProvider';
 import AdminCompaniesPage from './AdminCompaniesPage';
 import AdminPlansPage from './AdminPlansPage';
 import AdminSubmissionsPage from './AdminSubmissionsPage';
+import AdminMediaPage from './AdminMediaPage';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ export default function AdminDashboard() {
   const navItems = [
     { id: 'companies', label: 'Companies & Products', icon: '🏢', path: '/admin/companies' },
     { id: 'plans', label: 'Plans Management', icon: '📋', path: '/admin/plans' },
+    { id: 'media', label: 'Page Images', icon: '🖼️', path: '/admin/media' },
     { id: 'submissions', label: 'Form Submissions', icon: '📨', path: '/admin/submissions' }
   ];
 
@@ -73,8 +75,8 @@ export default function AdminDashboard() {
               boxShadow: '0 4px 15px rgba(201, 168, 106, 0.3)'
             }}>
               <img 
-                src="/assert/logo.png" 
-                alt="Uzhavar Logo" 
+                src={process.env.PUBLIC_URL + '/logo.jpeg'}
+                alt="Velwin Estates Logo"
                 style={{ 
                   width: '50px', 
                   height: '50px', 
@@ -93,7 +95,7 @@ export default function AdminDashboard() {
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
               }}>
-                Uzhavar Admin
+                Velwin Estates Admin
               </h1>
               <p style={{ 
                 margin: 0, 
@@ -329,6 +331,7 @@ export default function AdminDashboard() {
           <Route path="/" element={<Navigate to="/admin/companies" replace />} />
           <Route path="/companies" element={<AdminCompaniesPage onLogout={handleLogout} />} />
           <Route path="/plans" element={<AdminPlansPage onLogout={handleLogout} />} />
+          <Route path="/media" element={<AdminMediaPage />} />
           <Route path="/submissions" element={<AdminSubmissionsPage onLogout={handleLogout} />} />
         </Routes>
       </div>

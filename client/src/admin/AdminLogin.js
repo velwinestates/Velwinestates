@@ -79,7 +79,7 @@ export default function AdminLogin() {
             Admin Login
           </h2>
           <p style={{ color: '#666', fontSize: '0.95em' }}>
-            Access Uzhavar Admin Dashboard
+            Access Velwin Estates Admin Dashboard
           </p>
         </div>
 

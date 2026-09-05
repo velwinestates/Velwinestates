@@ -6,7 +6,7 @@ function SellProducePage() {
   return (
     <div className="sell-produce-page">
       <section className="page-header">
-        <h1><MdSell /> Sell My Produce – Uzhavar Bazaar</h1>
+        <h1><MdSell /> Sell My Produce – Velwin Bazaar</h1>
         <div className="phase-badge">Service information</div>
       </section>
       
@@ -15,7 +15,7 @@ function SellProducePage() {
           <img src={imageUrls.produce} alt="Farm Fresh Produce" />
         </div>
         <div className="coming-soon-content">
-          <h2>Produce Marketing Support</h2>
+          <h2>Launching Soon: Produce Marketing Support</h2>
           <p>We are developing a structured service to help farmers prepare, present, and connect their produce with suitable buyers.</p>
           <div className="features-preview">
             <div className="feature">

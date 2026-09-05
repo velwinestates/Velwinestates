@@ -20,7 +20,7 @@ SMTP_USER=$smtpUser
 SMTP_PASS=$smtpPass
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-TO_EMAIL=uzhavarconnect2025@gmail.com
+TO_EMAIL=velwinestates@gmail.com
 FROM_EMAIL=$smtpUser
 "@
 
@@ -43,5 +43,5 @@ try {
     Write-Host "test-send.js failed: $_" -ForegroundColor Yellow
 }
 
-Write-Host "If the test printed 'Email sent:' in server console and test-send printed success, emails should now be delivered to uzhavarconnect2025@gmail.com" -ForegroundColor Green
+Write-Host "If the test printed 'Email sent:' in server console and test-send printed success, emails should now be delivered to velwinestates@gmail.com" -ForegroundColor Green
 Write-Host "Do NOT commit the .env file with secrets to source control." -ForegroundColor Red

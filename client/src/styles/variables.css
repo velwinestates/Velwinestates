@@ -46,8 +46,8 @@
   --spacing-xxl: 48px;
   
   /* Typography */
-  --font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
-  --font-display: Georgia, 'Times New Roman', serif;
+  --font-family: Arial, Helvetica, sans-serif;
+  --font-display: var(--font-family);
   
   /* Transitions */
   --transition: all 0.3s ease;

@@ -1,6 +1,6 @@
 # Email Configuration Setup
 
-This application is configured to send form submissions to `uzhavarconnect2025@gmail.com` for all form submissions.
+This application is configured to send form submissions to `velwinestates@gmail.com` for all form submissions.
 
 ## Current Status
 - ✅ All forms are integrated with email functionality
@@ -31,7 +31,7 @@ This application is configured to send form submissions to `uzhavarconnect2025@g
 
 2. **Update `.env` file:**
    ```env
-   SMTP_USER=uzhavarconnect2025@gmail.com
+   SMTP_USER=velwinestates@gmail.com
    SMTP_PASS=your_16_character_app_password_here
    SEND_EMAILS=true
    ```
@@ -66,4 +66,4 @@ Even when email sending fails, all submissions are:
 
 ## Admin Access
 
-View all submissions at: `http://localhost:4000/api/submissions?adminKey=uzhavar2025`
+View all submissions at: `http://localhost:4000/api/submissions?adminKey=velwinbest@12`

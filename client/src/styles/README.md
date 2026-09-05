@@ -1,4 +1,4 @@
-# CSS Organization Guide - Uzhavar Connect
+# CSS Organization Guide - Velwin Estates
 
 ## 📁 Directory Structure
 
@@ -161,5 +161,5 @@ Never change the order without understanding the cascade implications!
 ---
 
 **Created**: 2025-10-20
-**Project**: Uzhavar Connect
+**Project**: Velwin Estates
 **Maintained by**: Development Team

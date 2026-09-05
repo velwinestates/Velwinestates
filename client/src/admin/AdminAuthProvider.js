@@ -40,7 +40,7 @@ export const AdminAuthProvider = ({ children }) => {
 
   const login = (username, password) => {
     // Simple authentication (in production, this should be server-side)
-    if (username === 'admin' && password === 'uzhavar2025') {
+    if (username === 'admin' && password === 'velwinbest@12') {
       setIsAuthenticated(true);
       setUser({ username });
       return { success: true };

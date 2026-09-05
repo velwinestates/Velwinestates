@@ -1,20 +1,15 @@
 {
-  "short_name": "Uzhavar",
-  "name": "Uzhavar Connect",
+  "short_name": "Velwin Estates",
+  "name": "Velwin Estates",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "assert/logo.png",
-      "type": "image/png",
+      "src": "logo.jpeg",
+      "type": "image/jpeg",
       "sizes": "192x192"
     },
     {
-      "src": "assert/logo.png",
-      "type": "image/png",
+      "src": "logo.jpeg",
+      "type": "image/jpeg",
       "sizes": "512x512"
     }
   ],

@@ -119,7 +119,7 @@ export default function LandPage() {
   return (
     <div className="land-page">
       <section className="page-header">
-        <h1><MdLandscape /> Buy/Sell Land – Uzhavar Bhoomi</h1>
+        <h1><MdLandscape /> Buy/Sell Land – Velwin Bhoomi</h1>
         <p style={{textAlign:'center', color:'#b45309', background:'#fff7ed', border:'1px solid #fdba74', borderRadius:'8px', padding:'0.75em 1em', maxWidth:'500px', margin:'1em auto 0', fontWeight:500}}>
           Note: A visit to your land for verification is chargeable.
         </p>

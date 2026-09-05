@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import { Link } from 'react-router-dom';
 import { FaLeaf,FaImage, FaMapMarkerAlt, FaShoppingCart } from 'react-icons/fa';
@@ -12,9 +12,35 @@ import services from '../data/services';
 import trustFactors from '../data/trustFactors';
 import howItWorks from '../data/howItWorks';
 import projects from '../data/projects';
+import imageUrls from '../data/imageUrls';
+
+const constructionMedia = [
+  { type: 'image', src: imageUrls.construction, title: 'Construction Project' },
+  { type: 'image', src: imageUrls.farmhouse, title: 'Farmhouse Construction' },
+  { type: 'image', src: imageUrls.pool, title: 'Swimming Pool Construction' },
+  { type: 'image', src: imageUrls.waterTank, title: 'Water Tank Construction' },
+  { type: 'image', src: imageUrls.fencing, title: 'Farm Fencing' },
+  { type: 'image', src: imageUrls.polyhouse, title: 'Polyhouse Construction' },
+  { type: 'image', src: imageUrls.livestock, title: 'Livestock Shed Construction' },
+  { type: 'image', src: imageUrls.farmShed, title: 'Farm Shed Construction' },
+  { type: 'image', src: imageUrls.irrigation, title: 'Drip Irrigation Installation' },
+  { type: 'video', src: `${process.env.PUBLIC_URL}/videos/demo1.mp4`, title: 'Construction Project Video 1' },
+  { type: 'video', src: `${process.env.PUBLIC_URL}/videos/demo2.mp4`, title: 'Construction Project Video 2' },
+  { type: 'video', src: `${process.env.PUBLIC_URL}/videos/demo3.mp4`, title: 'Construction Project Video 3' }
+];
 
 
 function HomePage({ currentSlide, onBookProject }) {
+  const [constructionSlide, setConstructionSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setConstructionSlide((previousSlide) => (previousSlide + 1) % constructionMedia.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="home-page">
       <div className="construction-notice" role="status">
@@ -63,6 +89,41 @@ function HomePage({ currentSlide, onBookProject }) {
             50 - 100 KM - ₹9,999/- <br />
             Includes travel, field inspection and project report.
           </p>
+        </div>
+      </section>
+
+      <section className="construction-media-section" aria-label="Construction projects gallery">
+        <div className="section-heading">
+          <div className="section-heading-container">
+            <h2><FaImage /> Construction Projects Gallery</h2>
+            <p className="tagline">A moving view of our farm construction work and completed projects.</p>
+          </div>
+        </div>
+        <div className="construction-media-carousel">
+          <div className="construction-media-track" style={{ transform: `translateX(-${constructionSlide * 100}%)` }}>
+            {constructionMedia.map((media) => (
+              <div className="construction-media-slide" key={media.src}>
+                {media.type === 'video' ? (
+                  <video src={media.src} title={media.title} autoPlay muted loop playsInline />
+                ) : (
+                  <img src={media.src} alt={media.title} />
+                )}
+                <span>{media.title}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="carousel-dots" aria-label="Construction gallery slides">
+          {constructionMedia.map((media, index) => (
+            <button
+              type="button"
+              key={media.src}
+              className={`dot ${constructionSlide === index ? 'active' : ''}`}
+              aria-label={`Show ${media.title}`}
+              aria-current={constructionSlide === index ? 'true' : undefined}
+              onClick={() => setConstructionSlide(index)}
+            />
+          ))}
         </div>
       </section>
 

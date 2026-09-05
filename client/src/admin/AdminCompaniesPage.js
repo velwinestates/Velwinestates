@@ -3,6 +3,7 @@ import { apiUrl, imageUrl } from '../api';
 
 export default function AdminCompaniesPage({ onLogout }) {
   const [companies, setCompanies] = useState([]);
+  const [loadError, setLoadError] = useState('');
   const [form, setForm] = useState({ name: '', description: '', logo: '', logoFile: null });
   const [editingId, setEditingId] = useState(null);
   const [productForm, setProductForm] = useState({ name: '', image: '', imageFile: null, showOrderButton: true });
@@ -42,16 +43,15 @@ export default function AdminCompaniesPage({ onLogout }) {
 
   function handleAdd(e) {
     e.preventDefault();
-    if (!form.name.trim()) return;
+    if (!form.name.trim() || !form.logoFile) {
+      alert('Company name and logo image are required. Please upload the logo file.');
+      return;
+    }
     
     const formData = new FormData();
     formData.append('name', form.name);
     formData.append('description', form.description);
-    if (form.logoFile) {
-      formData.append('logo', form.logoFile);
-    } else if (form.logo) {
-      formData.append('logo', form.logo);
-    }
+    formData.append('logo', form.logoFile);
 
     fetch(apiUrl('/api/companies'), {
       method: 'POST',
@@ -143,16 +143,15 @@ export default function AdminCompaniesPage({ onLogout }) {
 
   function handleAddProduct(e, companyId) {
     e.preventDefault();
-    if (!productForm.name.trim()) return;
+    if (!productForm.name.trim() || !productForm.imageFile) {
+      alert('Product name and image are required. Please upload the image file.');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('name', productForm.name);
     formData.append('showOrderButton', productForm.showOrderButton);
-    if (productForm.imageFile) {
-      formData.append('image', productForm.imageFile);
-    } else if (productForm.image) {
-      formData.append('image', productForm.image);
-    }
+    formData.append('image', productForm.imageFile);
 
     fetch(apiUrl(`/api/companies/${companyId}/products`), {
       method: 'POST',
@@ -229,11 +228,22 @@ export default function AdminCompaniesPage({ onLogout }) {
   }
 
   useEffect(() => {
+    setLoadError('');
     fetch(apiUrl('/api/companies'))
-      .then(r => r.json())
+      .then(async r => {
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          throw new Error(data.error || `Failed to load companies (${r.status})`);
+        }
+        if (!Array.isArray(data)) {
+          throw new Error('The companies API returned an invalid response.');
+        }
+        return data;
+      })
       .then(data => setCompanies(data))
       .catch(err => {
         console.error('Failed to load companies', err);
+        setLoadError(err.message);
         setCompanies([]);
       });
   }, []);
@@ -243,7 +253,7 @@ export default function AdminCompaniesPage({ onLogout }) {
       minHeight: '100vh',
       position: 'relative',
       padding: '2rem 1rem',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+      fontFamily: 'var(--font-family)'
     }}>
       
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
@@ -374,15 +384,15 @@ export default function AdminCompaniesPage({ onLogout }) {
                     color: theme.textPrimary,
                     marginBottom: '0.5rem'
                   }}>
-                    Logo URL
+                    Logo image (uploaded to Cloudinary)
                   </label>
                   <input
                     id="logoUrl"
                     name="logo"
-                    type="url"
+                    type="text"
                     value={form.logo}
-                    onChange={handleChange}
-                    placeholder="https://example.com/logo.png"
+                    readOnly
+                    placeholder="Upload a logo file below"
                     style={{
                       width: '100%',
                       padding: '0.75rem 1rem',
@@ -406,7 +416,7 @@ export default function AdminCompaniesPage({ onLogout }) {
                     color: theme.textPrimary,
                     marginBottom: '0.5rem'
                   }}>
-                    Or Upload Logo
+                    Upload Logo *
                   </label>
                   <input
                     id="logoFile"
@@ -514,6 +524,19 @@ export default function AdminCompaniesPage({ onLogout }) {
               📊 Companies ({companies.length})
             </h2>
           </div>
+
+          {loadError && (
+            <div style={{
+              background: '#ffebee',
+              color: '#b71c1c',
+              border: '1px solid #ef9a9a',
+              borderRadius: theme.borderRadius,
+              padding: '1rem',
+              marginBottom: '1.5rem'
+            }}>
+              Unable to load companies: {loadError}
+            </div>
+          )}
 
           {companies.length === 0 ? (
             <div style={{
@@ -967,15 +990,15 @@ export default function AdminCompaniesPage({ onLogout }) {
                                     color: theme.textPrimary,
                                     marginBottom: '0.5rem'
                                   }}>
-                                    Image URL
+                                    Product image (uploaded to Cloudinary)
                                   </label>
                                   <input
                                     id={`productImage-${company.id}`}
                                     name="image"
-                                    type="url"
+                                    type="text"
                                     value={productForm.image}
-                                    onChange={handleProductChange}
-                                    placeholder="https://example.com/image.png"
+                                    readOnly
+                                    placeholder="Upload an image file below"
                                     style={{
                                       width: '100%',
                                       padding: '0.75rem 1rem',
@@ -999,7 +1022,7 @@ export default function AdminCompaniesPage({ onLogout }) {
                                     color: theme.textPrimary,
                                     marginBottom: '0.5rem'
                                   }}>
-                                    Or Upload Image
+                                    Upload Image *
                                   </label>
                                   <input
                                     id={`productImageFile-${company.id}`}

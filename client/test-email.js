@@ -26,7 +26,7 @@ const testEmailSubmission = async () => {
     
     if (result.success) {
       console.log('✅ Email functionality is working!');
-      console.log('📧 Email will be sent to: uzhavarconnect2025@gmail.com');
+      console.log('📧 Email will be sent to: velwinestates@gmail.com');
       console.log('📝 Form data is stored locally for backup');
     } else {
       console.log('❌ Email test failed');

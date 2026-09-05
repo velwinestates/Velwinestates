@@ -1,9 +1,9 @@
-# Uzhavar Connect - Database Design
+# Velwin Estates - Database Design
 **Last Updated:** November 9, 2025  
 **Version:** 2.0 (Price Field Removed)
 
 ## Overview
-This document outlines the complete database schema for the Uzhavar Connect platform. The system uses **PostgreSQL** (Supabase) as the primary database and falls back to JSON file storage when the database is not configured.
+This document outlines the complete database schema for the Velwin Estates platform. The system uses **PostgreSQL** (Supabase) as the primary database and falls back to JSON file storage when the database is not configured.
 
 ---
 

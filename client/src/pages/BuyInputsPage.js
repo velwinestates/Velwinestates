@@ -9,13 +9,13 @@ function BuyInputsPage() {
   return (
     <div className="buy-inputs-page">
       <section className="page-header">
-        <h1><FaShoppingCart /> Buy Agri Inputs – Uzhavar Mart</h1>
+        <h1><FaShoppingCart /> Buy Agri Inputs – Velwin Mart</h1>
         <div className="phase-badge">Service information</div>
       </section>
       
       <div className="coming-soon">
         <div className="coming-soon-content">
-          <h2>Agricultural Inputs</h2>
+          <h2>Launching Soon: Agricultural Inputs</h2>
           <p>We are preparing a verified supply service for fertilizers, tools, motors, and other farm essentials.</p>
           <div className="features-preview">
             <div className="feature">

@@ -650,10 +650,17 @@ export default function CompaniesPage() {
             {companies && companies.length > 0 ? (
               companies.map(c => renderCompanyCard(c, c.name && c.name.includes('Masala') ? fallbackMasala : fallbackOrganics))
             ) : (
-              <>
-                {renderCompanyCard({ id: 'masala', name: 'Adhivelan Masala', description: 'Premium spice blends and masala products, crafted for authentic taste and quality. Serving homes and businesses with pure, flavorful masalas.', products: [] }, fallbackMasala)}
-                {renderCompanyCard({ id: 'organics', name: 'Adhivelan Organics', description: 'Organic farm produce and products, grown and processed with care for health and sustainability. Bringing fresh, chemical-free food to your table.', products: [] }, fallbackOrganics)}
-              </>
+              <div style={{
+                gridColumn: '1 / -1',
+                padding: '3rem 1.5rem',
+                textAlign: 'center',
+                color: '#5d6b63',
+                background: '#f7f8f2',
+                borderRadius: 8
+              }}>
+                <h3 style={{ marginBottom: '0.5rem' }}>No companies available</h3>
+                <p style={{ margin: 0 }}>New company information will appear here after it is added from the admin page.</p>
+              </div>
             )}
           </div>
         </div>

@@ -392,7 +392,7 @@ function AppContent({
           <div className="navbar-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
             {/* Left side - Logo */}
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5em', fontSize: '1.1em', textDecoration: 'none' }}>
-              <img src={process.env.PUBLIC_URL + '/logo.jpeg'} alt="Velwin Estates Logo" className="logo-icon" style={{ height: '52px', width: 'auto', borderRadius: '50%', boxShadow: '0 6px 16px rgba(0,0,0,0.12)' }} />
+              <img src={process.env.PUBLIC_URL + '/logo.jpeg'} alt="Velwin Estates Logo" className="logo-icon" style={{ height: '64px', width: '64px', borderRadius: '8px', objectFit: 'cover', boxShadow: '0 6px 16px rgba(0,0,0,0.12)' }} />
               <span className="logo-text" style={{ fontWeight: 700, color: '#388e3c' }}>Velwin Estates</span>
             </Link>
             
@@ -527,7 +527,7 @@ function AppContent({
             {/* Column 3 - Contact Us */}
             <div className="footer-section">
               <h3>Contact Us</h3>
-              <p>Email: uzhavarconnect2025@gmail.com</p>
+              <p>Email: velwinestates@gmail.com</p>
               <p>Phone: +91 81100 13838 </p>
             </div>
           </div>
