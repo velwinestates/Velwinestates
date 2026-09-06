@@ -86,7 +86,7 @@
 
 .dropdown-menu-item:hover:not(.disabled) {
   background-color: #f7fafc;
-  color: #388e3c;
+  color: var(--text-color);
 }
 
 .dropdown-menu-item:active:not(.disabled) {

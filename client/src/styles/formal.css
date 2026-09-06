@@ -98,9 +98,62 @@ button.btn:hover {
   transform: none !important;
 }
 
+.dropdown-translation {
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dropdown-translation-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.45rem;
+  color: var(--text-color);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.language-select {
+  width: 100%;
+  min-height: 2.2rem;
+  padding: 0.35rem 0.5rem;
+  color: var(--text-color);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
 .home-page .recent-projects-link {
   animation: none !important;
   -webkit-animation: none !important;
+}
+
+.whatsapp-chat {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 2500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: #ffffff;
+  background: #25d366;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.whatsapp-chat:hover {
+  color: #ffffff;
+  background: #1da851;
+}
+
+.whatsapp-chat svg {
+  font-size: 1.35rem;
 }
 
 .construction-page section[style*="linear-gradient"],
@@ -139,6 +192,12 @@ button.btn:hover {
 
   .home-page .recent-projects-link {
     bottom: 20px !important;
+  }
+
+  .whatsapp-chat {
+    left: 1rem;
+    bottom: 1rem;
+    padding: 0.7rem 0.85rem;
   }
 
   .home-page .hero-content {

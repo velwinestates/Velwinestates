@@ -12,34 +12,40 @@ import services from '../data/services';
 import trustFactors from '../data/trustFactors';
 import howItWorks from '../data/howItWorks';
 import projects from '../data/projects';
-import imageUrls from '../data/imageUrls';
+import usePageMedia from '../hooks/usePageMedia';
 
-const constructionMedia = [
-  { type: 'image', src: imageUrls.construction, title: 'Construction Project' },
-  { type: 'image', src: imageUrls.farmhouse, title: 'Farmhouse Construction' },
-  { type: 'image', src: imageUrls.pool, title: 'Swimming Pool Construction' },
-  { type: 'image', src: imageUrls.waterTank, title: 'Water Tank Construction' },
-  { type: 'image', src: imageUrls.fencing, title: 'Farm Fencing' },
-  { type: 'image', src: imageUrls.polyhouse, title: 'Polyhouse Construction' },
-  { type: 'image', src: imageUrls.livestock, title: 'Livestock Shed Construction' },
-  { type: 'image', src: imageUrls.farmShed, title: 'Farm Shed Construction' },
-  { type: 'image', src: imageUrls.irrigation, title: 'Drip Irrigation Installation' },
-  { type: 'video', src: `${process.env.PUBLIC_URL}/videos/demo1.mp4`, title: 'Construction Project Video 1' },
-  { type: 'video', src: `${process.env.PUBLIC_URL}/videos/demo2.mp4`, title: 'Construction Project Video 2' },
-  { type: 'video', src: `${process.env.PUBLIC_URL}/videos/demo3.mp4`, title: 'Construction Project Video 3' }
+const defaultHomeMedia = [
+  { slot: 'slide1', title: 'Construction Project' },
+  { slot: 'slide2', title: 'Farmhouse Construction' },
+  { slot: 'slide3', title: 'Swimming Pool Construction' },
+  { slot: 'slide4', title: 'Water Tank Construction' },
+  { slot: 'slide5', title: 'Farm Fencing' },
+  { slot: 'slide6', title: 'Polyhouse Construction' },
+  { slot: 'slide7', title: 'Livestock Shed Construction' },
+  { slot: 'slide8', title: 'Farm Shed Construction' },
+  { slot: 'slide9', title: 'Drip Irrigation Installation' }
 ];
 
 
 function HomePage({ currentSlide, onBookProject }) {
   const [constructionSlide, setConstructionSlide] = useState(0);
+  const homeMedia = usePageMedia('home');
+  const constructionMedia = defaultHomeMedia
+    .filter(media => homeMedia[media.slot])
+    .map(media => ({ ...media, src: homeMedia[media.slot] }));
 
   useEffect(() => {
+    if (constructionMedia.length === 0) {
+      setConstructionSlide(0);
+      return undefined;
+    }
+
     const interval = setInterval(() => {
       setConstructionSlide((previousSlide) => (previousSlide + 1) % constructionMedia.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [constructionMedia.length]);
 
   return (
     <div className="home-page">
@@ -49,6 +55,31 @@ function HomePage({ currentSlide, onBookProject }) {
           Our website is still under construction. Thank you for your patience while we improve your experience.
         </span>
       </div>
+      {constructionMedia.length > 0 && (
+        <section className="construction-media-section home-media-top" aria-label="Home image slides">
+          <div className="construction-media-carousel">
+            <div className="construction-media-track" style={{ transform: `translateX(-${constructionSlide * 100}%)` }}>
+              {constructionMedia.map(media => (
+                <div className="construction-media-slide" key={media.slot}>
+                  <img src={media.src} alt={media.title} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="carousel-dots" aria-label="Home image slides">
+            {constructionMedia.map((media, index) => (
+              <button
+                type="button"
+                key={media.slot}
+                className={`dot ${constructionSlide === index ? 'active' : ''}`}
+                aria-label={`Show ${media.title}`}
+                aria-current={constructionSlide === index ? 'true' : undefined}
+                onClick={() => setConstructionSlide(index)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
       <Link
         to="/projects"
         className="btn btn-primary recent-projects-link"
@@ -91,42 +122,6 @@ function HomePage({ currentSlide, onBookProject }) {
           </p>
         </div>
       </section>
-
-      <section className="construction-media-section" aria-label="Construction projects gallery">
-        <div className="section-heading">
-          <div className="section-heading-container">
-            <h2><FaImage /> Construction Projects Gallery</h2>
-            <p className="tagline">A moving view of our farm construction work and completed projects.</p>
-          </div>
-        </div>
-        <div className="construction-media-carousel">
-          <div className="construction-media-track" style={{ transform: `translateX(-${constructionSlide * 100}%)` }}>
-            {constructionMedia.map((media) => (
-              <div className="construction-media-slide" key={media.src}>
-                {media.type === 'video' ? (
-                  <video src={media.src} title={media.title} autoPlay muted loop playsInline />
-                ) : (
-                  <img src={media.src} alt={media.title} />
-                )}
-                <span>{media.title}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="carousel-dots" aria-label="Construction gallery slides">
-          {constructionMedia.map((media, index) => (
-            <button
-              type="button"
-              key={media.src}
-              className={`dot ${constructionSlide === index ? 'active' : ''}`}
-              aria-label={`Show ${media.title}`}
-              aria-current={constructionSlide === index ? 'true' : undefined}
-              onClick={() => setConstructionSlide(index)}
-            />
-          ))}
-        </div>
-      </section>
-
 
       <section className="what-we-do-section">
         <div className="section-heading">

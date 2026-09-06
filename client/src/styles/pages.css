@@ -182,6 +182,10 @@
   padding: 2rem 0 3rem;
 }
 
+.home-media-top {
+  padding-top: 0;
+}
+
 .construction-media-carousel {
   width: 100%;
   overflow: hidden;
@@ -199,7 +203,6 @@
 .construction-media-slide {
   min-width: 100%;
   position: relative;
-  aspect-ratio: 16 / 7;
   overflow: hidden;
   background: #17221b;
 }
@@ -207,19 +210,8 @@
 .construction-media-slide img,
 .construction-media-slide video {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.construction-media-slide span {
-  position: absolute;
-  left: 1rem;
-  bottom: 1rem;
-  padding: 0.5rem 0.75rem;
-  color: #ffffff;
-  background: rgba(0, 0, 0, 0.65);
-  border-radius: var(--radius-sm);
-  font-weight: 700;
+  height: auto;
+  display: block;
 }
 
 .construction-media-section .carousel-dots button {

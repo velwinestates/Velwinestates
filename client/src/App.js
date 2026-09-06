@@ -3,6 +3,7 @@ import ProtectedRoute from './admin/ProtectedRoute';
 import { AdminAuthProvider } from './admin/AdminAuthProvider';
 import 'leaflet/dist/leaflet.css';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { FaWhatsapp } from 'react-icons/fa';
 import './App.css';
 import projects from './data/projects';
 import ScrollToTop from './ScrollToTop';
@@ -90,9 +91,6 @@ function App() {
   // Notification state for farm submission redirect
   const [notification, setNotification] = useState({ show: false, success: false, message: '' });
   
-  // Language state for Google Translate
-  const [currentLanguage, setCurrentLanguage] = useState('en');
-
   // Check for notification from farm details submission
   useEffect(() => {
     // Safe sessionStorage access for SSR/build compatibility
@@ -110,24 +108,7 @@ function App() {
       }
     }
     
-    // Check localStorage for saved language preference
-    const savedLang = localStorage.getItem('selectedLang') || 'en';
-    setCurrentLanguage(savedLang);
   }, []);
-  
-  // Language change function
-  const setCookie = (name, value, days) => {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
-  };
-
-  const changeLanguage = (lang) => {
-    const googleTransCookie = '/en/' + lang;
-    setCookie('googtrans', googleTransCookie, 1);
-    localStorage.setItem('selectedLang', lang);
-    setCurrentLanguage(lang);
-    window.location.reload();
-  };
 
   // Modal state for Book a Project (legacy, not used)
   // const [showProjectModal, setShowProjectModal] = useState(false);
@@ -249,8 +230,6 @@ function App() {
     <Router>
       <AppContent 
         notification={notification}
-        currentLanguage={currentLanguage}
-        changeLanguage={changeLanguage}
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
         currentSlide={currentSlide}
@@ -271,8 +250,8 @@ function App() {
   );
 }
 
-function AppContent({ 
-  notification, currentLanguage, changeLanguage, isMenuOpen, setIsMenuOpen, currentSlide, 
+function AppContent({
+  notification, isMenuOpen, setIsMenuOpen, currentSlide,
   showSoilTestModal, setShowSoilTestModal, soilTestForm, 
   handleSoilTestChange, handleSoilTestSubmit, showProjectForm, 
   setShowProjectForm, projectForm, handleProjectInput, 
@@ -318,7 +297,7 @@ function AppContent({
   }, [location.pathname, setIsMenuOpen]);
 
   return (
-      <div key={currentLanguage} className="app" style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
+      <div className="app" style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden' }}>
         {/* Toast Notification for Farm Submission */}
         {notification.show && (
           <div style={{
@@ -393,13 +372,11 @@ function AppContent({
             {/* Left side - Logo */}
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5em', fontSize: '1.1em', textDecoration: 'none' }}>
               <img src={process.env.PUBLIC_URL + '/logo.jpeg'} alt="Velwin Estates Logo" className="logo-icon" style={{ height: '64px', width: '64px', borderRadius: '8px', objectFit: 'cover', boxShadow: '0 6px 16px rgba(0,0,0,0.12)' }} />
-              <span className="logo-text" style={{ fontWeight: 700, color: '#388e3c' }}>Velwin Estates</span>
+              <span className="logo-text" style={{ fontWeight: 700, color: 'var(--text-color)' }}>Velwin Estates</span>
             </Link>
             
             {/* Right side - Menu Only */}
             <NavbarMenuDemo 
-              currentLanguage={currentLanguage}
-              changeLanguage={changeLanguage}
             />
           </div>
         </nav>
@@ -551,6 +528,19 @@ function AppContent({
             <p>Powered by Netcraft Studio</p>
           </div>
         </footer>
+        {!isAdminPage && (
+          <a
+            className="whatsapp-chat"
+            href="https://wa.me/918110013838?text=Dear%20Velwin%20Estates%20Team%2C%0A%0AI%20am%20contacting%20you%20through%20your%20website%20to%20enquire%20about%20your%20services.%0A%0AName%3A%0AContact%20number%3A%0AService%20or%20requirement%3A%0AFarm%20location%3A%0APreferred%20date%3A%0AAdditional%20details%3A%0A%0AThank%20you."
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Chat with Velwin Estates on WhatsApp"
+            title="Chat on WhatsApp"
+          >
+            <FaWhatsapp aria-hidden="true" />
+
+          </a>
+        )}
       </div>
   );
 }
