@@ -17,17 +17,47 @@ if (process.env.NODE_ENV !== 'production') {
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const siteMediaTableReady = db.isConfigured
+const databaseReady = db.isConfigured
   ? db.query(`
+      CREATE TABLE IF NOT EXISTS companies (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description TEXT DEFAULT '',
+        logo TEXT DEFAULT '',
+        logo_url TEXT DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        company_id INTEGER REFERENCES companies(id) ON DELETE CASCADE,
+        name VARCHAR(255) NOT NULL,
+        image TEXT DEFAULT '',
+        image_url TEXT DEFAULT '',
+        show_order_button BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      ALTER TABLE companies ADD COLUMN IF NOT EXISTS logo TEXT DEFAULT '';
+      ALTER TABLE companies ADD COLUMN IF NOT EXISTS logo_url TEXT DEFAULT '';
+      ALTER TABLE companies ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+      ALTER TABLE products ADD COLUMN IF NOT EXISTS image TEXT DEFAULT '';
+      ALTER TABLE products ADD COLUMN IF NOT EXISTS image_url TEXT DEFAULT '';
+      ALTER TABLE products ADD COLUMN IF NOT EXISTS show_order_button BOOLEAN DEFAULT true;
+      ALTER TABLE products ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+      UPDATE companies SET logo = logo_url WHERE COALESCE(logo, '') = '' AND COALESCE(logo_url, '') <> '';
+      UPDATE companies SET logo_url = logo WHERE COALESCE(logo_url, '') = '' AND COALESCE(logo, '') <> '';
+      UPDATE products SET image = image_url WHERE COALESCE(image, '') = '' AND COALESCE(image_url, '') <> '';
+      UPDATE products SET image_url = image WHERE COALESCE(image_url, '') = '' AND COALESCE(image, '') <> '';
       CREATE TABLE IF NOT EXISTS site_media (
         page VARCHAR(100) NOT NULL,
         slot VARCHAR(100) NOT NULL,
         image_url TEXT NOT NULL,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (page, slot)
-      )
+      );
     `).then(() => true).catch(error => {
-      console.error('⚠️ Unable to initialize site_media table:', error.message);
+      console.error('⚠️ Unable to initialize database tables:', error.message);
       return false;
     })
   : Promise.resolve(false);
@@ -193,8 +223,9 @@ app.get('/api/companies', async (req, res) => {
   console.log('📦 GET /api/companies - Request received');
   
   try {
+    const databaseAvailable = await databaseReady;
     // If database is configured, use it
-    if (db.isConfigured) {
+    if (db.isConfigured && databaseAvailable) {
       const result = await db.query(`
         SELECT c.id, c.name, c.description, c.logo,
                json_agg(
@@ -884,7 +915,7 @@ app.post('/api/send-email', async (req, res) => {
 // Get saved page media overrides
 app.get('/api/site-media', async (req, res) => {
   try {
-    const mediaTableAvailable = await siteMediaTableReady;
+    const mediaTableAvailable = await databaseReady;
     if (!db.isConfigured || !mediaTableAvailable) return res.json({});
     const result = await db.query('SELECT page, slot, image_url FROM site_media ORDER BY page, slot');
     const media = {};
@@ -898,7 +929,7 @@ app.get('/api/site-media', async (req, res) => {
 
 app.get('/api/site-media/:page', async (req, res) => {
   try {
-    const mediaTableAvailable = await siteMediaTableReady;
+    const mediaTableAvailable = await databaseReady;
     if (!db.isConfigured || !mediaTableAvailable) return res.json({});
     const result = await db.query('SELECT slot, image_url FROM site_media WHERE page = $1', [req.params.page]);
     const media = {};
@@ -913,7 +944,7 @@ app.get('/api/site-media/:page', async (req, res) => {
 app.put('/api/site-media/:page/:slot', upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'An image file is required' });
   try {
-    const mediaTableAvailable = await siteMediaTableReady;
+    const mediaTableAvailable = await databaseReady;
     if (!db.isConfigured || !mediaTableAvailable) {
       return res.status(503).json({ error: 'Media storage is temporarily unavailable' });
     }
