@@ -26,8 +26,11 @@ const siteMediaTableReady = db.isConfigured
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (page, slot)
       )
-    `)
-  : Promise.resolve();
+    `).then(() => true).catch(error => {
+      console.error('⚠️ Unable to initialize site_media table:', error.message);
+      return false;
+    })
+  : Promise.resolve(false);
 
 // Configure multer for memory storage (files will be uploaded to Cloudinary)
 const storage = multer.memoryStorage();
@@ -881,8 +884,8 @@ app.post('/api/send-email', async (req, res) => {
 // Get saved page media overrides
 app.get('/api/site-media', async (req, res) => {
   try {
-    await siteMediaTableReady;
-    if (!db.isConfigured) return res.json({});
+    const mediaTableAvailable = await siteMediaTableReady;
+    if (!db.isConfigured || !mediaTableAvailable) return res.json({});
     const result = await db.query('SELECT page, slot, image_url FROM site_media ORDER BY page, slot');
     const media = {};
     result.rows.forEach(row => { media[`${row.page}.${row.slot}`] = row.image_url; });
@@ -895,8 +898,8 @@ app.get('/api/site-media', async (req, res) => {
 
 app.get('/api/site-media/:page', async (req, res) => {
   try {
-    await siteMediaTableReady;
-    if (!db.isConfigured) return res.json({});
+    const mediaTableAvailable = await siteMediaTableReady;
+    if (!db.isConfigured || !mediaTableAvailable) return res.json({});
     const result = await db.query('SELECT slot, image_url FROM site_media WHERE page = $1', [req.params.page]);
     const media = {};
     result.rows.forEach(row => { media[row.slot] = row.image_url; });
@@ -910,7 +913,10 @@ app.get('/api/site-media/:page', async (req, res) => {
 app.put('/api/site-media/:page/:slot', upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'An image file is required' });
   try {
-    await siteMediaTableReady;
+    const mediaTableAvailable = await siteMediaTableReady;
+    if (!db.isConfigured || !mediaTableAvailable) {
+      return res.status(503).json({ error: 'Media storage is temporarily unavailable' });
+    }
     const result = await uploadToCloudinary(req.file.buffer, 'uzhavar/site-media');
     const saved = await db.query(`
       INSERT INTO site_media (page, slot, image_url, updated_at)
