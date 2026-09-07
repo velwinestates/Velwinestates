@@ -96,8 +96,6 @@ const siteMediaReady = db.isConfigured
       ALTER TABLE site_media ADD COLUMN IF NOT EXISTS slot VARCHAR(100);
       ALTER TABLE site_media ADD COLUMN IF NOT EXISTS image_url TEXT;
       ALTER TABLE site_media ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-      UPDATE site_media SET updated_at = CURRENT_TIMESTAMP WHERE updated_at IS NULL;
-      CREATE UNIQUE INDEX IF NOT EXISTS site_media_page_slot_unique ON site_media (page, slot);
     `).then(() => true).catch(error => {
       console.error('⚠️ Unable to initialize site_media table:', error.message);
       return false;
