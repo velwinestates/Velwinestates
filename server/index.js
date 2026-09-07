@@ -62,6 +62,21 @@ const databaseReady = db.isConfigured
         view_count INTEGER NOT NULL DEFAULT 0,
         PRIMARY KEY (view_date, page_path)
       );
+      CREATE TABLE IF NOT EXISTS plans (
+        id VARCHAR(100) PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        duration VARCHAR(100) DEFAULT 'Monthly',
+        description TEXT DEFAULT '',
+        popular BOOLEAN DEFAULT false,
+        features JSONB DEFAULT '[]'::jsonb,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      ALTER TABLE plans ADD COLUMN IF NOT EXISTS duration VARCHAR(100) DEFAULT 'Monthly';
+      ALTER TABLE plans ADD COLUMN IF NOT EXISTS description TEXT DEFAULT '';
+      ALTER TABLE plans ADD COLUMN IF NOT EXISTS popular BOOLEAN DEFAULT false;
+      ALTER TABLE plans ADD COLUMN IF NOT EXISTS features JSONB DEFAULT '[]'::jsonb;
+      ALTER TABLE plans ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
     `).then(() => true).catch(error => {
       console.error('⚠️ Unable to initialize database tables:', error.message);
       return false;
@@ -1003,12 +1018,10 @@ app.put('/api/site-media/:page/:slot', upload.single('image'), async (req, res) 
 
     let saved;
     try {
-      saved = await db.query(`
-        INSERT INTO site_media (page, slot, image_url, updated_at)
-        VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
-        ON CONFLICT (page, slot) DO UPDATE SET image_url = EXCLUDED.image_url, updated_at = CURRENT_TIMESTAMP
-        RETURNING image_url
-      `, [req.params.page, req.params.slot, result.secure_url]);
+      saved = await db.query('UPDATE site_media SET image_url = $3, updated_at = CURRENT_TIMESTAMP WHERE page = $1 AND slot = $2 RETURNING image_url', [req.params.page, req.params.slot, result.secure_url]);
+      if (saved.rows.length === 0) {
+        saved = await db.query('INSERT INTO site_media (page, slot, image_url, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP) RETURNING image_url', [req.params.page, req.params.slot, result.secure_url]);
+      }
     } catch (error) {
       console.error('Database page media save failed:', error.message);
       return res.status(500).json({ error: 'Image uploaded to Cloudinary but could not be saved', details: error.message });
