@@ -56,8 +56,29 @@ const databaseReady = db.isConfigured
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (page, slot)
       );
+      CREATE TABLE IF NOT EXISTS page_views (
+        view_date DATE NOT NULL,
+        page_path VARCHAR(255) NOT NULL,
+        view_count INTEGER NOT NULL DEFAULT 0,
+        PRIMARY KEY (view_date, page_path)
+      );
     `).then(() => true).catch(error => {
       console.error('⚠️ Unable to initialize database tables:', error.message);
+      return false;
+    })
+  : Promise.resolve(false);
+
+const siteMediaReady = db.isConfigured
+  ? db.query(`
+      CREATE TABLE IF NOT EXISTS site_media (
+        page VARCHAR(100) NOT NULL,
+        slot VARCHAR(100) NOT NULL,
+        image_url TEXT NOT NULL,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (page, slot)
+      )
+    `).then(() => true).catch(error => {
+      console.error('⚠️ Unable to initialize site_media table:', error.message);
       return false;
     })
   : Promise.resolve(false);
@@ -915,7 +936,7 @@ app.post('/api/send-email', async (req, res) => {
 // Get saved page media overrides
 app.get('/api/site-media', async (req, res) => {
   try {
-    const mediaTableAvailable = await databaseReady;
+    const mediaTableAvailable = await siteMediaReady;
     if (!db.isConfigured || !mediaTableAvailable) return res.json({});
     const result = await db.query('SELECT page, slot, image_url FROM site_media ORDER BY page, slot');
     const media = {};
@@ -929,7 +950,7 @@ app.get('/api/site-media', async (req, res) => {
 
 app.get('/api/site-media/:page', async (req, res) => {
   try {
-    const mediaTableAvailable = await databaseReady;
+    const mediaTableAvailable = await siteMediaReady;
     if (!db.isConfigured || !mediaTableAvailable) return res.json({});
     const result = await db.query('SELECT slot, image_url FROM site_media WHERE page = $1', [req.params.page]);
     const media = {};
@@ -944,9 +965,12 @@ app.get('/api/site-media/:page', async (req, res) => {
 app.put('/api/site-media/:page/:slot', upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'An image file is required' });
   try {
-    const mediaTableAvailable = await databaseReady;
+    const mediaTableAvailable = await siteMediaReady;
     if (!db.isConfigured || !mediaTableAvailable) {
       return res.status(503).json({ error: 'Media storage is temporarily unavailable' });
+    }
+    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+      return res.status(503).json({ error: 'Cloudinary storage is not configured on the server' });
     }
     const result = await uploadToCloudinary(req.file.buffer, 'uzhavar/site-media');
     const saved = await db.query(`
@@ -958,7 +982,68 @@ app.put('/api/site-media/:page/:slot', upload.single('image'), async (req, res) 
     res.json({ url: saved.rows[0].image_url });
   } catch (error) {
     console.error('Error saving page media:', error.message);
-    res.status(500).json({ error: 'Failed to save page media' });
+    res.status(500).json({ error: 'Failed to save page media', details: error.message });
+  }
+});
+
+// Record one public page view for the current day.
+app.post('/api/analytics/page-view', async (req, res) => {
+  const pagePath = typeof req.body?.path === 'string' ? req.body.path : '/';
+  const normalizedPath = pagePath.startsWith('/') ? pagePath.slice(0, 255) : `/${pagePath}`.slice(0, 255);
+
+  try {
+    const databaseAvailable = await databaseReady;
+    if (!db.isConfigured || !databaseAvailable) return res.status(204).end();
+
+    await db.query(`
+      INSERT INTO page_views (view_date, page_path, view_count)
+      VALUES (CURRENT_DATE, $1, 1)
+      ON CONFLICT (view_date, page_path)
+      DO UPDATE SET view_count = page_views.view_count + 1
+    `, [normalizedPath]);
+    res.status(204).end();
+  } catch (error) {
+    console.error('Error recording page view:', error.message);
+    res.status(204).end();
+  }
+});
+
+// Return daily page-view totals for the admin dashboard.
+app.get('/api/analytics/page-views', async (req, res) => {
+  try {
+    const databaseAvailable = await databaseReady;
+    if (!db.isConfigured || !databaseAvailable) {
+      return res.json({ total: 0, daily: [], byPage: [] });
+    }
+
+    const result = await db.query(`
+      SELECT view_date, page_path, view_count
+      FROM page_views
+      ORDER BY view_date DESC, page_path ASC
+    `);
+    const dailyMap = new Map();
+    const pageMap = new Map();
+    let total = 0;
+
+    result.rows.forEach(row => {
+      const count = Number(row.view_count) || 0;
+      const date = row.view_date instanceof Date
+        ? row.view_date.toISOString().slice(0, 10)
+        : String(row.view_date).slice(0, 10);
+      total += count;
+      dailyMap.set(date, (dailyMap.get(date) || 0) + count);
+      pageMap.set(row.page_path, (pageMap.get(row.page_path) || 0) + count);
+    });
+
+    res.json({
+      total,
+      daily: Array.from(dailyMap, ([date, views]) => ({ date, views })),
+      byPage: Array.from(pageMap, ([path, views]) => ({ path, views }))
+        .sort((left, right) => right.views - left.views)
+    });
+  } catch (error) {
+    console.error('Error reading page views:', error.message);
+    res.status(500).json({ error: 'Failed to read page views' });
   }
 });
 

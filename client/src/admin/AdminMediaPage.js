@@ -68,7 +68,7 @@ export default function AdminMediaPage() {
         method: 'PUT',
         body: formData
       });
-      const result = await response.json();
+      const result = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(result.error || 'Upload failed');
       setMedia(previous => ({ ...previous, [`${item.page}.${item.slot}`]: result.url }));
       setStatus(`${item.label} updated successfully.`);
