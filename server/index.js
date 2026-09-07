@@ -7,7 +7,7 @@ const path = require('path');
 const multer = require('multer');
 const https = require('https');
 const db = require('./db'); // Database connection
-const { uploadToCloudinary, deleteFromCloudinary } = require('./cloudinary'); // Cloudinary integration
+const { cloudinary, uploadToCloudinary, deleteFromCloudinary } = require('./cloudinary'); // Cloudinary integration
 
 // Allow self-signed certificates in development
 if (process.env.NODE_ENV !== 'production') {
@@ -989,16 +989,30 @@ app.put('/api/site-media/:page/:slot', upload.single('image'), async (req, res) 
     if (!db.isConfigured || !mediaTableAvailable) {
       return res.status(503).json({ error: 'Media storage is temporarily unavailable' });
     }
-    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+    const cloudinaryConfig = cloudinary.config();
+    if (!cloudinaryConfig.cloud_name || !cloudinaryConfig.api_key || !cloudinaryConfig.api_secret) {
       return res.status(503).json({ error: 'Cloudinary storage is not configured on the server' });
     }
-    const result = await uploadToCloudinary(req.file.buffer, 'uzhavar/site-media');
-    const saved = await db.query(`
-      INSERT INTO site_media (page, slot, image_url, updated_at)
-      VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
-      ON CONFLICT (page, slot) DO UPDATE SET image_url = EXCLUDED.image_url, updated_at = CURRENT_TIMESTAMP
-      RETURNING image_url
-    `, [req.params.page, req.params.slot, result.secure_url]);
+    let result;
+    try {
+      result = await uploadToCloudinary(req.file.buffer, 'uzhavar/site-media');
+    } catch (error) {
+      console.error('Cloudinary page media upload failed:', error.message);
+      return res.status(502).json({ error: 'Cloudinary upload failed', details: error.message });
+    }
+
+    let saved;
+    try {
+      saved = await db.query(`
+        INSERT INTO site_media (page, slot, image_url, updated_at)
+        VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+        ON CONFLICT (page, slot) DO UPDATE SET image_url = EXCLUDED.image_url, updated_at = CURRENT_TIMESTAMP
+        RETURNING image_url
+      `, [req.params.page, req.params.slot, result.secure_url]);
+    } catch (error) {
+      console.error('Database page media save failed:', error.message);
+      return res.status(500).json({ error: 'Image uploaded to Cloudinary but could not be saved', details: error.message });
+    }
     res.json({ url: saved.rows[0].image_url });
   } catch (error) {
     console.error('Error saving page media:', error.message);
