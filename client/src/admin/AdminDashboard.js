@@ -5,6 +5,7 @@ import AdminCompaniesPage from './AdminCompaniesPage';
 import AdminPlansPage from './AdminPlansPage';
 import AdminSubmissionsPage from './AdminSubmissionsPage';
 import AdminMediaPage from './AdminMediaPage';
+import AdminAnalyticsPage from './AdminAnalyticsPage';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ export default function AdminDashboard() {
     { id: 'companies', label: 'Companies & Products', icon: '🏢', path: '/admin/companies' },
     { id: 'plans', label: 'Plans Management', icon: '📋', path: '/admin/plans' },
     { id: 'media', label: 'Page Images', icon: '🖼️', path: '/admin/media' },
+    { id: 'analytics', label: 'Website Views', icon: '📊', path: '/admin/analytics' },
     { id: 'submissions', label: 'Form Submissions', icon: '📨', path: '/admin/submissions' }
   ];
 
@@ -110,6 +112,16 @@ export default function AdminDashboard() {
 
           {/* Desktop: Logout Button | Mobile: Burger + Logout */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1em' }}>
+            <a
+              href="/"
+              target="_blank"
+              rel="noreferrer"
+              className="admin-view-website-btn"
+              title="Open the public website"
+            >
+              <span aria-hidden="true">↗</span> View Website
+            </a>
+
             {/* Burger Menu Button (visible on mobile) */}
             <button
               onClick={toggleMenu}
@@ -280,6 +292,17 @@ export default function AdminDashboard() {
                   <span>{item.label}</span>
                 </Link>
               ))}
+
+              <a
+                href="/"
+                target="_blank"
+                rel="noreferrer"
+                className="admin-mobile-view-website"
+                onClick={() => setMenuOpen(false)}
+              >
+                <span aria-hidden="true">↗</span>
+                <span>View Website</span>
+              </a>
               
               {/* Logout Button in Mobile Menu */}
               <button
@@ -332,6 +355,7 @@ export default function AdminDashboard() {
           <Route path="/companies" element={<AdminCompaniesPage onLogout={handleLogout} />} />
           <Route path="/plans" element={<AdminPlansPage onLogout={handleLogout} />} />
           <Route path="/media" element={<AdminMediaPage />} />
+          <Route path="/analytics" element={<AdminAnalyticsPage />} />
           <Route path="/submissions" element={<AdminSubmissionsPage onLogout={handleLogout} />} />
         </Routes>
       </div>

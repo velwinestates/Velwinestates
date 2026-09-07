@@ -53,14 +53,16 @@ const DropdownMenu = ({ trigger, children, align = 'left' }) => {
           <div className={`dropdown-menu ${align}`}>
             <div className="dropdown-menu-content">
               {React.Children.map(children, (child) =>
-                React.cloneElement(child, {
-                  onClick: () => {
-                    if (child.props.onClick) {
-                      child.props.onClick();
-                    }
-                    setIsOpen(false);
-                  },
-                })
+                child.type === DropdownMenuItem
+                  ? React.cloneElement(child, {
+                      onClick: () => {
+                        if (child.props.onClick) {
+                          child.props.onClick();
+                        }
+                        setIsOpen(false);
+                      },
+                    })
+                  : child
               )}
             </div>
           </div>

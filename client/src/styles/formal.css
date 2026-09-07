@@ -179,6 +179,35 @@ button.btn:hover {
   display: none !important;
 }
 
+.admin-view-website-btn,
+.admin-mobile-view-website {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #4a5568;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.admin-view-website-btn {
+  padding: 0.7em 1em;
+  border: 1px solid #d6d2c7;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.admin-view-website-btn:hover,
+.admin-mobile-view-website:hover {
+  color: #285943;
+}
+
+.admin-mobile-view-website {
+  width: 100%;
+  padding: 1em;
+  margin-bottom: 0.5em;
+  border-left: 4px solid transparent;
+}
+
 @media (max-width: 700px) {
   .construction-notice {
     align-items: flex-start;

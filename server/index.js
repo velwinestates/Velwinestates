@@ -95,6 +95,10 @@ const upload = multer({
 
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
 const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null;
+const configuredOrigins = (process.env.ALLOWED_ORIGINS || '')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
 
 const allowedOrigins = [
   'https://www.uzhavarconnect.com',
@@ -103,7 +107,8 @@ const allowedOrigins = [
   vercelUrl,
   'http://localhost:3000',
   'http://localhost:3001',
-  'http://localhost:4000'
+  'http://localhost:4000',
+  ...configuredOrigins
 ].filter(Boolean);
 
 app.use(cors({
@@ -115,10 +120,19 @@ app.use(cors({
     const normalizedOrigin = origin.replace(/\/$/, '');
     const normalizedAllowedOrigins = allowedOrigins.map(o => o.replace(/\/$/, ''));
 
-    const isAllowedVercelOrigin = normalizedOrigin.endsWith('.vercel.app') || normalizedOrigin.includes('.vercel.app');
+    let originHostname = '';
+    try {
+      originHostname = new URL(normalizedOrigin).hostname;
+    } catch (error) {
+      originHostname = '';
+    }
+    const isAllowedHostedOrigin = originHostname.endsWith('.vercel.app')
+      || originHostname.endsWith('.onrender.com')
+      || originHostname === 'uzhavarconnect.com'
+      || originHostname === 'www.uzhavarconnect.com';
 
     // Allow if origin is in the allowed list or matches a Vercel preview domain
-    if (normalizedAllowedOrigins.indexOf(normalizedOrigin) === -1 && !isAllowedVercelOrigin) {
+    if (normalizedAllowedOrigins.indexOf(normalizedOrigin) === -1 && !isAllowedHostedOrigin) {
       console.warn('⚠️ CORS blocked origin:', origin);
       return callback(new Error('CORS policy does not allow access from this origin.'), false);
     }

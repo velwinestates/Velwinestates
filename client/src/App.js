@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect } from 'react';
+import React, { lazy, Suspense, useRef, useState, useEffect } from 'react';
 import ProtectedRoute from './admin/ProtectedRoute';
 import { AdminAuthProvider } from './admin/AdminAuthProvider';
 import 'leaflet/dist/leaflet.css';
@@ -260,6 +260,7 @@ function AppContent({
   const location = useLocation();
   const isAdminPage = location.pathname.startsWith('/admin');
   const seoData = seoPages[location.pathname] || seoPages['/'];
+  const trackedPath = useRef(null);
 
   useEffect(() => {
     document.title = seoData.title;
@@ -282,6 +283,33 @@ function AppContent({
     updateMeta('meta[name="twitter:title"]', 'twitter:title', seoData.title);
     updateMeta('meta[name="twitter:description"]', 'twitter:description', seoData.description);
 
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Velwin Estates',
+      url: window.location.origin,
+      logo: `${window.location.origin}/logo.jpeg`,
+      email: 'velwinestates@gmail.com',
+      telephone: '+91 81100 13838',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: '7/3, Duraiswamy Nagar',
+        addressLocality: 'Coimbatore',
+        addressRegion: 'Tamil Nadu',
+        postalCode: '641014',
+        addressCountry: 'IN'
+      },
+      description: seoData.description
+    };
+    let structuredDataScript = document.querySelector('script[data-seo-structured-data]');
+    if (!structuredDataScript) {
+      structuredDataScript = document.createElement('script');
+      structuredDataScript.type = 'application/ld+json';
+      structuredDataScript.setAttribute('data-seo-structured-data', 'true');
+      document.head.appendChild(structuredDataScript);
+    }
+    structuredDataScript.textContent = JSON.stringify(structuredData);
+
     let canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement('link');
@@ -290,6 +318,17 @@ function AppContent({
     }
     canonical.setAttribute('href', `${window.location.origin}${location.pathname}`);
   }, [location.pathname, seoData]);
+
+  useEffect(() => {
+    if (isAdminPage || trackedPath.current === location.pathname) return;
+    trackedPath.current = location.pathname;
+    fetch(apiUrl('/api/analytics/page-view'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path: location.pathname }),
+      keepalive: true
+    }).catch(() => {});
+  }, [isAdminPage, location.pathname]);
 
   // Close menu when route changes
   useEffect(() => {
