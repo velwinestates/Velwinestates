@@ -102,6 +102,38 @@ const siteMediaReady = db.isConfigured
     })
   : Promise.resolve(false);
 
+async function ensureSiteMediaTable() {
+  if (!db.isConfigured) return false;
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS site_media (
+      page VARCHAR(100) NOT NULL,
+      slot VARCHAR(100) NOT NULL,
+      image_url TEXT NOT NULL,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (page, slot)
+    )
+  `);
+  await db.query('ALTER TABLE site_media ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
+  return true;
+}
+
+async function ensurePlansTable() {
+  if (!db.isConfigured) return false;
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS plans (
+      id VARCHAR(100) PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      duration VARCHAR(100) DEFAULT 'Monthly',
+      description TEXT DEFAULT '',
+      popular BOOLEAN DEFAULT false,
+      features JSONB DEFAULT '[]'::jsonb,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+  return true;
+}
+
 // Configure multer for memory storage (files will be uploaded to Cloudinary)
 const storage = multer.memoryStorage();
 const upload = multer({ 
@@ -973,7 +1005,7 @@ app.post('/api/send-email', async (req, res) => {
 // Get saved page media overrides
 app.get('/api/site-media', async (req, res) => {
   try {
-    const mediaTableAvailable = await siteMediaReady;
+    const mediaTableAvailable = await ensureSiteMediaTable();
     if (!db.isConfigured || !mediaTableAvailable) return res.json({});
     const result = await db.query('SELECT page, slot, image_url FROM site_media ORDER BY page, slot');
     const media = {};
@@ -987,7 +1019,7 @@ app.get('/api/site-media', async (req, res) => {
 
 app.get('/api/site-media/:page', async (req, res) => {
   try {
-    const mediaTableAvailable = await siteMediaReady;
+    const mediaTableAvailable = await ensureSiteMediaTable();
     if (!db.isConfigured || !mediaTableAvailable) return res.json({});
     const result = await db.query('SELECT slot, image_url FROM site_media WHERE page = $1', [req.params.page]);
     const media = {};
@@ -1002,7 +1034,7 @@ app.get('/api/site-media/:page', async (req, res) => {
 app.put('/api/site-media/:page/:slot', upload.single('image'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'An image file is required' });
   try {
-    const mediaTableAvailable = await siteMediaReady;
+    const mediaTableAvailable = await ensureSiteMediaTable();
     if (!db.isConfigured || !mediaTableAvailable) {
       return res.status(503).json({ error: 'Media storage is temporarily unavailable' });
     }
@@ -1099,6 +1131,7 @@ app.get('/api/analytics/page-views', async (req, res) => {
 // Get all plans
 app.get('/api/plans', async (req, res) => {
   try {
+    await ensurePlansTable();
     // If database is configured, use it
     if (db.isConfigured) {
       const result = await db.query('SELECT * FROM plans ORDER BY id');
