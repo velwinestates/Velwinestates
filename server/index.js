@@ -124,6 +124,8 @@ const configuredOrigins = (process.env.ALLOWED_ORIGINS || '')
 const allowedOrigins = [
   'https://www.uzhavarconnect.com',
   'https://uzhavarconnect.com',
+  'https://www.velwinestates.com',
+  'https://velwinestates.com',
   frontendUrl,
   vercelUrl,
   'http://localhost:3000',
@@ -150,7 +152,9 @@ app.use(cors({
     const isAllowedHostedOrigin = originHostname.endsWith('.vercel.app')
       || originHostname.endsWith('.onrender.com')
       || originHostname === 'uzhavarconnect.com'
-      || originHostname === 'www.uzhavarconnect.com';
+      || originHostname === 'www.uzhavarconnect.com'
+      || originHostname === 'velwinestates.com'
+      || originHostname === 'www.velwinestates.com';
 
     // Allow if origin is in the allowed list or matches a Vercel preview domain
     if (normalizedAllowedOrigins.indexOf(normalizedOrigin) === -1 && !isAllowedHostedOrigin) {
