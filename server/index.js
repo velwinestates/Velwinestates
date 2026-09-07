@@ -113,6 +113,9 @@ async function ensureSiteMediaTable() {
       PRIMARY KEY (page, slot)
     )
   `);
+  await db.query('ALTER TABLE site_media ADD COLUMN IF NOT EXISTS page VARCHAR(100)');
+  await db.query('ALTER TABLE site_media ADD COLUMN IF NOT EXISTS slot VARCHAR(100)');
+  await db.query('ALTER TABLE site_media ADD COLUMN IF NOT EXISTS image_url TEXT');
   await db.query('ALTER TABLE site_media ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
   return true;
 }
@@ -1052,10 +1055,8 @@ app.put('/api/site-media/:page/:slot', upload.single('image'), async (req, res) 
 
     let saved;
     try {
-      saved = await db.query('UPDATE site_media SET image_url = $3, updated_at = CURRENT_TIMESTAMP WHERE page = $1 AND slot = $2 RETURNING image_url', [req.params.page, req.params.slot, result.secure_url]);
-      if (saved.rows.length === 0) {
-        saved = await db.query('INSERT INTO site_media (page, slot, image_url, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP) RETURNING image_url', [req.params.page, req.params.slot, result.secure_url]);
-      }
+      await db.query('DELETE FROM site_media WHERE page = $1 AND slot = $2', [req.params.page, req.params.slot]);
+      saved = await db.query('INSERT INTO site_media (page, slot, image_url, updated_at) VALUES ($1, $2, $3, CURRENT_TIMESTAMP) RETURNING image_url', [req.params.page, req.params.slot, result.secure_url]);
     } catch (error) {
       console.error('Database page media save failed:', error.message);
       return res.status(500).json({ error: 'Image uploaded to Cloudinary but could not be saved', details: error.message });
