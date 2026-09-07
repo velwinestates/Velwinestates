@@ -83,41 +83,37 @@ const databaseReady = db.isConfigured
     })
   : Promise.resolve(false);
 
-const siteMediaReady = db.isConfigured
-  ? db.query(`
-      CREATE TABLE IF NOT EXISTS site_media (
-        page VARCHAR(100) NOT NULL,
-        slot VARCHAR(100) NOT NULL,
-        image_url TEXT NOT NULL,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (page, slot)
-      );
-      ALTER TABLE site_media ADD COLUMN IF NOT EXISTS page VARCHAR(100);
-      ALTER TABLE site_media ADD COLUMN IF NOT EXISTS slot VARCHAR(100);
-      ALTER TABLE site_media ADD COLUMN IF NOT EXISTS image_url TEXT;
-      ALTER TABLE site_media ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-    `).then(() => true).catch(error => {
-      console.error('⚠️ Unable to initialize site_media table:', error.message);
-      return false;
-    })
-  : Promise.resolve(false);
-
 async function ensureSiteMediaTable() {
   if (!db.isConfigured) return false;
-  await db.query(`
-    CREATE TABLE IF NOT EXISTS site_media (
+  const statements = [
+    `CREATE TABLE IF NOT EXISTS site_media (
       page VARCHAR(100) NOT NULL,
       slot VARCHAR(100) NOT NULL,
       image_url TEXT NOT NULL,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY (page, slot)
-    )
-  `);
-  await db.query('ALTER TABLE site_media ADD COLUMN IF NOT EXISTS page VARCHAR(100)');
-  await db.query('ALTER TABLE site_media ADD COLUMN IF NOT EXISTS slot VARCHAR(100)');
-  await db.query('ALTER TABLE site_media ADD COLUMN IF NOT EXISTS image_url TEXT');
-  await db.query('ALTER TABLE site_media ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP');
-  return true;
+    )`,
+    'ALTER TABLE site_media ADD COLUMN IF NOT EXISTS page VARCHAR(100)',
+    'ALTER TABLE site_media ADD COLUMN IF NOT EXISTS slot VARCHAR(100)',
+    'ALTER TABLE site_media ADD COLUMN IF NOT EXISTS image_url TEXT',
+    'ALTER TABLE site_media ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+  ];
+
+  for (const statement of statements) {
+    try {
+      await db.query(statement);
+    } catch (error) {
+      console.warn('Media schema statement skipped:', error.message);
+    }
+  }
+
+  try {
+    await db.query('SELECT page, slot, image_url FROM site_media LIMIT 1');
+    return true;
+  } catch (error) {
+    console.error('Media table is unavailable:', error.message);
+    return false;
+  }
 }
 
 async function ensurePlansTable() {
@@ -1016,7 +1012,7 @@ app.get('/api/site-media', async (req, res) => {
     res.json(media);
   } catch (error) {
     console.error('Error reading page media:', error.message);
-    res.status(500).json({ error: 'Failed to load page media' });
+    res.json({});
   }
 });
 
@@ -1030,7 +1026,7 @@ app.get('/api/site-media/:page', async (req, res) => {
     res.json(media);
   } catch (error) {
     console.error('Error reading page media:', error.message);
-    res.status(500).json({ error: 'Failed to load page media' });
+    res.json({});
   }
 });
 
