@@ -2,6 +2,7 @@ import agricultureImage from '../assert/agriculture.jpg';
 import coconutImage from '../assert/Coconut Plantation.jpg';
 import fencingImage from '../assert/fencing.jpg';
 import farmWorkersImage from '../assert/farm workers.jpg';
+import founderImage from '../assert/founder.jpg';
 import farmShedImage from '../assert/Farm Shed Construction.jpg';
 import farmhouseImage from '../assert/FArmhouse.jpeg';
 import irrigationImage from '../assert/Drip Irrigation.webp';
@@ -13,6 +14,7 @@ import waterTankImage from '../assert/Water Tank Construction.jpg';
 
 const imageUrls = {
   farmWorkers: farmWorkersImage,
+  founder: founderImage,
   farmerMobile: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1200&q=85',
   construction: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=85',
   fencing: fencingImage,

@@ -29,7 +29,7 @@ function AboutPage() {
         <h2>Our Team</h2>
         <div className="team-grid">
           <div className="team-member">
-            <img src={imageUrls.farmerMobile} alt="Founder" />
+            <img src={imageUrls.founder} alt="Founder" />
             <h3>Velu Samy</h3>
             <p style={{ color: '#388e3c', fontWeight: 'bold' }}>Founder</p>
           </div>

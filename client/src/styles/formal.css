@@ -130,6 +130,19 @@ button.btn:hover {
   -webkit-animation: none !important;
 }
 
+.logo-copy {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.logo-tagline {
+  margin-top: 0.2rem;
+  color: var(--text-light);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
 .whatsapp-chat {
   position: fixed;
   left: 1.25rem;

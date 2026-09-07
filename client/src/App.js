@@ -411,7 +411,10 @@ function AppContent({
             {/* Left side - Logo */}
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="logo" style={{ display: 'flex', alignItems: 'center', gap: '0.5em', fontSize: '1.1em', textDecoration: 'none' }}>
               <img src={process.env.PUBLIC_URL + '/logo.jpeg'} alt="Velwin Estates Logo" className="logo-icon" style={{ height: '64px', width: '64px', borderRadius: '8px', objectFit: 'cover', boxShadow: '0 6px 16px rgba(0,0,0,0.12)' }} />
-              <span className="logo-text" style={{ fontWeight: 700, color: 'var(--text-color)' }}>Velwin Estates</span>
+              <div className="logo-copy">
+                <span className="logo-text" style={{ fontWeight: 700, color: 'var(--text-color)' }}>Velwin Estates</span>
+                <span className="logo-tagline">உயிரன்பு நான் இல்லை நாம் தான்!</span>
+              </div>
             </Link>
             
             {/* Right side - Menu Only */}
