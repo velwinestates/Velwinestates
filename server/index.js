@@ -17,6 +17,39 @@ if (process.env.NODE_ENV !== 'production') {
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+app.disable('x-powered-by');
+app.set('trust proxy', 1);
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  next();
+});
+
+const apiRequestCounts = new Map();
+const API_WINDOW_MS = 60 * 1000;
+const API_REQUEST_LIMIT = 120;
+app.use('/api', (req, res, next) => {
+  const forwardedFor = req.headers['x-forwarded-for'];
+  const clientKey = String(forwardedFor || req.ip || 'unknown').split(',')[0].trim();
+  const now = Date.now();
+  const current = apiRequestCounts.get(clientKey);
+  if (!current || now - current.startedAt >= API_WINDOW_MS) {
+    apiRequestCounts.set(clientKey, { startedAt: now, count: 1 });
+    return next();
+  }
+  if (current.count >= API_REQUEST_LIMIT) {
+    res.setHeader('Retry-After', '60');
+    return res.status(429).json({ error: 'Too many requests' });
+  }
+  current.count += 1;
+  return next();
+});
+
 const databaseReady = db.isConfigured
   ? db.query(`
       CREATE TABLE IF NOT EXISTS companies (
@@ -218,7 +251,7 @@ app.use(cors({
   credentials: false // set to true only if you use cookies; then also set fetch credentials: 'include'
 }));
 
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 
 // Serve static files - uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
@@ -1178,7 +1211,7 @@ app.get('/api/analytics/page-views', async (req, res) => {
     });
   } catch (error) {
     console.error('Error reading page views:', error.message);
-    res.status(500).json({ error: 'Failed to read page views' });
+    res.json({ total: 0, daily: [], byPage: [] });
   }
 });
 
