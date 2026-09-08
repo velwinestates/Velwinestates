@@ -1,28 +1,26 @@
 
 import 'leaflet/dist/leaflet.css';
 
-const constructionImage = (filename) => `${process.env.PUBLIC_URL || ''}/assert/${encodeURIComponent(filename)}`;
-
 const constructionImages = [
-  'WhatsApp Image 2026-09-04 at 7.16.17 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.16.38 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.16.39 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.16.56 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.16.58 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.16.59 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.17.00 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.17.10 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.17.11 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.17.14 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.17.29 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.22.30 PM.jpeg'
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878900/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_17_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878904/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_38_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878913/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_39_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878916/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_56_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878918/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_58_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878920/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_59_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878926/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_00_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878929/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_10_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878931/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_11_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878934/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_14_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878936/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_29_PM.jpg',
+  'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878938/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_22_30_PM.jpg'
 ];
 
 const projects = [
   {
     id: 1,
     title: 'Fencing',
-    image: constructionImage(constructionImages[0]),
+    image: constructionImages[0],
     imageAlt: 'Completed agricultural field fencing',
     location: 'Erode',
     category: 'fencing',
@@ -31,7 +29,7 @@ const projects = [
   {
     id: 2,
     title: 'Mango AMC',
-    image: constructionImage(constructionImages[1]),
+    image: constructionImages[1],
     imageAlt: 'Mango orchard maintenance work',
     location: 'Salem',
     category: 'maintenance',
@@ -40,7 +38,7 @@ const projects = [
   {
     id: 3,
     title: 'Water Tank Construction',
-    image: constructionImage(constructionImages[2]),
+    image: constructionImages[2],
     imageAlt: 'Farm water tank construction',
     location: 'Coimbatore',
     category: 'construction',
@@ -49,7 +47,7 @@ const projects = [
   {
     id: 4,
     title: 'Drip Irrigation',
-    image: constructionImage(constructionImages[3]),
+    image: constructionImages[3],
     imageAlt: 'Drip irrigation system installed on a farm',
     location: 'Madurai',
     category: 'irrigation',
@@ -58,7 +56,7 @@ const projects = [
   {
     id: 5,
     title: 'Coconut Plantation',
-    image: constructionImage(constructionImages[4]),
+    image: constructionImages[4],
     imageAlt: 'New coconut plantation',
     location: 'Tirupur',
     category: 'plantation',
@@ -67,7 +65,7 @@ const projects = [
   {
     id: 6,
     title: 'Farm Shed Construction',
-    image: constructionImage(constructionImages[5]),
+    image: constructionImages[5],
     imageAlt: 'Completed farm shed construction',
     location: 'Pollachi',
     category: 'construction',
@@ -76,7 +74,7 @@ const projects = [
   {
     id: 7,
     title: 'Farm Workers',
-    image: constructionImage(constructionImages[6]),
+    image: constructionImages[6],
     imageAlt: 'Agricultural workers in a field',
     location: 'Tamil Nadu',
     category: 'field-work',
@@ -85,7 +83,7 @@ const projects = [
   {
     id: 8,
     title: 'Farmhouse',
-    image: constructionImage(constructionImages[7]),
+    image: constructionImages[7],
     imageAlt: 'Farmhouse construction project',
     location: 'Tamil Nadu',
     category: 'construction',
@@ -94,7 +92,7 @@ const projects = [
   {
     id: 9,
     title: 'Swimming Pool',
-    image: constructionImage(constructionImages[8]),
+    image: constructionImages[8],
     imageAlt: 'Farm property swimming pool',
     location: 'Tamil Nadu',
     category: 'construction',
@@ -103,7 +101,7 @@ const projects = [
   {
     id: 10,
     title: 'Water Tank',
-    image: constructionImage(constructionImages[9]),
+    image: constructionImages[9],
     imageAlt: 'Agricultural water storage tank',
     location: 'Tamil Nadu',
     category: 'water-management',
@@ -112,7 +110,7 @@ const projects = [
   {
     id: 11,
     title: 'Polyhouse',
-    image: constructionImage(constructionImages[10]),
+    image: constructionImages[10],
     imageAlt: 'Protected cultivation polyhouse',
     location: 'Tamil Nadu',
     category: 'protected-cultivation',
@@ -121,7 +119,7 @@ const projects = [
   {
     id: 12,
     title: 'Goat Shed',
-    image: constructionImage(constructionImages[11]),
+    image: constructionImages[11],
     imageAlt: 'Livestock shed for goats',
     location: 'Tamil Nadu',
     category: 'livestock',

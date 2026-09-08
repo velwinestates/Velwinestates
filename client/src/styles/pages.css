@@ -362,6 +362,43 @@
   margin-bottom: var(--spacing-md);
 }
 
+.construction-reviews {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) 1.15rem;
+  text-align: center;
+}
+
+.construction-reviews h2 {
+  color: var(--primary-dark);
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.review-card {
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+
+.review-stars {
+  margin-bottom: 0.75rem;
+  color: #d6921e;
+  letter-spacing: 0.12em;
+}
+
+.review-card p {
+  margin-bottom: 1rem;
+  color: var(--text-light);
+}
+
 .section-heading h2 {
   display: inline-flex;
   align-items: center;

@@ -2,29 +2,26 @@ import { useMemo } from 'react';
 
 const pageMedia = {
   home: {
-    slide1: 'Velwin Logo.jpeg',
-    slide2: 'WhatsApp Image 2026-09-04 at 8.19.19 PM.jpeg',
-    slide3: 'WhatsApp Image 2026-09-04 at 8.24.16 PM.jpeg'
+    slide1: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878959/uzhavar/page-images/Velwin_Logo.jpg',
+    slide2: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878960/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_8_19_19_PM.jpg',
+    slide3: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878961/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_8_24_16_PM.jpg'
   },
   construction: {
-    hero: 'WhatsApp Image 2026-09-04 at 7.16.17 PM.jpeg',
-    farmhouse: 'WhatsApp Image 2026-09-04 at 7.16.38 PM.jpeg',
-    pool: 'WhatsApp Image 2026-09-04 at 7.16.39 PM.jpeg',
-    waterTank: 'WhatsApp Image 2026-09-04 at 7.16.56 PM.jpeg',
-    fencing: 'WhatsApp Image 2026-09-04 at 7.16.58 PM.jpeg',
-    polyhouse: 'WhatsApp Image 2026-09-04 at 7.16.59 PM.jpeg',
-    livestock: 'WhatsApp Image 2026-09-04 at 7.17.00 PM.jpeg',
-    farmShed: 'WhatsApp Image 2026-09-04 at 7.17.10 PM.jpeg',
-    irrigation: 'WhatsApp Image 2026-09-04 at 7.17.11 PM.jpeg'
+    hero: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878900/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_17_PM.jpg',
+    farmhouse: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878904/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_38_PM.jpg',
+    pool: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878913/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_39_PM.jpg',
+    waterTank: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878916/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_56_PM.jpg',
+    fencing: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878918/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_58_PM.jpg',
+    polyhouse: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878920/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_59_PM.jpg',
+    livestock: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878926/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_00_PM.jpg',
+    farmShed: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878929/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_10_PM.jpg',
+    irrigation: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878931/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_11_PM.jpg'
   },
   services: {}
 };
 
 export default function usePageMedia(page) {
   return useMemo(() => Object.fromEntries(
-    Object.entries(pageMedia[page] || {}).map(([slot, filename]) => [
-      slot,
-      `${process.env.PUBLIC_URL || ''}/assert/${encodeURIComponent(filename)}`
-    ])
+    Object.entries(pageMedia[page] || {})
   ), [page]);
 }

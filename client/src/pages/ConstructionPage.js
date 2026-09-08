@@ -1,8 +1,6 @@
 import 'leaflet/dist/leaflet.css';
 import { Link } from 'react-router-dom';
-import {  FaMapMarkerAlt } from 'react-icons/fa';
-import { MdOutlineConstruction } from 'react-icons/md';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import '../App.css';
 import imageUrls from '../data/imageUrls';
 import projects from '../data/projects';
@@ -11,9 +9,22 @@ import usePageMedia from '../hooks/usePageMedia';
 function ConstructionPage() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedFolder, setSelectedFolder] = useState(null);
-  const [folders, setFolders] = useState([]);
   const media = usePageMedia('construction');
   const image = (slot, fallback) => media[slot] || fallback;
+  const folders = [{
+    id: 'all-projects',
+    images: [
+      { id: 1, src: image('hero', imageUrls.construction), title: 'Construction Project 1' },
+      { id: 2, src: image('farmhouse', imageUrls.farmhouse), title: 'Construction Project 2' },
+      { id: 3, src: image('pool', imageUrls.pool), title: 'Construction Project 3' },
+      { id: 4, src: image('waterTank', imageUrls.waterTank), title: 'Construction Project 4' },
+      { id: 5, src: image('fencing', imageUrls.fencing), title: 'Construction Project 5' },
+      { id: 6, src: image('polyhouse', imageUrls.polyhouse), title: 'Construction Project 6' },
+      { id: 7, src: image('livestock', imageUrls.livestock), title: 'Construction Project 7' },
+      { id: 8, src: image('farmShed', imageUrls.farmShed), title: 'Construction Project 8' },
+      { id: 9, src: image('irrigation', imageUrls.irrigation), title: 'Construction Project 9' }
+    ]
+  }];
 
   // Define folder categories with icons and colors
   const folderCategories = [
@@ -26,53 +37,9 @@ function ConstructionPage() {
     }
   ];
 
-  // Load gallery images organized by folders
-  useEffect(() => {
-    // Get all images for "All Projects" folder
-    const allImages = [
-      { id: 1, src: image('hero', imageUrls.construction), title: 'Construction Project 1' },
-      { id: 2, src: image('farmhouse', imageUrls.farmhouse), title: 'Construction Project 2' },
-      { id: 3, src: image('pool', imageUrls.pool), title: 'Construction Project 3' },
-      { id: 4, src: image('waterTank', imageUrls.waterTank), title: 'Construction Project 4' },
-      { id: 5, src: image('fencing', imageUrls.fencing), title: 'Construction Project 5' },
-      { id: 6, src: image('polyhouse', imageUrls.polyhouse), title: 'Construction Project 6' },
-      { id: 7, src: image('livestock', imageUrls.livestock), title: 'Construction Project 7' },
-      { id: 8, src: image('farmShed', imageUrls.farmShed), title: 'Construction Project 8' },
-      { id: 9, src: image('irrigation', imageUrls.irrigation), title: 'Construction Project 9' }
-    ];
-
-    const organizedFolders = [
-      {
-        id: 'all-projects',
-        images: allImages
-      }
-    ];
-
-    setFolders(organizedFolders);
-  }, [media]);
-
   return (
     <div className="construction-page">
-      <section className="page-header">
-        <h1><MdOutlineConstruction /> Construction Services</h1>
-        <p>Quality infrastructure for your farm with professional teams</p>
-      </section>
-      
       <section className="construction-intro">
-        <div className="intro-content">
-          <h2>Farm Infrastructure Experts</h2>
-          <p>From water storage to living spaces, we build the facilities your farm needs to thrive.</p>
-          <p>All our construction projects come with:</p>
-          <ul>
-            <li>Detailed planning and estimation</li>
-            <li>Quality materials</li>
-            <li>Professional construction teams</li>
-            <li>Regular progress updates</li>
-            <li>Photo documentation</li>
-            <li>Transparent billing</li>
-          </ul>
-          {/* Top Request Quote button removed as requested */}
-        </div>
         <div className="intro-image">
           <img src={image('hero', imageUrls.construction)} alt="Farm Construction" />
         </div>
@@ -509,24 +476,30 @@ function ConstructionPage() {
             <div className="project-image">
               <img src={project.image} alt={project.title} />
             </div>
-            <div className="project-info">
-              <h3>{project.title}</h3>
-              <p>{project.description}</p>
-              <p className="project-location"><FaMapMarkerAlt /> {project.location}</p>
-              <div className="project-rating">
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <span className="star">★</span>
-                <span className="rating-text">5.0</span>
-              </div>
-            </div>
           </div>
         ))}
       </div>
-      
-      {/* Pagination removed as requested */}
+
+      <section className="construction-reviews" aria-labelledby="construction-reviews-title">
+        <h2 id="construction-reviews-title">Reviews</h2>
+        <div className="reviews-grid">
+          <article className="review-card">
+            <div className="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <p>“The team completed our farm improvements neatly and kept us updated at every stage.”</p>
+            <strong>Ramesh, Erode</strong>
+          </article>
+          <article className="review-card">
+            <div className="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <p>“Good quality construction work and clear communication from planning to completion.”</p>
+            <strong>Priya, Coimbatore</strong>
+          </article>
+          <article className="review-card">
+            <div className="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <p>“The work was well organized, reliable, and delivered as promised.”</p>
+            <strong>Suresh, Salem</strong>
+          </article>
+        </div>
+      </section>
     </div>
   );
 }
