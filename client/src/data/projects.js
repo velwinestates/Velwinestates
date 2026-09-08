@@ -1,21 +1,21 @@
 
 import 'leaflet/dist/leaflet.css';
 
-const constructionImage = (filename) => `${process.env.PUBLIC_URL || ''}/page-images/construction/${encodeURIComponent(filename)}`;
+const constructionImage = (filename) => `${process.env.PUBLIC_URL || ''}/assert/${encodeURIComponent(filename)}`;
 
 const constructionImages = [
   'WhatsApp Image 2026-09-04 at 7.16.17 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.16.38 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.16.39 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.16.56 PM.jpeg',
   'WhatsApp Image 2026-09-04 at 7.16.58 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.16.59 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.17.00 PM.jpeg',
   'WhatsApp Image 2026-09-04 at 7.17.10 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.17.11 PM.jpeg',
   'WhatsApp Image 2026-09-04 at 7.17.14 PM.jpeg',
   'WhatsApp Image 2026-09-04 at 7.17.29 PM.jpeg',
-  'watertank.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.23.24 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.23.27 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.23.34 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.23.36 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.23.42 PM.jpeg',
-  'WhatsApp Image 2026-09-04 at 7.23.43 PM.jpeg'
+  'WhatsApp Image 2026-09-04 at 7.22.30 PM.jpeg'
 ];
 
 const projects = [

@@ -33,11 +33,6 @@ function AboutPage() {
             <h3>Velu Samy</h3>
             <p style={{ color: '#388e3c', fontWeight: 'bold' }}>Founder</p>
           </div>
-          <div className="team-member">
-            <img src={imageUrls.farmWorkers} alt="Team Member" />
-            <h3>Prasanth</h3>
-            <p style={{ color: '#388e3c', fontWeight: 'bold' }}>Admin</p>
-          </div>
         </div>
       </section>
     </div>
