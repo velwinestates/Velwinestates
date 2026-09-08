@@ -77,6 +77,28 @@ export default function AdminMediaPage() {
     }
   }
 
+  async function handleRemove(item) {
+    const key = `${item.page}.${item.slot}`;
+    if (!media[key] || !window.confirm(`Remove ${item.label}?`)) return;
+
+    setStatus(`Removing ${item.label}...`);
+    try {
+      const response = await fetch(apiUrl(`/api/site-media/${item.page}/${item.slot}`), {
+        method: 'DELETE'
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || 'Remove failed');
+      setMedia(previous => {
+        const next = { ...previous };
+        delete next[key];
+        return next;
+      });
+      setStatus(`${item.label} removed successfully.`);
+    } catch (error) {
+      setStatus(error.message);
+    }
+  }
+
   return (
     <section style={{ padding: '2rem 1rem', fontFamily: 'var(--font-family)' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -103,6 +125,15 @@ export default function AdminMediaPage() {
                     <h4 style={{ marginTop: 0 }}>{item.label}</h4>
                     {media[key] && <img src={media[key]} alt={item.label} style={{ width: '100%', aspectRatio: '16 / 9', objectFit: 'cover', marginBottom: '0.75rem' }} />}
                     <input type="file" accept="image/*" onChange={event => handleUpload(event, item)} />
+                    {media[key] && (
+                      <button
+                        type="button"
+                        onClick={() => handleRemove(item)}
+                        style={{ marginTop: '0.75rem', padding: '0.55rem 0.8rem', border: '1px solid #b3261e', borderRadius: 6, background: '#fff', color: '#b3261e', cursor: 'pointer' }}
+                      >
+                        Remove image
+                      </button>
+                    )}
                   </article>
                 );
               })}

@@ -39,12 +39,28 @@ function ManageFarmPage(props) {
     setLoadingPlans(true);
     try {
       const res = await fetch(apiUrl('/api/plans'));
-      if (res.ok) {
-        const data = await res.json();
-        setPlans(data);
-      }
+      if (!res.ok) throw new Error(`Failed to load plans (${res.status})`);
+      const data = await res.json();
+      const normalizedPlans = Array.isArray(data) ? data.map(plan => {
+        let features = plan.features;
+        if (typeof features === 'string') {
+          try {
+            features = JSON.parse(features);
+          } catch {
+            features = features.split(',').map(feature => feature.trim()).filter(Boolean);
+          }
+        }
+        return {
+          ...plan,
+          features: Array.isArray(features) ? features : [],
+          duration: plan.duration || 'Monthly',
+          description: plan.description || ''
+        };
+      }) : [];
+      setPlans(normalizedPlans);
     } catch (error) {
       console.error('Error loading plans:', error);
+      setPlans([]);
     } finally {
       setLoadingPlans(false);
     }
@@ -148,10 +164,12 @@ function ManageFarmPage(props) {
                     <div key={plan.id} className={`plan-card ${plan.popular ? 'featured' : ''}`}>
                       {plan.popular && <div className="featured-badge">Popular</div>}
                       <h3>{plan.name}</h3>
+                      <p className="plan-duration">{plan.duration}</p>
+                      {plan.description && <p className="plan-description">{plan.description}</p>}
                       <ul>
-                        {plan.features && plan.features.map((feature, index) => (
+                        {plan.features.length > 0 ? plan.features.map((feature, index) => (
                           <li key={index}>{feature}</li>
-                        ))}
+                        )) : <li>Farm maintenance tailored to your needs</li>}
                       </ul>
                       <button className="btn btn-primary" onClick={() => navigate(`/confirm-plan?type=${plan.id}`)}>Select Plan</button>
                     </div>

@@ -1064,6 +1064,41 @@ app.put('/api/site-media/:page/:slot', upload.single('image'), async (req, res) 
   }
 });
 
+app.delete('/api/site-media/:page/:slot', async (req, res) => {
+  try {
+    const mediaTableAvailable = await ensureSiteMediaTable();
+    if (!db.isConfigured || !mediaTableAvailable) {
+      return res.status(503).json({ error: 'Media storage is temporarily unavailable' });
+    }
+
+    const result = await db.query(
+      'DELETE FROM site_media WHERE page = $1 AND slot = $2 RETURNING image_url',
+      [req.params.page, req.params.slot]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Image not found' });
+    }
+
+    const imageUrl = result.rows[0].image_url;
+    try {
+      const parsedUrl = new URL(imageUrl);
+      const uploadPath = parsedUrl.pathname.split('/upload/')[1] || '';
+      const publicId = uploadPath
+        .replace(/^v\d+\//, '')
+        .replace(/\.[^/.]+$/, '');
+      if (publicId) await deleteFromCloudinary(publicId);
+    } catch (error) {
+      console.warn('Cloudinary image cleanup skipped:', error.message);
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error removing page media:', error.message);
+    res.status(500).json({ error: 'Failed to remove page image', details: error.message });
+  }
+});
+
 // Record one public page view for the current day.
 app.post('/api/analytics/page-view', async (req, res) => {
   const pagePath = typeof req.body?.path === 'string' ? req.body.path : '/';
@@ -1180,7 +1215,7 @@ app.post('/api/plans', async (req, res) => {
           req.body.duration || 'Monthly',
           req.body.description || '',
           req.body.popular || false,
-          features
+          JSON.stringify(features)
         ]
       );
       
@@ -1248,7 +1283,7 @@ app.put('/api/plans/:id', async (req, res) => {
           req.body.duration || 'Monthly',
           req.body.description || '',
           req.body.popular || false,
-          features,
+          JSON.stringify(features),
           id
         ]
       );

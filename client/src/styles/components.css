@@ -223,6 +223,18 @@
   font-size: 1.5rem;
 }
 
+.plan-duration {
+  color: var(--primary-color);
+  font-weight: 700;
+  margin: -0.75rem 0 0.75rem;
+}
+
+.plan-description {
+  min-height: 3.2em;
+  color: var(--text-light);
+  margin-bottom: var(--spacing-lg);
+}
+
 .plan-card ul {
   text-align: left;
   margin-bottom: var(--spacing-xl);
