@@ -119,8 +119,9 @@ async function ensureSiteMediaTable() {
 
 async function ensurePlansTable() {
   if (!db.isConfigured) return false;
-  await db.query(`
-    CREATE TABLE IF NOT EXISTS plans (
+  await databaseReady;
+  const statements = [
+    `CREATE TABLE IF NOT EXISTS plans (
       id VARCHAR(100) PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
       duration VARCHAR(100) DEFAULT 'Monthly',
@@ -129,9 +130,29 @@ async function ensurePlansTable() {
       features JSONB DEFAULT '[]'::jsonb,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-  return true;
+    )`,
+    'ALTER TABLE plans ADD COLUMN IF NOT EXISTS duration VARCHAR(100) DEFAULT \'Monthly\'',
+    'ALTER TABLE plans ADD COLUMN IF NOT EXISTS description TEXT DEFAULT \'\'',
+    'ALTER TABLE plans ADD COLUMN IF NOT EXISTS popular BOOLEAN DEFAULT false',
+    'ALTER TABLE plans ADD COLUMN IF NOT EXISTS features JSONB DEFAULT \'[]\'::jsonb',
+    'ALTER TABLE plans ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+  ];
+
+  for (const statement of statements) {
+    try {
+      await db.query(statement);
+    } catch (error) {
+      console.warn('Plans schema statement skipped:', error.message);
+    }
+  }
+
+  try {
+    await db.query('SELECT id, name, duration, description, popular, features FROM plans LIMIT 1');
+    return true;
+  } catch (error) {
+    console.error('Plans table is unavailable:', error.message);
+    return false;
+  }
 }
 
 // Configure multer for memory storage (files will be uploaded to Cloudinary)
@@ -1164,9 +1185,9 @@ app.get('/api/analytics/page-views', async (req, res) => {
 // Get all plans
 app.get('/api/plans', async (req, res) => {
   try {
-    await ensurePlansTable();
+    const plansTableAvailable = await ensurePlansTable();
     // If database is configured, use it
-    if (db.isConfigured) {
+    if (db.isConfigured && plansTableAvailable) {
       const result = await db.query('SELECT * FROM plans ORDER BY id');
       
       const plans = result.rows.map(row => ({
@@ -1197,7 +1218,7 @@ app.get('/api/plans', async (req, res) => {
     }
   } catch (error) {
     console.error('❌ Error reading plans:', error.message);
-    res.status(500).json({ error: 'Failed to read plans' });
+    res.json([]);
   }
 });
 
