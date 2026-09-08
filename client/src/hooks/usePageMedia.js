@@ -1,20 +1,16 @@
-import { useEffect, useState } from 'react';
-import { apiUrl } from '../api';
+import { useMemo } from 'react';
+
+const pageSlots = {
+  home: ['slide1', 'slide2', 'slide3', 'slide4', 'slide5', 'slide6', 'slide7', 'slide8', 'slide9'],
+  construction: ['hero', 'farmhouse', 'pool', 'waterTank', 'fencing', 'polyhouse', 'livestock', 'farmShed', 'irrigation'],
+  services: ['farmWorkers', 'drone', 'fertilizer', 'irrigation', 'waterTank']
+};
 
 export default function usePageMedia(page) {
-  const [media, setMedia] = useState({});
-
-  useEffect(() => {
-    let active = true;
-    fetch(apiUrl(`/api/site-media/${page}`))
-      .then(response => response.ok ? response.json() : {})
-      .then(data => {
-        if (active && data && typeof data === 'object') setMedia(data);
-      })
-      .catch(() => {});
-
-    return () => { active = false; };
-  }, [page]);
-
-  return media;
+  return useMemo(() => Object.fromEntries(
+    (pageSlots[page] || []).map(slot => [
+      slot,
+      `${process.env.PUBLIC_URL || ''}/page-images/${page}/${slot}.jpg`
+    ])
+  ), [page]);
 }
