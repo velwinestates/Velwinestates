@@ -1,12 +1,28 @@
 
 import 'leaflet/dist/leaflet.css';
-import imageUrls from './imageUrls';
+
+const constructionImage = (filename) => `${process.env.PUBLIC_URL || ''}/page-images/construction/${encodeURIComponent(filename)}`;
+
+const constructionImages = [
+  'WhatsApp Image 2026-09-04 at 7.16.17 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.16.58 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.17.10 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.17.14 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.17.29 PM.jpeg',
+  'watertank.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.23.24 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.23.27 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.23.34 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.23.36 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.23.42 PM.jpeg',
+  'WhatsApp Image 2026-09-04 at 7.23.43 PM.jpeg'
+];
 
 const projects = [
   {
     id: 1,
     title: 'Fencing',
-    image: imageUrls.fencing,
+    image: constructionImage(constructionImages[0]),
     imageAlt: 'Completed agricultural field fencing',
     location: 'Erode',
     category: 'fencing',
@@ -15,7 +31,7 @@ const projects = [
   {
     id: 2,
     title: 'Mango AMC',
-    image: imageUrls.mango,
+    image: constructionImage(constructionImages[1]),
     imageAlt: 'Mango orchard maintenance work',
     location: 'Salem',
     category: 'maintenance',
@@ -24,7 +40,7 @@ const projects = [
   {
     id: 3,
     title: 'Water Tank Construction',
-    image: imageUrls.waterTank,
+    image: constructionImage(constructionImages[2]),
     imageAlt: 'Farm water tank construction',
     location: 'Coimbatore',
     category: 'construction',
@@ -33,7 +49,7 @@ const projects = [
   {
     id: 4,
     title: 'Drip Irrigation',
-    image: imageUrls.irrigation,
+    image: constructionImage(constructionImages[3]),
     imageAlt: 'Drip irrigation system installed on a farm',
     location: 'Madurai',
     category: 'irrigation',
@@ -42,7 +58,7 @@ const projects = [
   {
     id: 5,
     title: 'Coconut Plantation',
-    image: imageUrls.coconut,
+    image: constructionImage(constructionImages[4]),
     imageAlt: 'New coconut plantation',
     location: 'Tirupur',
     category: 'plantation',
@@ -51,7 +67,7 @@ const projects = [
   {
     id: 6,
     title: 'Farm Shed Construction',
-    image: imageUrls.farmShed,
+    image: constructionImage(constructionImages[5]),
     imageAlt: 'Completed farm shed construction',
     location: 'Pollachi',
     category: 'construction',
@@ -60,7 +76,7 @@ const projects = [
   {
     id: 7,
     title: 'Farm Workers',
-    image: imageUrls.farmWorkers,
+    image: constructionImage(constructionImages[6]),
     imageAlt: 'Agricultural workers in a field',
     location: 'Tamil Nadu',
     category: 'field-work',
@@ -69,7 +85,7 @@ const projects = [
   {
     id: 8,
     title: 'Farmhouse',
-    image: imageUrls.farmhouse,
+    image: constructionImage(constructionImages[7]),
     imageAlt: 'Farmhouse construction project',
     location: 'Tamil Nadu',
     category: 'construction',
@@ -78,7 +94,7 @@ const projects = [
   {
     id: 9,
     title: 'Swimming Pool',
-    image: imageUrls.pool,
+    image: constructionImage(constructionImages[8]),
     imageAlt: 'Farm property swimming pool',
     location: 'Tamil Nadu',
     category: 'construction',
@@ -87,7 +103,7 @@ const projects = [
   {
     id: 10,
     title: 'Water Tank',
-    image: imageUrls.waterTank,
+    image: constructionImage(constructionImages[9]),
     imageAlt: 'Agricultural water storage tank',
     location: 'Tamil Nadu',
     category: 'water-management',
@@ -96,7 +112,7 @@ const projects = [
   {
     id: 11,
     title: 'Polyhouse',
-    image: imageUrls.polyhouse,
+    image: constructionImage(constructionImages[10]),
     imageAlt: 'Protected cultivation polyhouse',
     location: 'Tamil Nadu',
     category: 'protected-cultivation',
@@ -105,7 +121,7 @@ const projects = [
   {
     id: 12,
     title: 'Goat Shed',
-    image: imageUrls.livestock,
+    image: constructionImage(constructionImages[11]),
     imageAlt: 'Livestock shed for goats',
     location: 'Tamil Nadu',
     category: 'livestock',

@@ -80,48 +80,29 @@ function ConstructionPage() {
 
       
       <section className="construction-services">
-        <h2>Our Construction Services</h2>
         <div className="service-cards">
           <div className="service-card">
-        <img src={image('farmhouse', imageUrls.farmhouse)} alt="Farmhouse" />
-        <h3>Farmhouses</h3>
-        <p>Elegant farm living with modern comforts.</p>
-        <p>Perfect for retreats or permanent residence.</p>
+        <img src={image('farmhouse', imageUrls.farmhouse)} alt="Farmhouse construction" />
       </div>
 
       <div className="service-card">
-        <img src={image('pool', imageUrls.pool)} alt="Swimming Pool" />
-        <h3>Swimming Pools</h3>
-        <p>Luxury pools designed for relaxation & fun.</p>
-        <p>Durable, stylish, and low-maintenance.</p>
+        <img src={image('pool', imageUrls.pool)} alt="Swimming pool construction" />
       </div>
 
       <div className="service-card">
-        <img src={image('waterTank', imageUrls.waterTank)} alt="Water Tanks" />
-        <h3>Water Tanks</h3>
-        <p>Reliable storage for irrigation & livestock.</p>
-        <p>Built strong, lasting through all seasons.</p>
+        <img src={image('waterTank', imageUrls.waterTank)} alt="Water tank construction" />
       </div>
 
       <div className="service-card">
-        <img src={image('fencing', imageUrls.fencing)} alt="Fencing" />
-        <h3>Fencing</h3>
-        <p>Secure & durable fencing solutions.</p>
-        <p>Protect crops, livestock, and property.</p>
+        <img src={image('fencing', imageUrls.fencing)} alt="Farm fencing" />
       </div>
 
       <div className="service-card">
-        <img src={image('polyhouse', imageUrls.polyhouse)} alt="Polyhouse" />
-        <h3>Polyhouse</h3>
-        <p>Climate-controlled farming spaces.</p>
-        <p>Boosts yield with advanced technology.</p>
+        <img src={image('polyhouse', imageUrls.polyhouse)} alt="Polyhouse construction" />
       </div>
 
       <div className="service-card">
-        <img src={image('livestock', imageUrls.livestock)} alt="Cow & Goat Shed" />
-        <h3>Cow & Goat Sheds</h3>
-        <p>Hygienic, ventilated, and durable shelters.</p>
-        <p>Designed for animal comfort & health.</p>
+        <img src={image('livestock', imageUrls.livestock)} alt="Livestock shed construction" />
       </div>
         </div>
       </section>

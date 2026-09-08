@@ -81,7 +81,7 @@ function HomePage({ currentSlide, onBookProject }) {
         </section>
       )}
       <Link
-        to="/projects"
+        to="/construction"
         className="btn btn-primary recent-projects-link"
         style={{
           position: 'fixed',
@@ -100,7 +100,7 @@ function HomePage({ currentSlide, onBookProject }) {
         }}
       >
         <FaImage />
-        <span className="recent-projects-link-text">Recent Projects</span>
+        <span className="recent-projects-link-text">Construction Services</span>
       </Link>
       <section className="hero-section">
         <div className="hero-content">
@@ -208,7 +208,7 @@ function HomePage({ currentSlide, onBookProject }) {
             />
           ))}
         </div>
-        <Link to="/projects" className="btn btn-primary center-btn">See Past Work <BsArrowRightCircle /></Link>
+        <Link to="/construction" className="btn btn-primary center-btn">Construction Services <BsArrowRightCircle /></Link>
       </section>
 
     </div>
