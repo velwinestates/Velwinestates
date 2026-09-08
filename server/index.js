@@ -85,6 +85,7 @@ const databaseReady = db.isConfigured
 
 async function ensureSiteMediaTable() {
   if (!db.isConfigured) return false;
+  await databaseReady;
   const statements = [
     `CREATE TABLE IF NOT EXISTS site_media (
       page VARCHAR(100) NOT NULL,
