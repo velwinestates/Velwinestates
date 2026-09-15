@@ -11,7 +11,6 @@ import {
 import services from '../data/services';
 import trustFactors from '../data/trustFactors';
 import howItWorks from '../data/howItWorks';
-import projects from '../data/projects';
 import usePageMedia from '../hooks/usePageMedia';
 
 const defaultHomeMedia = [
@@ -49,12 +48,6 @@ function HomePage({ currentSlide, onBookProject }) {
 
   return (
     <div className="home-page">
-      <div className="construction-notice" role="status">
-        <span className="construction-notice-label">Site update</span>
-        <span className="construction-notice-message">
-          Our website is still under construction. Thank you for your patience while we improve your experience.
-        </span>
-      </div>
       {constructionMedia.length > 0 && (
         <section className="construction-media-section home-media-top" aria-label="Home image slides">
           <div className="construction-media-carousel">
@@ -178,38 +171,6 @@ function HomePage({ currentSlide, onBookProject }) {
   {/* Book Site Visit button removed as requested */}
       </section>
 
-      <section className="recent-projects-section">
-        <div className="section-heading">
-            <div className="section-heading-container">
-                <h2><FaImage /> Recent Projects</h2>
-            </div>
-        </div>
-        <div className="projects-carousel">
-          <div className="carousel-container" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-            {projects.map((project, index) => (
-              <div className="project-card" key={project.id}>
-                <div className="project-image">
-                  <img src={project.image} alt={project.title} />
-                </div>
-                <div className="project-info">
-                  <h3>{project.title}</h3>
-                  <p>{project.description}</p>
-                  <p className="project-location"><FaMapMarkerAlt /> {project.location}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="carousel-dots">
-          {projects.map((_, index) => (
-            <span 
-              key={index} 
-              className={`dot ${currentSlide === index ? 'active' : ''}`} 
-            />
-          ))}
-        </div>
-        <Link to="/construction" className="btn btn-primary center-btn">Construction Services <BsArrowRightCircle /></Link>
-      </section>
 
     </div>
   );

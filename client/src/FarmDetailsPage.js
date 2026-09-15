@@ -64,8 +64,10 @@ export default function FarmDetailsPage() {
         'Area (acres)': form.area,
         'Crop Planted': form.crop || 'Not specified',
         'Irrigation Type': form.irrigationType || 'Not specified',
-        'Additional Notes': form.notes || 'None'
-      }
+        'Additional Notes': form.notes || 'None',
+        'Land Image': form.landImage ? form.landImage.name : 'Not uploaded'
+      },
+      toEmail: 'velwinestates@gmail.com'
     };
 
     // Send email
@@ -165,7 +167,10 @@ export default function FarmDetailsPage() {
             <label style={{display:'block',fontWeight:600,color:'#2e7d32',marginBottom:'0.5rem',fontSize:'0.95em'}}>Additional Notes</label>
             <textarea name="notes" value={form.notes} onChange={handleChange} style={{width:'100%',padding:'0.85rem 1rem',borderRadius:'10px',border:'2px solid #e0e0e0',fontSize:'1em',transition:'all 0.3s ease',outline:'none',background:'rgba(255,255,255,0.9)',minHeight:'60px',resize:'vertical'}} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
           </div>
-          <button type="submit" style={{width:'100%',padding:'1rem',background:'linear-gradient(135deg, #2e7d32, #4caf50)',color:'white',border:'none',borderRadius:'10px',fontWeight:600,fontSize:'1.05em',cursor:'pointer',boxShadow:'0 4px 15px rgba(46,125,50,0.3)',transition:'all 0.3s ease'}} onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>Submit Farm Details</button>
+          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem' }}>
+            <button type="submit" style={{ flex: 1, padding:'1rem', background:'linear-gradient(135deg, #2e7d32, #4caf50)', color:'white', border:'none', borderRadius:'10px', fontWeight:600, fontSize:'1.05em', cursor:'pointer', boxShadow:'0 4px 15px rgba(46,125,50,0.3)', transition:'all 0.3s ease' }} onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>Submit Farm Details</button>
+            <button type="button" onClick={() => navigate('/')} style={{ flex: 1, padding:'1rem', background:'#c62828', color:'white', border:'none', borderRadius:'10px', fontWeight:600, fontSize:'1.05em', cursor:'pointer' }}>Cancel</button>
+          </div>
         </form>
         {submitted && <div style={{textAlign:'center',marginTop:'2rem',padding:'1.5rem',background:'rgba(46,125,50,0.1)',borderRadius:'10px',color:'#2e7d32'}}><div style={{fontSize:'2em',marginBottom:'0.5rem'}}>✓</div><div style={{fontWeight:600}}>Thank you! We received your farm details.</div></div>}
       </div>

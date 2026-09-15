@@ -6,6 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const https = require('https');
+const nodemailer = require('nodemailer');
 const db = require('./db'); // Database connection
 const { cloudinary, uploadToCloudinary, deleteFromCloudinary } = require('./cloudinary'); // Cloudinary integration
 
@@ -78,6 +79,23 @@ const databaseReady = db.isConfigured
       ALTER TABLE products ADD COLUMN IF NOT EXISTS image_url TEXT DEFAULT '';
       ALTER TABLE products ADD COLUMN IF NOT EXISTS show_order_button BOOLEAN DEFAULT true;
       ALTER TABLE products ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+      CREATE TABLE IF NOT EXISTS product_orders (
+        id SERIAL PRIMARY KEY,
+        product_id INTEGER REFERENCES products(id) ON DELETE SET NULL,
+        company_id INTEGER REFERENCES companies(id) ON DELETE SET NULL,
+        product_name VARCHAR(255) NOT NULL,
+        company_name VARCHAR(255) NOT NULL,
+        customer_name VARCHAR(255) NOT NULL,
+        phone VARCHAR(20) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        address TEXT NOT NULL,
+        quantity INTEGER NOT NULL DEFAULT 1,
+        order_status VARCHAR(50) DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      CREATE INDEX IF NOT EXISTS idx_product_orders_status ON product_orders(order_status);
+      CREATE INDEX IF NOT EXISTS idx_product_orders_created_at ON product_orders(created_at);
       UPDATE companies SET logo = logo_url WHERE COALESCE(logo, '') = '' AND COALESCE(logo_url, '') <> '';
       UPDATE companies SET logo_url = logo WHERE COALESCE(logo_url, '') = '' AND COALESCE(logo, '') <> '';
       UPDATE products SET image = image_url WHERE COALESCE(image, '') = '' AND COALESCE(image_url, '') <> '';
@@ -239,9 +257,12 @@ app.use(cors({
       || originHostname === 'www.uzhavarconnect.com'
       || originHostname === 'velwinestates.com'
       || originHostname === 'www.velwinestates.com';
+    const isAllowedLocalOrigin = originHostname === 'localhost'
+      || originHostname === '127.0.0.1'
+      || originHostname === '::1';
 
     // Allow if origin is in the allowed list or matches a Vercel preview domain
-    if (normalizedAllowedOrigins.indexOf(normalizedOrigin) === -1 && !isAllowedHostedOrigin) {
+    if (normalizedAllowedOrigins.indexOf(normalizedOrigin) === -1 && !isAllowedHostedOrigin && !isAllowedLocalOrigin) {
       console.warn('⚠️ CORS blocked origin:', origin);
       return callback(new Error('CORS policy does not allow access from this origin.'), false);
     }
@@ -938,6 +959,59 @@ app.delete('/api/companies/:companyId/products/:productId', async (req, res) => 
   }
 });
 
+app.get('/api/orders', async (req, res) => {
+  try {
+    if (!db.isConfigured) return res.json([]);
+    const result = await db.query(`
+      SELECT id, product_id AS "productId", company_id AS "companyId",
+             product_name AS "productName", company_name AS "companyName",
+             customer_name AS "customerName", phone, email, address,
+             quantity, order_status AS status, created_at AS "createdAt"
+      FROM product_orders
+      ORDER BY created_at DESC
+    `);
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error loading orders:', error.message);
+    res.status(500).json({ error: 'Failed to load orders' });
+  }
+});
+
+app.post('/api/orders', async (req, res) => {
+  const { companyId, productId, productName, companyName, name, phone, email, extra = {} } = req.body || {};
+  const address = extra['Delivery Address'] || req.body.address || '';
+  const quantity = Number(extra.Quantity || req.body.quantity || 1);
+
+  if (!productName || !companyName || !name || !phone || !email || !address || !Number.isInteger(quantity) || quantity < 1) {
+    return res.status(400).json({ error: 'Complete customer and order details are required.' });
+  }
+
+  try {
+    if (!db.isConfigured) {
+      const ordersPath = path.join(__dirname, 'data', 'orders.json');
+      const orders = fs.existsSync(ordersPath) ? JSON.parse(fs.readFileSync(ordersPath, 'utf8')) : [];
+      const order = { id: Date.now(), productId, companyId, productName, companyName, customerName: name, phone, email, address, quantity, status: 'pending', createdAt: new Date().toISOString() };
+      orders.unshift(order);
+      fs.writeFileSync(ordersPath, JSON.stringify(orders, null, 2));
+      return res.status(201).json(order);
+    }
+
+    const result = await db.query(`
+      INSERT INTO product_orders
+        (product_id, company_id, product_name, company_name, customer_name, phone, email, address, quantity)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      RETURNING id, product_id AS "productId", company_id AS "companyId",
+                product_name AS "productName", company_name AS "companyName",
+                customer_name AS "customerName", phone, email, address,
+                quantity, order_status AS status, created_at AS "createdAt"
+    `, [productId || null, companyId || null, productName, companyName, name, phone, email, address, quantity]);
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error saving order:', error.message);
+    res.status(500).json({ error: 'Failed to save order' });
+  }
+});
+
 // Send email endpoint
 app.post('/api/send-email', async (req, res) => {
   console.log('� Form submission endpoint hit');
@@ -1038,6 +1112,31 @@ app.post('/api/send-email', async (req, res) => {
       }
     } else {
       console.warn('⚠️ GOOGLE_SHEETS_URL not configured - skipping Google Sheets save');
+    }
+
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+    if (smtpUser && smtpPass && process.env.SEND_EMAILS !== 'false') {
+      try {
+        const transporter = nodemailer.createTransport({
+          host: process.env.SMTP_HOST || 'smtp.gmail.com',
+          port: Number(process.env.SMTP_PORT || 587),
+          secure: String(process.env.SMTP_PORT || '587') === '465',
+          auth: { user: smtpUser, pass: smtpPass }
+        });
+        await transporter.sendMail({
+          from: process.env.FROM_EMAIL || smtpUser,
+          to: req.body?.toEmail || process.env.TO_EMAIL || 'velwinestates@gmail.com',
+          replyTo: req.body?.email || undefined,
+          subject,
+          text: JSON.stringify(req.body, null, 2)
+        });
+        console.log('✅ Notification email sent');
+      } catch (emailError) {
+        console.error('❌ Notification email failed:', emailError.message);
+      }
+    } else {
+      console.warn('⚠️ SMTP is not configured; submission was stored but no email was sent');
     }
 
     // 3) Submission stored successfully in Google Sheets
@@ -1181,7 +1280,7 @@ app.get('/api/analytics/page-views', async (req, res) => {
   try {
     const databaseAvailable = await databaseReady;
     if (!db.isConfigured || !databaseAvailable) {
-      return res.json({ total: 0, daily: [], byPage: [] });
+      return res.status(503).json({ error: 'Website views require a configured database' });
     }
 
     const result = await db.query(`
@@ -1211,7 +1310,7 @@ app.get('/api/analytics/page-views', async (req, res) => {
     });
   } catch (error) {
     console.error('Error reading page views:', error.message);
-    res.json({ total: 0, daily: [], byPage: [] });
+    res.status(500).json({ error: 'Unable to load website views', details: error.message });
   }
 });
 

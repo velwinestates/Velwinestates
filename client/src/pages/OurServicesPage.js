@@ -41,37 +41,6 @@ export default function OurServicesPage() {
   // Log video URLs for debugging
   console.log('Demo Videos:', demoVideos);
 
-  // Drone images configuration
-  const droneImages = [
-    {
-      id: 1,
-      title: 'Crop Monitoring',
-      image: image('drone', imageUrls.drone),
-      description: 'Real-time crop health monitoring with high-resolution imaging'
-    },
-    {
-      id: 2,
-      title: 'Precision Spraying',
-      image: image('irrigation', imageUrls.irrigation),
-      description: 'Efficient and precise pesticide and fertilizer application'
-    },
-    {
-      id: 3,
-      title: 'Land Mapping',
-      image: image('farmWorkers', imageUrls.farmWorkers),
-      description: 'Detailed topographical mapping and analysis'
-    },
-    {
-      id: 4,
-      title: 'Irrigation Management',
-      image: image('waterTank', imageUrls.waterTank),
-      description: 'Smart irrigation monitoring and optimization'
-    }
-  ];
-
-  // Log image URLs for debugging
-  console.log('Drone Images:', droneImages);
-
   const services = [
     {
       title: 'Aadhivelan Drone Services',
@@ -309,88 +278,6 @@ export default function OurServicesPage() {
                 </h3>
                 <p style={{ color: '#666', lineHeight: 1.6 }}>
                   {video.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Drone Images Gallery */}
-      <div style={{ 
-        maxWidth: 1200, 
-        margin: '0 auto 4rem',
-        padding: '0 1rem'
-      }}>
-        <h2 style={{ 
-          color: '#2e7d32', 
-          fontSize: '2rem', 
-          fontWeight: 700, 
-          marginBottom: '2rem',
-          textAlign: 'center'
-        }}>
-          Drone Technology Showcase
-        </h2>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-          gap: '2rem' 
-        }}>
-          {droneImages.map((item) => (
-            <div 
-              key={item.id}
-              style={{ 
-                background: 'rgba(255, 255, 255, 0.75)', 
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.5)',
-                borderRadius: 16, 
-                overflow: 'hidden',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease'
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = 'scale(1.03)';
-                e.currentTarget.style.boxShadow = '0 8px 30px rgba(46,125,50,0.2)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'scale(1)';
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
-              }}
-            >
-              <div style={{ 
-                width: '100%', 
-                height: 220, 
-                background: '#ebe8de',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                overflow: 'hidden'
-              }}>
-                <img 
-                  src={item.image} 
-                  alt={item.title}
-                  style={{ 
-                    width: '100%', 
-                    height: '100%', 
-                    objectFit: 'cover' 
-                  }}
-                  onError={(e) => {
-                    console.error('Failed to load drone image:', e.target.src);
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: #285943; font-size: 1rem;">Image unavailable</div>';
-                  }}
-                  onLoad={(e) => {
-                    console.log('Successfully loaded drone image:', e.target.src);
-                  }}
-                />
-              </div>
-              <div style={{ padding: '1.5rem' }}>
-                <h3 style={{ color: '#2e7d32', fontSize: '1.3rem', marginBottom: '0.5rem' }}>
-                  {item.title}
-                </h3>
-                <p style={{ color: '#666', lineHeight: 1.6 }}>
-                  {item.description}
                 </p>
               </div>
             </div>

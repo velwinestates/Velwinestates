@@ -226,7 +226,7 @@ export default function JoinUsPage() {
               </div>
             </div>
             <div className="join-image">
-              <img src={imageUrls.farmerMobile} alt="Farmer Using App" />
+              <img src={imageUrls.agriculture} alt="Farmer in field" />
             </div>
           </div>
           

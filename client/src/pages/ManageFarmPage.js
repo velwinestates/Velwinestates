@@ -208,7 +208,7 @@ function ManageFarmPage(props) {
               <p>Maintain healthy growth and protect your crops from pests.</p>
               <div className="service-details">
                 <div className="service-image">
-                  <img src={imageUrls.pruning} alt="Pruning & Pest Control" />
+                  <img src={imageUrls.mango} alt="Pruning & Pest Control" />
                 </div>
                 <div className="service-text">
                   <h3>Expert Pruning Services</h3>

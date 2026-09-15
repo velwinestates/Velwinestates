@@ -67,7 +67,7 @@ export default function CompaniesPage() {
   }, []);
 
   const handleOrderClick = (product, company) => {
-    setSelectedProduct({ ...product, companyName: company.name });
+    setSelectedProduct({ ...product, companyName: company.name, companyId: company.id });
     setShowOrderModal(true);
     setOrderSubmitted(false);
   };
@@ -82,6 +82,11 @@ export default function CompaniesPage() {
     
     try {
       const orderData = {
+        companyId: selectedProduct.companyId,
+        productId: selectedProduct.id,
+        productName: selectedProduct.name,
+        companyName: selectedProduct.companyName,
+        toEmail: 'velwinestates@gmail.com',
         formType: 'Product Order',
         name: orderForm.name,
         phone: orderForm.phone,
@@ -94,6 +99,16 @@ export default function CompaniesPage() {
           'Delivery Address': orderForm.address
         }
       };
+
+      const orderResponse = await fetch(apiUrl('/api/orders'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
+      });
+      if (!orderResponse.ok) {
+        const error = await orderResponse.json().catch(() => ({}));
+        throw new Error(error.error || 'Failed to save order');
+      }
 
       const response = await fetch(apiUrl('/api/send-email'), {
         method: 'POST',

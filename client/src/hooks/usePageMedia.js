@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
+import { apiUrl } from '../api';
 
 const pageMedia = {
   home: {
@@ -21,7 +22,25 @@ const pageMedia = {
 };
 
 export default function usePageMedia(page) {
-  return useMemo(() => Object.fromEntries(
-    Object.entries(pageMedia[page] || {})
-  ), [page]);
+  const [media, setMedia] = useState(() => pageMedia[page] || {});
+
+  useEffect(() => {
+    let cancelled = false;
+
+    setMedia(pageMedia[page] || {});
+    fetch(apiUrl(`/api/site-media/${page}`), { cache: 'no-store' })
+      .then(response => response.ok ? response.json() : {})
+      .then(overrides => {
+        if (!cancelled && overrides && typeof overrides === 'object') {
+          setMedia({ ...(pageMedia[page] || {}), ...overrides });
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [page]);
+
+  return media;
 }

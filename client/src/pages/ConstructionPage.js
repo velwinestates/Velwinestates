@@ -1,404 +1,41 @@
-import 'leaflet/dist/leaflet.css';
-import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import '../App.css';
 import imageUrls from '../data/imageUrls';
-import projects from '../data/projects';
 import usePageMedia from '../hooks/usePageMedia';
 
 function ConstructionPage() {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedFolder, setSelectedFolder] = useState(null);
   const media = usePageMedia('construction');
   const image = (slot, fallback) => media[slot] || fallback;
-  const folders = [{
-    id: 'all-projects',
-    images: [
-      { id: 1, src: image('hero', imageUrls.construction), title: 'Construction Project 1' },
-      { id: 2, src: image('farmhouse', imageUrls.farmhouse), title: 'Construction Project 2' },
-      { id: 3, src: image('pool', imageUrls.pool), title: 'Construction Project 3' },
-      { id: 4, src: image('waterTank', imageUrls.waterTank), title: 'Construction Project 4' },
-      { id: 5, src: image('fencing', imageUrls.fencing), title: 'Construction Project 5' },
-      { id: 6, src: image('polyhouse', imageUrls.polyhouse), title: 'Construction Project 6' },
-      { id: 7, src: image('livestock', imageUrls.livestock), title: 'Construction Project 7' },
-      { id: 8, src: image('farmShed', imageUrls.farmShed), title: 'Construction Project 8' },
-      { id: 9, src: image('irrigation', imageUrls.irrigation), title: 'Construction Project 9' }
-    ]
-  }];
-
-  // Define folder categories with icons and colors
-  const folderCategories = [
-    { 
-      id: 'all-projects', 
-      name: 'All Projects', 
-      icon: 'Folder', 
-      color: '#285943',
-      description: 'View all construction projects'
-    }
+  const images = [
+    { id: 1, src: image('hero', imageUrls.construction), title: 'Construction Project 1' },
+    { id: 2, src: image('farmhouse', imageUrls.farmhouse), title: 'Construction Project 2' },
+    { id: 3, src: image('pool', imageUrls.pool), title: 'Construction Project 3' },
+    { id: 4, src: image('waterTank', imageUrls.waterTank), title: 'Construction Project 4' },
+    { id: 5, src: image('fencing', imageUrls.fencing), title: 'Construction Project 5' },
+    { id: 6, src: image('polyhouse', imageUrls.polyhouse), title: 'Construction Project 6' },
+    { id: 7, src: image('livestock', imageUrls.livestock), title: 'Construction Project 7' },
+    { id: 8, src: image('farmShed', imageUrls.farmShed), title: 'Construction Project 8' },
+    { id: 9, src: image('irrigation', imageUrls.irrigation), title: 'Construction Project 9' }
   ];
 
   return (
-    <div className="construction-page">
-      <section className="construction-intro">
-        <div className="intro-image">
-          <img src={image('hero', imageUrls.construction)} alt="Farm Construction" />
-        </div>
-      </section>
-
-      
-      <section className="construction-services">
-        <div className="service-cards">
-          <div className="service-card">
-        <img src={image('farmhouse', imageUrls.farmhouse)} alt="Farmhouse construction" />
+    <div className="construction-page" style={{ padding: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+        {images.map(constructionImage => (
+          <button
+            type="button"
+            key={constructionImage.id}
+            onClick={() => setSelectedImage(constructionImage)}
+            style={{ padding: 0, border: 0, background: 'transparent', cursor: 'pointer' }}
+          >
+            <img
+              src={constructionImage.src}
+              alt=""
+              style={{ display: 'block', width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: 8 }}
+            />
+          </button>
+        ))}
       </div>
-
-      <div className="service-card">
-        <img src={image('pool', imageUrls.pool)} alt="Swimming pool construction" />
-      </div>
-
-      <div className="service-card">
-        <img src={image('waterTank', imageUrls.waterTank)} alt="Water tank construction" />
-      </div>
-
-      <div className="service-card">
-        <img src={image('fencing', imageUrls.fencing)} alt="Farm fencing" />
-      </div>
-
-      <div className="service-card">
-        <img src={image('polyhouse', imageUrls.polyhouse)} alt="Polyhouse construction" />
-      </div>
-
-      <div className="service-card">
-        <img src={image('livestock', imageUrls.livestock)} alt="Livestock shed construction" />
-      </div>
-        </div>
-      </section>
-      
-      <section className="construction-cta">
-        <h2>Ready to Start Your Construction Project?</h2>
-        <div className="cta-buttons">
-          <Link to="/request-quote" className="btn btn-primary">Request Quote</Link>
-          {/* See Past Constructions button removed as requested */}
-        </div>
-      </section>
-
-      {/* Construction Gallery with Folder System */}
-      <section style={{
-        padding: '4em 2em',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        margin: '2em 0'
-      }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3em' }}>
-            <h2 style={{
-              color: 'white',
-              fontSize: '2.5em',
-              marginBottom: '0.5em',
-              fontWeight: 700,
-              textShadow: '2px 2px 8px rgba(0,0,0,0.3)'
-            }}>
-              📁 Construction Projects Gallery
-            </h2>
-            <p style={{
-              fontSize: '1.2em',
-              color: 'rgba(255,255,255,0.9)',
-              maxWidth: '600px',
-              margin: '0 auto'
-            }}>
-              Browse our projects organized by category
-            </p>
-          </div>
-
-          {/* Folder View */}
-          {!selectedFolder && (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '2em',
-              padding: '0 1em'
-            }}>
-              {folderCategories.map(folder => {
-                const folderData = folders.find(f => f.id === folder.id);
-                const imageCount = folderData ? folderData.images.length : 0;
-                
-                return (
-                  <div
-                    key={folder.id}
-                    onClick={() => setSelectedFolder(folder)}
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.75)',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255, 255, 255, 0.5)',
-                      borderRadius: '20px',
-                      padding: '2em',
-                      cursor: 'pointer',
-                      boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
-                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                      textAlign: 'center',
-                      position: 'relative',
-                      overflow: 'hidden'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-10px) scale(1.03)';
-                      e.currentTarget.style.boxShadow = '0 20px 50px rgba(0,0,0,0.3)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                      e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
-                    }}
-                  >
-                    {/* Colored background accent */}
-                    <div style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: '8px',
-                      background: folder.color
-                    }} />
-
-                    {/* Folder Icon */}
-                    <div style={{
-                      fontSize: '4em',
-                      marginBottom: '0.3em',
-                      filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
-                    }}>
-                      {folder.icon}
-                    </div>
-
-                    {/* Folder Name */}
-                    <h3 style={{
-                      margin: '0.5em 0',
-                      color: '#333',
-                      fontSize: '1.3em',
-                      fontWeight: 600
-                    }}>
-                      {folder.name}
-                    </h3>
-
-                    {/* Description */}
-                    <p style={{
-                      color: '#666',
-                      fontSize: '0.95em',
-                      margin: '0.5em 0 1em',
-                      minHeight: '40px'
-                    }}>
-                      {folder.description}
-                    </p>
-
-                    {/* Image Count Badge */}
-                    <div style={{
-                      display: 'inline-block',
-                      background: folder.color,
-                      color: 'white',
-                      padding: '0.5em 1.5em',
-                      borderRadius: '20px',
-                      fontSize: '0.9em',
-                      fontWeight: 600,
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
-                    }}>
-                      {imageCount} {imageCount === 1 ? 'Image' : 'Images'}
-                    </div>
-
-                    {/* Hover indicator */}
-                    <div style={{
-                      marginTop: '1.5em',
-                      color: folder.color,
-                      fontSize: '0.9em',
-                      fontWeight: 600,
-                      opacity: 0.8
-                    }}>
-                      Click to open →
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Images View (when folder is selected) */}
-          {selectedFolder && (
-            <div>
-              {/* Back Button and Header */}
-              <div style={{
-                marginBottom: '2em',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1em',
-                flexWrap: 'wrap'
-              }}>
-                <button
-                  onClick={() => setSelectedFolder(null)}
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.85)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.5)',
-                    color: selectedFolder.color,
-                    padding: '1em 2em',
-                    borderRadius: '12px',
-                    fontSize: '1em',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-                    transition: 'all 0.3s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5em'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateX(-5px)';
-                    e.target.style.boxShadow = '0 6px 20px rgba(0,0,0,0.3)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = 'translateX(0)';
-                    e.target.style.boxShadow = '0 4px 15px rgba(0,0,0,0.2)';
-                  }}
-                >
-                  ← Back to Folders
-                </button>
-                
-                <div style={{
-                  flex: 1,
-                  background: 'rgba(255,255,255,0.95)',
-                  padding: '1em 2em',
-                  borderRadius: '12px',
-                  boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
-                }}>
-                  <h3 style={{
-                    margin: 0,
-                    color: selectedFolder.color,
-                    fontSize: '1.5em',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5em'
-                  }}>
-                    <span style={{ fontSize: '1.2em' }}>{selectedFolder.icon}</span>
-                    {selectedFolder.name}
-                  </h3>
-                </div>
-              </div>
-
-              {/* Images Grid */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '2em',
-                padding: '0 1em'
-              }}>
-                {folders.find(f => f.id === selectedFolder.id)?.images.map(image => (
-                  <div
-                    key={image.id}
-                    onClick={() => setSelectedImage(image)}
-                    style={{
-                      position: 'relative',
-                      height: '280px',
-                      borderRadius: '16px',
-                      overflow: 'hidden',
-                      cursor: 'pointer',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                      background: 'rgba(255, 255, 255, 0.75)',
-                      backdropFilter: 'blur(10px)',
-                      border: '1px solid rgba(255, 255, 255, 0.5)'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-12px) scale(1.02)';
-                      e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,0.4)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                      e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)';
-                    }}
-                  >
-                    <div style={{
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'hidden'
-                    }}>
-                      <img 
-                        src={image.src} 
-                        alt={image.title}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          transition: 'transform 0.4s ease'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.transform = 'scale(1.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.transform = 'scale(1)';
-                        }}
-                      />
-                    </div>
-                    
-                    <div style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 50%, transparent 100%)',
-                      color: 'white',
-                      padding: '2.5em 1.5em 1.5em',
-                    }}>
-                      <h3 style={{
-                        margin: 0,
-                        fontSize: '1.2em',
-                        fontWeight: 600,
-                        textTransform: 'capitalize'
-                      }}>
-                        {image.title}
-                      </h3>
-                      <div style={{
-                        marginTop: '0.5em',
-                        fontSize: '0.9em',
-                        opacity: 0.9
-                      }}>
-                        🔍 Click to enlarge
-                      </div>
-                    </div>
-
-                    <div style={{
-                      position: 'absolute',
-                      top: '15px',
-                      right: '15px',
-                      background: selectedFolder.color,
-                      borderRadius: '50%',
-                      width: '45px',
-                      height: '45px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '1.5em',
-                      boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
-                    }}>
-                      {selectedFolder.icon}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {folders.find(f => f.id === selectedFolder.id)?.images.length === 0 && (
-                <div style={{
-                  textAlign: 'center',
-                  padding: '4em 2em',
-                  background: 'rgba(255, 255, 255, 0.75)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.5)',
-                  borderRadius: '16px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-                }}>
-                  <div style={{ fontSize: '1.2em', marginBottom: '0.5em', color: '#285943' }}>Gallery</div>
-                  <p style={{ fontSize: '1.2em', color: '#666', margin: 0 }}>
-                    No images in this folder yet
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </section>
 
       {/* Image Modal */}
       {selectedImage && (
@@ -458,48 +95,9 @@ function ConstructionPage() {
                 boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
               }}
             />
-            <h3 style={{
-              color: 'white',
-              textAlign: 'center',
-              marginTop: '1em',
-              fontSize: '1.5em'
-            }}>
-              {selectedImage.title}
-            </h3>
           </div>
         </div>
       )}
-      
-      <div className="projects-grid">
-        {projects.map(project => (
-          <div className="gallery-project-card" key={project.id}>
-            <div className="project-image">
-              <img src={project.image} alt={project.title} />
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <section className="construction-reviews" aria-labelledby="construction-reviews-title">
-        <h2 id="construction-reviews-title">Reviews</h2>
-        <div className="reviews-grid">
-          <article className="review-card">
-            <div className="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-            <p>“The team completed our farm improvements neatly and kept us updated at every stage.”</p>
-            <strong>Ramesh, Erode</strong>
-          </article>
-          <article className="review-card">
-            <div className="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-            <p>“Good quality construction work and clear communication from planning to completion.”</p>
-            <strong>Priya, Coimbatore</strong>
-          </article>
-          <article className="review-card">
-            <div className="review-stars" aria-label="5 out of 5 stars">★★★★★</div>
-            <p>“The work was well organized, reliable, and delivered as promised.”</p>
-            <strong>Suresh, Salem</strong>
-          </article>
-        </div>
-      </section>
     </div>
   );
 }

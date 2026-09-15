@@ -173,7 +173,7 @@ function DeveloperInfoPage() {
             </div>
             <div className="contact-item">
               <MdEmail className="contact-icon" />
-              <a href="mailto:netcraftstudio01@gmail.com">netcraftstudio01@gmail.com</a>
+              <a href="mailto:info.netcraftstudio@gmail.com">info.netcraftstudio@gmail.com</a>
             </div>
           </div>
         </div>
