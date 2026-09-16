@@ -134,6 +134,25 @@ const databaseReady = db.isConfigured
     })
   : Promise.resolve(false);
 
+const companyTableReady = db.isConfigured
+  ? db.query(`
+      CREATE TABLE IF NOT EXISTS companies (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description TEXT DEFAULT '',
+        logo TEXT DEFAULT '',
+        logo_url TEXT DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      ALTER TABLE companies ADD COLUMN IF NOT EXISTS logo TEXT DEFAULT '';
+      ALTER TABLE companies ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+    `).then(() => true).catch(error => {
+      console.error('⚠️ Unable to prepare companies table:', error.message);
+      return false;
+    })
+  : Promise.resolve(false);
+
 async function ensureSiteMediaTable() {
   if (!db.isConfigured) return false;
   await databaseReady;
@@ -485,8 +504,8 @@ app.post('/api/companies', upload.single('logo'), async (req, res) => {
   try {
     // If database is configured, use it
     if (db.isConfigured) {
-      const databaseAvailable = await databaseReady;
-      if (!databaseAvailable) {
+      const companyTableAvailable = await companyTableReady;
+      if (!companyTableAvailable) {
         return res.status(503).json({ error: 'Database is not ready. Please try again shortly.' });
       }
 
