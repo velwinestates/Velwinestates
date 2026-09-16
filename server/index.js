@@ -454,8 +454,18 @@ app.post('/api/companies', upload.single('logo'), async (req, res) => {
   console.log('📝 Request body:', req.body);
   console.log('📝 File uploaded:', req.file ? req.file.originalname : 'none');
 
+  if (!req.body.name || !req.body.name.trim()) {
+    return res.status(400).json({ error: 'Company name is required.' });
+  }
+
   if (!req.file) {
     return res.status(400).json({ error: 'A company logo file is required and must be uploaded to Cloudinary.' });
+  }
+
+  const cloudinaryConfig = cloudinary.config();
+  if (!cloudinaryConfig.cloud_name || !cloudinaryConfig.api_key || !cloudinaryConfig.api_secret) {
+    console.error('❌ Cloudinary is not configured for company logo upload');
+    return res.status(503).json({ error: 'Image storage is not configured on the server.' });
   }
   
   let logoPath = req.body.logo || '';
@@ -475,6 +485,11 @@ app.post('/api/companies', upload.single('logo'), async (req, res) => {
   try {
     // If database is configured, use it
     if (db.isConfigured) {
+      const databaseAvailable = await databaseReady;
+      if (!databaseAvailable) {
+        return res.status(503).json({ error: 'Database is not ready. Please try again shortly.' });
+      }
+
       const result = await db.query(
         'INSERT INTO companies (name, description, logo) VALUES ($1, $2, $3) RETURNING *',
         [req.body.name, req.body.description || '', logoPath]

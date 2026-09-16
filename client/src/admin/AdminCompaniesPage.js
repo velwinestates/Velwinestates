@@ -57,7 +57,13 @@ export default function AdminCompaniesPage({ onLogout }) {
       method: 'POST',
       body: formData
     })
-    .then(r => r.json())
+    .then(async r => {
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) {
+        throw new Error(data.error || `Failed to add company (${r.status})`);
+      }
+      return data;
+    })
     .then(newCompany => {
       setCompanies(prev => [...prev, newCompany]);
       setForm({ name: '', description: '', logo: '', logoFile: null });
@@ -65,7 +71,7 @@ export default function AdminCompaniesPage({ onLogout }) {
     })
     .catch(err => {
       console.error('Error adding company:', err);
-      alert('Failed to add company');
+      alert(err.message || 'Failed to add company');
     });
   }
 
