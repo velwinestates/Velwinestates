@@ -2,12 +2,13 @@ const { Pool } = require('pg');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
-// Check if database URL is configured
-const DATABASE_URL = process.env.DATABASE_URL;
+// Prefer Supabase's IPv4-compatible pooler in hosted environments.
+const DATABASE_URL = process.env.DATABASE_POOLER_URL || process.env.DATABASE_URL;
+const databaseUrlSource = process.env.DATABASE_POOLER_URL ? 'DATABASE_POOLER_URL' : 'DATABASE_URL';
 
 if (!DATABASE_URL || DATABASE_URL.includes('YOUR_')) {
-  console.warn('⚠️ DATABASE_URL not properly configured. Using JSON file fallback.');
-  console.warn('⚠️ Add valid DATABASE_URL to .env file to enable Supabase.');
+  console.warn('⚠️ Database URL not properly configured. Using JSON file fallback.');
+  console.warn('⚠️ Add DATABASE_POOLER_URL (recommended) or DATABASE_URL to the server environment.');
   
   // Export dummy functions that indicate database is not configured
   module.exports = {
@@ -19,11 +20,12 @@ if (!DATABASE_URL || DATABASE_URL.includes('YOUR_')) {
   };
 } else {
   console.log('🔧 Attempting to connect to Supabase...');
-  console.log('📊 Database URL configured:', DATABASE_URL.substring(0, 50) + '...');
+  console.log(`📊 Database URL configured from ${databaseUrlSource}:`, DATABASE_URL.substring(0, 50) + '...');
   
   // Create a connection pool
   const pool = new Pool({
     connectionString: DATABASE_URL,
+    connectionTimeoutMillis: 10000,
     ssl: {
       rejectUnauthorized: false
     }

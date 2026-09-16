@@ -82,7 +82,7 @@ The client must be pointed at the deployed backend by setting the `REACT_APP_API
 
 When `REACT_APP_API_URL` is not set, the client uses relative API paths. This works locally with the CRA proxy, but a separately deployed static frontend will send upload and media requests to the frontend host and they will fail.
 
-The deployed server also needs `DATABASE_URL` and `CLOUDINARY_URL` (or `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET`) configured in its hosting provider. The frontend variable is embedded during `npm run build`, so set it before triggering a production deployment.
+The deployed server also needs `DATABASE_POOLER_URL` (recommended for IPv4-only hosts; use the Supabase pooler connection string) or `DATABASE_URL`, plus `CLOUDINARY_URL` (or `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET`) configured in its hosting provider. The frontend variable is embedded during `npm run build`, so set it before triggering a production deployment.
 
 
 
