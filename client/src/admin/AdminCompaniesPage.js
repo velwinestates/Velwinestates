@@ -60,7 +60,7 @@ export default function AdminCompaniesPage({ onLogout }) {
     .then(async r => {
       const data = await r.json().catch(() => ({}));
       if (!r.ok) {
-        throw new Error(data.error || `Failed to add company (${r.status})`);
+        throw new Error(data.details ? `${data.error}: ${data.details}` : data.error || `Failed to add company (${r.status})`);
       }
       return data;
     })

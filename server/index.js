@@ -513,8 +513,22 @@ app.post('/api/companies', upload.single('logo'), async (req, res) => {
     if (db.isConfigured) {
       await ensureCompanyTable();
 
+      const columnsResult = await db.query(
+        "SELECT column_name FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'companies'"
+      );
+      const companyColumns = new Set(columnsResult.rows.map(row => row.column_name));
+      const logoColumn = companyColumns.has('logo')
+        ? 'logo'
+        : companyColumns.has('logo_url')
+          ? 'logo_url'
+          : null;
+
+      if (!logoColumn) {
+        return res.status(500).json({ error: 'Companies table has no logo column.' });
+      }
+
       const result = await db.query(
-        'INSERT INTO companies (name, description, logo) VALUES ($1, $2, $3) RETURNING *',
+        `INSERT INTO companies (name, description, ${logoColumn}) VALUES ($1, $2, $3) RETURNING *`,
         [req.body.name, req.body.description || '', logoPath]
       );
       
@@ -522,7 +536,7 @@ app.post('/api/companies', upload.single('logo'), async (req, res) => {
         id: result.rows[0].id,
         name: result.rows[0].name,
         description: result.rows[0].description,
-        logo: result.rows[0].logo,
+        logo: result.rows[0].logo || result.rows[0].logo_url || '',
         products: []
       };
       
