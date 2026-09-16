@@ -134,34 +134,31 @@ const databaseReady = db.isConfigured
     })
   : Promise.resolve(false);
 
-const companyTableReady = db.isConfigured
-  ? db.query('SELECT 1 FROM companies LIMIT 1')
-      .then(() => true)
-      .catch(async error => {
-        if (!/relation .*companies.* does not exist/i.test(error.message)) {
-          console.error('⚠️ Unable to access companies table:', error.message);
-          return false;
-        }
+async function ensureCompanyTable() {
+  if (!db.isConfigured) return false;
 
-        try {
-          await db.query(`
-            CREATE TABLE companies (
-              id SERIAL PRIMARY KEY,
-              name VARCHAR(255) NOT NULL,
-              description TEXT DEFAULT '',
-              logo TEXT DEFAULT '',
-              logo_url TEXT DEFAULT '',
-              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-              updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-          `);
-          return true;
-        } catch (createError) {
-          console.error('⚠️ Unable to create companies table:', createError.message);
-          return false;
-        }
-      })
-  : Promise.resolve(false);
+  try {
+    await db.query('SELECT 1 FROM companies LIMIT 1');
+    return true;
+  } catch (error) {
+    if (!/relation .*companies.* does not exist/i.test(error.message)) {
+      throw error;
+    }
+
+    await db.query(`
+      CREATE TABLE companies (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        description TEXT DEFAULT '',
+        logo TEXT DEFAULT '',
+        logo_url TEXT DEFAULT '',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    return true;
+  }
+}
 
 async function ensureSiteMediaTable() {
   if (!db.isConfigured) return false;
@@ -514,10 +511,7 @@ app.post('/api/companies', upload.single('logo'), async (req, res) => {
   try {
     // If database is configured, use it
     if (db.isConfigured) {
-      const companyTableAvailable = await companyTableReady;
-      if (!companyTableAvailable) {
-        return res.status(503).json({ error: 'Database is not ready. Please try again shortly.' });
-      }
+      await ensureCompanyTable();
 
       const result = await db.query(
         'INSERT INTO companies (name, description, logo) VALUES ($1, $2, $3) RETURNING *',
