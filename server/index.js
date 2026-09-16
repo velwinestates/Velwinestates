@@ -135,22 +135,32 @@ const databaseReady = db.isConfigured
   : Promise.resolve(false);
 
 const companyTableReady = db.isConfigured
-  ? db.query(`
-      CREATE TABLE IF NOT EXISTS companies (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(255) NOT NULL,
-        description TEXT DEFAULT '',
-        logo TEXT DEFAULT '',
-        logo_url TEXT DEFAULT '',
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-      ALTER TABLE companies ADD COLUMN IF NOT EXISTS logo TEXT DEFAULT '';
-      ALTER TABLE companies ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
-    `).then(() => true).catch(error => {
-      console.error('⚠️ Unable to prepare companies table:', error.message);
-      return false;
-    })
+  ? db.query('SELECT 1 FROM companies LIMIT 1')
+      .then(() => true)
+      .catch(async error => {
+        if (!/relation .*companies.* does not exist/i.test(error.message)) {
+          console.error('⚠️ Unable to access companies table:', error.message);
+          return false;
+        }
+
+        try {
+          await db.query(`
+            CREATE TABLE companies (
+              id SERIAL PRIMARY KEY,
+              name VARCHAR(255) NOT NULL,
+              description TEXT DEFAULT '',
+              logo TEXT DEFAULT '',
+              logo_url TEXT DEFAULT '',
+              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+              updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+          `);
+          return true;
+        } catch (createError) {
+          console.error('⚠️ Unable to create companies table:', createError.message);
+          return false;
+        }
+      })
   : Promise.resolve(false);
 
 async function ensureSiteMediaTable() {
