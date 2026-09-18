@@ -35,6 +35,11 @@
       "dest": "/favicon.ico"
     },
     {
+      "src": "/logo.jpeg",
+      "headers": { "content-type": "image/jpeg" },
+      "dest": "/logo.jpeg"
+    },
+    {
       "src": "/robots.txt",
       "dest": "/robots.txt"
     },
