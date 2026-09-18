@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import { Link } from 'react-router-dom';
-import { FaLeaf,FaImage, FaMapMarkerAlt, FaShoppingCart } from 'react-icons/fa';
-import {  MdSettings, MdSell } from 'react-icons/md';
-import { BsArrowRightCircle, BsStars } from 'react-icons/bs';
+import { FaLeaf, FaImage, FaShoppingCart } from 'react-icons/fa';
+import { MdSettings, MdSell } from 'react-icons/md';
+import { BsStars } from 'react-icons/bs';
 import '../App.css';
 import {
   GiFarmTractor,
@@ -109,9 +109,15 @@ function HomePage({ currentSlide, onBookProject }) {
           </div>
           <p className="site-visit-note">
             Site verification visit is chargeable. <br />
+            SITE VISIT & FARM CONSULTATION <br />
+            Velwin Estates provides professional on-site visits and personalized farm consultation to help you understand your land and plan its development. <br />
+            SITE VISIT CHARGES <br />
             Up to 50 KM - ₹4,999/- <br />
             50 - 100 KM - ₹9,999/- <br />
-            Includes travel, field inspection and project report.
+            The consultation includes direct site inspection, understanding your land requirements, and discussing suitable farm development possibilities. <br />
+            <strong>Note: Advance Booking Required.</strong><br />
+            Your time matters. Our expertise matters.<br />
+            Let’s make your land productive.
           </p>
         </div>
       </section>

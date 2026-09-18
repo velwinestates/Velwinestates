@@ -3,7 +3,7 @@ import ProtectedRoute from './admin/ProtectedRoute';
 import { AdminAuthProvider } from './admin/AdminAuthProvider';
 import 'leaflet/dist/leaflet.css';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { FaWhatsapp } from 'react-icons/fa';
+import { FaWhatsapp, FaInstagram, FaFacebookF } from 'react-icons/fa';
 import './App.css';
 import projects from './data/projects';
 import ScrollToTop from './ScrollToTop';
@@ -293,7 +293,7 @@ function AppContent({
       telephone: '+91 81100 13838',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: '7/3, Duraiswamy Nagar',
+        streetAddress: '7/3, Duraisamy Nagar',
         addressLocality: 'Coimbatore',
         addressRegion: 'Tamil Nadu',
         postalCode: '641014',
@@ -537,7 +537,7 @@ function AppContent({
             <div className="footer-section">
               <h3>Address</h3>
               <p>
-                7/3, Duraiswamy Nagar<br />
+                7/3, Duraisamy Nagar<br />
                 Coimbatore, Tamil Nadu - 641014<br />
                 India
               </p>
@@ -548,6 +548,49 @@ function AppContent({
               <h3>Contact Us</h3>
               <p>Email: velwinestates@gmail.com</p>
               <p>Phone: +91 81100 13838 </p>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginTop: '0.75rem' }}>
+                <a
+                  href="https://www.instagram.com/velwinestates?stkn=MWVpaWl0aHBiYnV3aA=="
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Instagram"
+                  title="Instagram"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '2.25rem',
+                    height: '2.25rem',
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #f58529 0%, #dd2a7b 35%, #8134af 70%, #515bd4 100%)',
+                    color: '#fff',
+                    boxShadow: '0 4px 12px rgba(221, 42, 123, 0.25)'
+                  }}
+                >
+                  <FaInstagram aria-hidden="true" />
+                </a>
+
+                <a
+                  href="https://www.facebook.com/share/p/1Hu7ZyydvU/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Facebook"
+                  title="Facebook"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '2.25rem',
+                    height: '2.25rem',
+                    borderRadius: '50%',
+                    background: '#1877F2',
+                    color: '#fff',
+                    boxShadow: '0 4px 12px rgba(24, 119, 242, 0.25)'
+                  }}
+                >
+                  <FaFacebookF aria-hidden="true" />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -580,7 +623,6 @@ function AppContent({
             title="Chat on WhatsApp"
           >
             <FaWhatsapp aria-hidden="true" />
-
           </a>
         )}
       </div>

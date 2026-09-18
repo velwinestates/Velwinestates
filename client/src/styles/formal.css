@@ -143,6 +143,7 @@ button.btn:hover {
   font-weight: 500;
 }
 
+.instagram-chat,
 .whatsapp-chat {
   position: fixed;
   left: 1.25rem;
@@ -150,21 +151,40 @@ button.btn:hover {
   z-index: 2500;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
   color: #ffffff;
-  background: #25d366;
   border-radius: var(--radius-sm);
   box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
-  font-weight: 700;
   text-decoration: none;
 }
 
+.instagram-chat {
+  left: 5.25rem;
+  background: linear-gradient(135deg, #f58529 0%, #dd2a7b 35%, #8134af 70%, #515bd4 100%);
+  box-shadow: 0 4px 14px rgba(221, 42, 123, 0.28);
+}
+
+.whatsapp-chat {
+  background: #25d366;
+}
+
+.instagram-chat:hover,
 .whatsapp-chat:hover {
   color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.instagram-chat:hover {
+  background: linear-gradient(135deg, #e67e22 0%, #c92d79 35%, #6d2db4 70%, #3d4fc4 100%);
+}
+
+.whatsapp-chat:hover {
   background: #1da851;
 }
 
+.instagram-chat svg,
 .whatsapp-chat svg {
   font-size: 1.35rem;
 }
