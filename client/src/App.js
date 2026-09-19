@@ -7,7 +7,7 @@ import { FaWhatsapp, FaInstagram, FaFacebookF } from 'react-icons/fa';
 import './App.css';
 import projects from './data/projects';
 import ScrollToTop from './ScrollToTop';
-import NavbarMenuDemo from './components/NavbarMenuDemo';
+import NavbarMenuDemo, { getNativeLanguageName, languages } from './components/NavbarMenuDemo';
 import { apiUrl } from './api';
 
 const ConfirmPlan = lazy(() => import('./ConfirmPlan'));
@@ -261,6 +261,28 @@ function AppContent({
   const isAdminPage = location.pathname.startsWith('/admin');
   const seoData = seoPages[location.pathname] || seoPages['/'];
   const trackedPath = useRef(null);
+
+  const getSavedLanguage = () => {
+    if (typeof window === 'undefined') return 'en';
+    return localStorage.getItem('selectedLang') || 'en';
+  };
+
+  const [selectedLanguage, setSelectedLanguage] = useState(getSavedLanguage);
+  const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
+
+  const setLanguageCookie = (name, value, days) => {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+  };
+
+  const changeLanguage = (lang) => {
+    const googleTransCookie = '/en/' + lang;
+    setLanguageCookie('googtrans', googleTransCookie, 1);
+    localStorage.setItem('selectedLang', lang);
+    setSelectedLanguage(lang);
+    setIsLanguageMenuOpen(false);
+    window.location.reload();
+  };
 
   useEffect(() => {
     document.title = seoData.title;
@@ -614,16 +636,52 @@ function AppContent({
           </div>
         </footer>
         {!isAdminPage && (
-          <a
-            className="whatsapp-chat"
-            href="https://wa.me/918110013838?text=Dear%20Velwin%20Estates%20Team%2C%0A%0AI%20am%20contacting%20you%20through%20your%20website%20to%20enquire%20about%20your%20services.%0A%0AName%3A%0AContact%20number%3A%0AService%20or%20requirement%3A%0AFarm%20location%3A%0APreferred%20date%3A%0AAdditional%20details%3A%0A%0AThank%20you."
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Chat with Velwin Estates on WhatsApp"
-            title="Chat on WhatsApp"
-          >
-            <FaWhatsapp aria-hidden="true" />
-          </a>
+          <div className="floating-social-tools" aria-label="Quick actions">
+            <div className="floating-language-switch" aria-label="Select website language">
+              <button
+                type="button"
+                className="floating-language-trigger"
+                onClick={() => setIsLanguageMenuOpen((isOpen) => !isOpen)}
+                aria-expanded={isLanguageMenuOpen}
+                aria-haspopup="listbox"
+                aria-label="Select website language"
+                title="Select language"
+              >
+                {(() => {
+                  const selected = languages.find(([code]) => code === selectedLanguage);
+                  return selected ? getNativeLanguageName(selected[0], selected[1]) : 'English';
+                })()}
+                <span aria-hidden="true">▴</span>
+              </button>
+              {isLanguageMenuOpen && (
+                <div className="floating-language-options" role="listbox" aria-label="Website languages">
+                  {languages.map(([code, label]) => (
+                    <button
+                      type="button"
+                      role="option"
+                      aria-selected={selectedLanguage === code}
+                      className={selectedLanguage === code ? 'active' : ''}
+                      key={code}
+                      onClick={() => changeLanguage(code)}
+                    >
+                      {getNativeLanguageName(code, label)}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <a
+              className="whatsapp-chat"
+              href="https://wa.me/918110013838?text=Dear%20Velwin%20Estates%20Team%2C%0A%0AI%20am%20contacting%20you%20through%20your%20website%20to%20enquire%20about%20your%20services.%0A%0AName%3A%0AContact%20number%3A%0AService%20or%20requirement%3A%0AFarm%20location%3A%0APreferred%20date%3A%0AAdditional%20details%3A%0A%0AThank%20you."
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Chat with Velwin Estates on WhatsApp"
+              title="Chat on WhatsApp"
+            >
+              <FaWhatsapp aria-hidden="true" />
+            </a>
+          </div>
         )}
       </div>
   );

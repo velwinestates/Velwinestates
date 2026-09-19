@@ -83,17 +83,17 @@ function HomePage({ currentSlide, onBookProject }) {
           zIndex: 2500,
           display: 'flex',
           alignItems: 'center',
-          gap: '0.5rem',
+          gap: '0.45rem',
           whiteSpace: 'nowrap',
-          fontSize: '0.9rem',
-          padding: '0.8rem 1rem',
+          fontSize: '0.75rem',
+          padding: '0.6rem 0.8rem',
           borderRadius: '999px',
           background: '#285943',
           boxShadow: '0 3px 10px rgba(23, 60, 44, 0.18)'
         }}
       >
-        <FaImage />
-        <span className="recent-projects-link-text">Construction Services</span>
+        <FaImage size={14} />
+        <span className="recent-projects-link-text" style={{ fontSize: '0.75rem' }}>Construction Services</span>
       </Link>
       <section className="hero-section">
         <div className="hero-content">

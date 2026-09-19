@@ -143,11 +143,101 @@ button.btn:hover {
   font-weight: 500;
 }
 
-.instagram-chat,
-.whatsapp-chat {
+.floating-social-tools {
   position: fixed;
   left: 1.25rem;
   bottom: 1.25rem;
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.floating-language-switch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0.1rem 0.2rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(151, 156, 160, 0.5);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+.floating-language-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  border: none;
+  background: transparent;
+  color: #2e2e2e;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.28rem 0.35rem;
+  border-radius: 999px;
+  cursor: pointer;
+  min-width: 5.7rem;
+}
+
+.floating-language-trigger:focus {
+  outline: none;
+}
+
+.floating-language-trigger span {
+  color: #555;
+  font-size: 0.7rem;
+}
+
+.floating-language-options {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 4.75rem;
+  z-index: 2600;
+  width: min(12rem, calc(100vw - 2.5rem));
+  box-sizing: border-box;
+  max-height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.25rem;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+}
+
+.floating-language-options button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.3rem 0.45rem;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--text-color);
+  font-size: 0.7rem;
+  line-height: 1.25;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.floating-language-options button:hover,
+.floating-language-options button.active {
+  background: var(--primary-light);
+}
+
+@media (max-width: 480px) {
+  .floating-language-options {
+    left: 0.75rem;
+    width: calc(100vw - 1.5rem);
+  }
+}
+
+.instagram-chat,
+.whatsapp-chat {
+  position: static;
   z-index: 2500;
   display: inline-flex;
   align-items: center;
@@ -161,7 +251,6 @@ button.btn:hover {
 }
 
 .instagram-chat {
-  left: 5.25rem;
   background: linear-gradient(135deg, #f58529 0%, #dd2a7b 35%, #8134af 70%, #515bd4 100%);
   box-shadow: 0 4px 14px rgba(221, 42, 123, 0.28);
 }

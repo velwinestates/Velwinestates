@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuHeader } from './DropdownMenu';
 import { Globe, Home, Info, Building2, Wrench, Tractor, ShoppingCart, Banknote, Map, Hammer, Images, Users } from 'lucide-react';
 
-const languages = [
+export const languages = [
   ['en', 'English'], ['af', 'Afrikaans'], ['sq', 'Albanian'], ['am', 'Amharic'], ['ar', 'Arabic'],
   ['hy', 'Armenian'], ['az', 'Azerbaijani'], ['eu', 'Basque'], ['be', 'Belarusian'], ['bn', 'Bengali'],
   ['bs', 'Bosnian'], ['bg', 'Bulgarian'], ['ca', 'Catalan'], ['ceb', 'Cebuano'], ['zh-CN', 'Chinese (Simplified)'],
@@ -24,6 +24,14 @@ const languages = [
   ['tk', 'Turkmen'], ['uk', 'Ukrainian'], ['ur', 'Urdu'], ['ug', 'Uyghur'], ['uz', 'Uzbek'], ['vi', 'Vietnamese'],
   ['cy', 'Welsh'], ['xh', 'Xhosa'], ['yi', 'Yiddish'], ['yo', 'Yoruba'], ['zu', 'Zulu']
 ];
+
+export function getNativeLanguageName(code, fallback) {
+  try {
+    return new Intl.DisplayNames([code], { type: 'language' }).of(code) || fallback;
+  } catch {
+    return fallback;
+  }
+}
 
 function getSelectedLanguage() {
   const match = document.cookie.match(/(?:^|; )googtrans=\/en\/([^;]+)/);
@@ -48,7 +56,11 @@ function LanguageSelector() {
       onChange={handleLanguageChange}
       aria-label="Select website language"
     >
-      {languages.map(([code, name]) => <option key={code} value={code}>{name}</option>)}
+      {languages.map(([code, name]) => (
+        <option key={code} value={code}>
+          {getNativeLanguageName(code, name)}
+        </option>
+      ))}
     </select>
   );
 }
