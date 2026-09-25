@@ -3,7 +3,7 @@ import ProtectedRoute from './admin/ProtectedRoute';
 import { AdminAuthProvider } from './admin/AdminAuthProvider';
 import 'leaflet/dist/leaflet.css';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { FaWhatsapp, FaInstagram, FaFacebookF } from 'react-icons/fa';
+import { FaWhatsapp, FaInstagram, FaFacebookF, FaYoutube } from 'react-icons/fa';
 import './App.css';
 import projects from './data/projects';
 import ScrollToTop from './ScrollToTop';
@@ -611,6 +611,27 @@ function AppContent({
                   }}
                 >
                   <FaFacebookF aria-hidden="true" />
+                </a>
+
+                <a
+                  href="https://youtube.com/@velwinestates?si=lErNfwfocm7M5ykW"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="YouTube"
+                  title="YouTube"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '2.25rem',
+                    height: '2.25rem',
+                    borderRadius: '50%',
+                    background: '#FF0000',
+                    color: '#fff',
+                    boxShadow: '0 4px 12px rgba(255, 0, 0, 0.25)'
+                  }}
+                >
+                  <FaYoutube aria-hidden="true" />
                 </a>
               </div>
             </div>

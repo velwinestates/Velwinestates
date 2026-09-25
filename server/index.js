@@ -17,6 +17,55 @@ if (process.env.NODE_ENV !== 'production') {
 
 const app = express();
 const PORT = process.env.PORT || 4000;
+const defaultAmcPlans = [
+  {
+    id: 'essential-farm-care',
+    name: 'Essential Farm Care',
+    duration: 'Monthly',
+    description: 'Reliable scheduled maintenance for farms that need regular oversight.',
+    popular: false,
+    features: [
+      'Monthly farm inspection',
+      'Basic irrigation and pump check',
+      'Weed and field condition review',
+      'Pest and disease observation',
+      'Monthly activity report',
+      'Phone support during working hours'
+    ]
+  },
+  {
+    id: 'complete-farm-care',
+    name: 'Complete Farm Care',
+    duration: 'Monthly',
+    description: 'A balanced maintenance plan for farms that need proactive field support.',
+    popular: true,
+    features: [
+      'Fortnightly farm visits',
+      'Irrigation and fertigation monitoring',
+      'Crop nutrition schedule',
+      'Preventive pest management guidance',
+      'Seasonal pruning recommendations',
+      'Photo-based progress reports',
+      'Priority support'
+    ]
+  },
+  {
+    id: 'premium-farm-management',
+    name: 'Premium Farm Management',
+    duration: 'Monthly',
+    description: 'Hands-on coordination for owners who want end-to-end farm management support.',
+    popular: false,
+    features: [
+      'Weekly farm visit and supervision',
+      'Complete irrigation and fertigation coordination',
+      'Crop nutrition and protection planning',
+      'Pruning, harvest, and labour coordination',
+      'Detailed weekly reports with photos',
+      'Emergency issue escalation',
+      'Dedicated farm coordinator'
+    ]
+  }
+];
 
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
@@ -315,6 +364,19 @@ app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello from backend!' });
 });
 
+const submissionsPath = path.join(__dirname, 'data', 'submissions.json');
+
+function readLocalSubmissions() {
+  if (!fs.existsSync(submissionsPath)) return [];
+  const data = fs.readFileSync(submissionsPath, 'utf8');
+  return JSON.parse(data);
+}
+
+function saveLocalSubmissions(submissions) {
+  fs.mkdirSync(path.dirname(submissionsPath), { recursive: true });
+  fs.writeFileSync(submissionsPath, JSON.stringify(submissions, null, 2));
+}
+
 // Get all submissions
 app.get('/api/submissions', async (req, res) => {
   console.log('📥 GET /api/submissions - Fetching submissions');
@@ -339,7 +401,8 @@ app.get('/api/submissions', async (req, res) => {
           
           if (result.status === 'success') {
             // Transform Google Sheets data to match AdminSubmissionsPage format
-            const submissions = (result.data || []).map(item => ({
+            const submissions = (result.data || []).map((item, index) => ({
+              id: `sheet-${index}`,
               receivedAt: item.timestamp,
               toEmail: 'admin@uzhavar.com',
               subject: item.subject || item.formType || 'No Subject',
@@ -383,12 +446,9 @@ app.get('/api/submissions', async (req, res) => {
   
   // Fallback to local file
   console.log('📂 Reading from local submissions.json file');
-  const submissionsPath = path.join(__dirname, 'data', 'submissions.json');
-  
   try {
     if (fs.existsSync(submissionsPath)) {
-      const data = fs.readFileSync(submissionsPath, 'utf8');
-      const submissions = JSON.parse(data);
+      const submissions = readLocalSubmissions();
       console.log(`✅ Loaded ${submissions.length} submissions from local file`);
       res.json(submissions);
     } else {
@@ -401,12 +461,55 @@ app.get('/api/submissions', async (req, res) => {
   }
 });
 
-// Delete a submission - DISABLED (using Google Sheets now)
-app.delete('/api/submissions/:index', (req, res) => {
-  console.log('⚠️ DELETE /api/submissions - Feature disabled (using Google Sheets)');
-  res.status(501).json({ 
-    error: 'Delete feature not available. Please delete directly from Google Sheets.' 
-  });
+// Delete a locally stored submission or request deletion of a Google Sheets row.
+app.delete('/api/submissions/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (id.startsWith('sheet-')) {
+      const googleSheetsUrl = process.env.GOOGLE_SHEETS_URL;
+      const googleSheetsSecret = process.env.GOOGLE_SHEETS_SECRET;
+      const sheetIndex = Number(id.slice('sheet-'.length));
+      if (!googleSheetsUrl || !Number.isInteger(sheetIndex)) {
+        return res.status(400).json({ error: 'Invalid Google Sheets submission ID' });
+      }
+
+      const response = await fetch(googleSheetsUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          secret: googleSheetsSecret || '',
+          action: 'delete',
+          index: sheetIndex
+        })
+      });
+      const responseText = await response.text();
+      let result = {};
+      try {
+        result = JSON.parse(responseText);
+      } catch (error) {
+        // Google Apps Script may return plain text for successful requests.
+      }
+      if (!response.ok || result.success === false || result.status === 'error') {
+        return res.status(502).json({
+          error: result.error || result.message || 'Google Sheets could not delete this submission'
+        });
+      }
+      return res.json({ success: true });
+    }
+
+    const submissions = readLocalSubmissions();
+    const index = submissions.findIndex(submission => submission.id === id);
+    if (index === -1) return res.status(404).json({ error: 'Submission not found' });
+
+    submissions.splice(index, 1);
+    saveLocalSubmissions(submissions);
+    console.log(`✅ Deleted local submission ${id}`);
+    return res.json({ success: true });
+  } catch (error) {
+    console.error('❌ Error deleting submission:', error.message);
+    return res.status(500).json({ error: 'Failed to delete submission' });
+  }
 });
 
 // Get all companies
@@ -1082,11 +1185,30 @@ app.post('/api/send-email', async (req, res) => {
     const name = req.body?.name || req.body?.payload?.name || 'Unknown';
     const subject = req.body?.subject || `${formType} from ${name}`;
 
+    const submission = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
+      receivedAt: now,
+      toEmail: req.body?.toEmail || process.env.TO_EMAIL || 'velwinestates@gmail.com',
+      subject,
+      payload: req.body?.payload || req.body,
+      metadata: {
+        source: 'website',
+        userAgent: req.get('user-agent') || '',
+        ip: req.ip
+      }
+    };
+
+    const localSubmissions = readLocalSubmissions();
+    localSubmissions.unshift(submission);
+    saveLocalSubmissions(localSubmissions);
+    console.log(`✅ Submission saved locally with ID ${submission.id}`);
+
     console.log('� Form submission received:', { formType, name, subject });
 
     // Send data to Google Sheets for storage
     const googleSheetsUrl = process.env.GOOGLE_SHEETS_URL;
     const googleSheetsSecret = process.env.GOOGLE_SHEETS_SECRET;
+    let googleSheetsSaved = !googleSheetsUrl;
     
     console.log('🔧 Google Sheets config check:', {
       hasUrl: !!googleSheetsUrl,
@@ -1146,16 +1268,19 @@ app.post('/api/send-email', async (req, res) => {
         console.log('📥 Google Sheets response status:', response.status);
         console.log('📥 Google Sheets response:', responseText);
 
-        if (response.ok) {
+        let jsonResponse = null;
+        try {
+          jsonResponse = JSON.parse(responseText);
+          console.log('✅ Parsed response:', jsonResponse);
+        } catch (e) {
+          console.log('⚠️ Response is not JSON:', responseText.substring(0, 200));
+        }
+
+        if (response.ok && jsonResponse?.status !== 'error' && jsonResponse?.success !== false) {
+          googleSheetsSaved = true;
           console.log('✅ Data sent to Google Sheets successfully');
-          try {
-            const jsonResponse = JSON.parse(responseText);
-            console.log('✅ Parsed response:', jsonResponse);
-          } catch (e) {
-            console.log('⚠️ Response is not JSON:', responseText.substring(0, 200));
-          }
         } else {
-          console.error('❌ Failed to send data to Google Sheets:', response.status, response.statusText);
+          console.error('❌ Google Sheets rejected the submission:', response.status, response.statusText);
           console.error('❌ Response body:', responseText);
         }
       } catch (sheetsError) {
@@ -1164,6 +1289,13 @@ app.post('/api/send-email', async (req, res) => {
       }
     } else {
       console.warn('⚠️ GOOGLE_SHEETS_URL not configured - skipping Google Sheets save');
+    }
+
+    if (!googleSheetsSaved) {
+      return res.status(502).json({
+        error: 'Google Sheets rejected the submission. Check the deployed Apps Script secret and version.',
+        storedLocally: true
+      });
     }
 
     const smtpUser = process.env.SMTP_USER;
@@ -1191,9 +1323,8 @@ app.post('/api/send-email', async (req, res) => {
       console.warn('⚠️ SMTP is not configured; submission was stored but no email was sent');
     }
 
-    // 3) Submission stored successfully in Google Sheets
-    console.log('✅ Submission stored successfully in Google Sheets');
-    return res.json({ success: true, message: 'Submission stored successfully in Google Sheets' });
+    console.log('✅ Submission stored locally and processing completed');
+    return res.json({ success: true, message: 'Submission stored successfully' });
   } catch (error) {
     console.error('❌ Error in /api/send-email:', error);
     console.error('❌ Error name:', error.name);
@@ -1372,7 +1503,17 @@ app.get('/api/plans', async (req, res) => {
     const plansTableAvailable = await ensurePlansTable();
     // If database is configured, use it
     if (db.isConfigured && plansTableAvailable) {
-      const result = await db.query('SELECT * FROM plans ORDER BY id');
+      let result = await db.query('SELECT * FROM plans ORDER BY id');
+
+      if (result.rows.length === 0) {
+        for (const plan of defaultAmcPlans) {
+          await db.query(
+            'INSERT INTO plans (id, name, duration, description, popular, features) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (id) DO NOTHING',
+            [plan.id, plan.name, plan.duration, plan.description, plan.popular, JSON.stringify(plan.features)]
+          );
+        }
+        result = await db.query('SELECT * FROM plans ORDER BY id');
+      }
       
       const plans = result.rows.map(row => ({
         id: row.id,
@@ -1397,8 +1538,10 @@ app.get('/api/plans', async (req, res) => {
       console.log('✅ Plans loaded from file:', plans.length);
       res.json(plans);
     } else {
-      console.log('ℹ️ Plans file not found - returning empty array');
-      res.json([]);
+      fs.mkdirSync(path.dirname(plansPath), { recursive: true });
+      fs.writeFileSync(plansPath, JSON.stringify(defaultAmcPlans, null, 2));
+      console.log('✅ Default AMC plans created in JSON file');
+      res.json(defaultAmcPlans);
     }
   } catch (error) {
     console.error('❌ Error reading plans:', error.message);

@@ -67,18 +67,14 @@ export default function AdminSubmissionsPage() {
     }
 
     try {
-      // Find the actual index in the full submissions array
-      const actualIndex = subs.findIndex(s => 
-        s.receivedAt === submission.receivedAt && 
-        s.subject === submission.subject &&
-        s.payload?.email === submission.payload?.email
-      );
+      const actualIndex = subs.indexOf(submission);
+      const submissionId = submission.id || actualIndex;
 
-      if (actualIndex === -1) {
+      if (actualIndex === -1 || submissionId === undefined) {
         throw new Error('Submission not found');
       }
 
-      const res = await fetch(apiUrl(`/api/submissions/${actualIndex}`), {
+      const res = await fetch(apiUrl(`/api/submissions/${encodeURIComponent(submissionId)}`), {
         method: 'DELETE'
       });
 

@@ -19,6 +19,7 @@ logs/
 !server/data/email.log
 
 # Runtime data
+server/data/submissions.json
 pids/
 *.pid
 *.seed

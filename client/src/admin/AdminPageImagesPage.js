@@ -16,6 +16,21 @@ const pageGroups = [
       ['slide8', 'Farm Shed Construction'],
       ['slide9', 'Drip Irrigation Installation']
     ]
+  },
+  {
+    id: 'construction',
+    label: 'Construction page gallery',
+    slots: [
+      ['hero', 'Construction Project'],
+      ['farmhouse', 'Farmhouse Construction'],
+      ['pool', 'Swimming Pool Construction'],
+      ['waterTank', 'Water Tank Construction'],
+      ['fencing', 'Farm Fencing'],
+      ['polyhouse', 'Polyhouse Construction'],
+      ['livestock', 'Livestock Shed Construction'],
+      ['farmShed', 'Farm Shed Construction'],
+      ['irrigation', 'Drip Irrigation Installation']
+    ]
   }
 ];
 
@@ -73,8 +88,8 @@ export default function AdminPageImagesPage() {
 
   return (
     <section style={{ fontFamily: 'var(--font-family)' }}>
-      <h2 style={{ marginBottom: '0.35rem' }}>Home Page Carousel Images</h2>
-      <p style={{ marginTop: 0, color: '#5d6b63' }}>Add, edit, or delete images used by the home page image carousel.</p>
+      <h2 style={{ marginBottom: '0.35rem' }}>Page Images</h2>
+      <p style={{ marginTop: 0, color: '#5d6b63' }}>Add, edit, or delete images used across the home and construction pages.</p>
       {status && <p role="status">{status}</p>}
       {pageGroups.map(group => (
         <section key={group.id} style={{ marginTop: '1.5rem' }}>
