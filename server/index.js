@@ -377,6 +377,26 @@ function saveLocalSubmissions(submissions) {
   fs.writeFileSync(submissionsPath, JSON.stringify(submissions, null, 2));
 }
 
+function removeEmptyFields(value) {
+  if (Array.isArray(value)) {
+    const items = value.map(removeEmptyFields).filter(item => item !== undefined);
+    return items.length ? items : undefined;
+  }
+
+  if (value && typeof value === 'object') {
+    const entries = Object.entries(value)
+      .map(([key, nestedValue]) => [key, removeEmptyFields(nestedValue)])
+      .filter(([, nestedValue]) => nestedValue !== undefined);
+    return entries.length ? Object.fromEntries(entries) : undefined;
+  }
+
+  if (value == null || (typeof value === 'string' && value.trim() === '')) {
+    return undefined;
+  }
+
+  return value;
+}
+
 // Get all submissions
 app.get('/api/submissions', async (req, res) => {
   console.log('📥 GET /api/submissions - Fetching submissions');
@@ -1116,7 +1136,12 @@ app.delete('/api/companies/:companyId/products/:productId', async (req, res) => 
 
 app.get('/api/orders', async (req, res) => {
   try {
-    if (!db.isConfigured) return res.json([]);
+    if (!db.isConfigured) {
+      const ordersPath = path.join(__dirname, 'data', 'orders.json');
+      const orders = fs.existsSync(ordersPath) ? JSON.parse(fs.readFileSync(ordersPath, 'utf8')) : [];
+      return res.json(orders);
+    }
+
     const result = await db.query(`
       SELECT id, product_id AS "productId", company_id AS "companyId",
              product_name AS "productName", company_name AS "companyName",
@@ -1164,6 +1189,35 @@ app.post('/api/orders', async (req, res) => {
   } catch (error) {
     console.error('Error saving order:', error.message);
     res.status(500).json({ error: 'Failed to save order' });
+  }
+});
+
+app.delete('/api/orders/:id', async (req, res) => {
+  try {
+    if (db.isConfigured) {
+      if (!/^\d+$/.test(req.params.id)) {
+        return res.status(400).json({ error: 'Invalid order ID' });
+      }
+
+      const result = await db.query(
+        'DELETE FROM product_orders WHERE id = $1 RETURNING id',
+        [req.params.id]
+      );
+      if (result.rows.length === 0) return res.status(404).json({ error: 'Order not found' });
+      return res.json({ success: true });
+    }
+
+    const ordersPath = path.join(__dirname, 'data', 'orders.json');
+    const orders = fs.existsSync(ordersPath) ? JSON.parse(fs.readFileSync(ordersPath, 'utf8')) : [];
+    const orderIndex = orders.findIndex(order => String(order.id) === req.params.id);
+    if (orderIndex === -1) return res.status(404).json({ error: 'Order not found' });
+
+    orders.splice(orderIndex, 1);
+    fs.writeFileSync(ordersPath, JSON.stringify(orders, null, 2));
+    return res.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting order:', error.message);
+    return res.status(500).json({ error: 'Failed to delete order' });
   }
 });
 
@@ -1226,7 +1280,7 @@ app.post('/api/send-email', async (req, res) => {
         console.log('🔍 DEBUG - Extra fields received:', JSON.stringify(extra, null, 2));
         
         // Standardize field extraction - handle all possible field name variations
-        const sheetData = {
+        const sheetData = removeEmptyFields({
           secret: googleSheetsSecret || 'MY_APP_KEY',
           timestamp: now,
           formType: formType,
@@ -1245,7 +1299,7 @@ app.post('/api/send-email', async (req, res) => {
           city: extra['City'] || extra['city'] || '',
           state: extra['State'] || extra['state'] || '',
           pincode: extra['Pincode'] || extra['pincode'] || ''
-        };
+        });
 
         console.log('📤 Sending sheet data:', { 
           formType: sheetData.formType, 
@@ -1313,7 +1367,7 @@ app.post('/api/send-email', async (req, res) => {
           to: req.body?.toEmail || process.env.TO_EMAIL || 'velwinestates@gmail.com',
           replyTo: req.body?.email || undefined,
           subject,
-          text: JSON.stringify(req.body, null, 2)
+          text: JSON.stringify(removeEmptyFields(req.body), null, 2)
         });
         console.log('✅ Notification email sent');
       } catch (emailError) {

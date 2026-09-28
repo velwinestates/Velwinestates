@@ -25,7 +25,7 @@ export default function ProtectedRoute({ children }) {
   
   if (!isAuthenticated) {
     // Redirect to admin login page if not authenticated
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to="/updates/login" replace />;
   }
   
   return children;

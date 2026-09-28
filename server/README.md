@@ -19,7 +19,7 @@ Features
 
 - All form submissions are stored in `data/submissions.json`
 - Email details are logged to `data/email.log` 
-- Admin can review submissions at `/admin/submissions` with password
+- Admin can review submissions at `/updates/submissions` with password
 - No actual emails are sent - everything stays local
 
 Testing

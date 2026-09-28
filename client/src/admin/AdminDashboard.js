@@ -16,7 +16,7 @@ export default function AdminDashboard() {
 
   function handleLogout() {
     logout();
-    navigate('/admin/login', { replace: true });
+    navigate('/updates/login', { replace: true });
   }
 
   function toggleMenu() {
@@ -29,12 +29,12 @@ export default function AdminDashboard() {
   }
 
   const navItems = [
-    { id: 'companies', label: 'Companies & Products', icon: '🏢', path: '/admin/companies' },
-    { id: 'orders', label: 'Product Orders', icon: '🛒', path: '/admin/orders' },
-    { id: 'plans', label: 'Plans Management', icon: '📋', path: '/admin/plans' },
-    { id: 'page-images', label: 'Page Images', icon: '🖼️', path: '/admin/page-images' },
-    { id: 'analytics', label: 'Website Views', icon: '📊', path: '/admin/analytics' },
-    { id: 'submissions', label: 'Form Submissions', icon: '📨', path: '/admin/submissions' }
+    { id: 'companies', label: 'Companies & Products', icon: '🏢', path: '/updates/companies' },
+    { id: 'orders', label: 'Product Orders', icon: '🛒', path: '/updates/orders' },
+    { id: 'plans', label: 'Plans Management', icon: '📋', path: '/updates/plans' },
+    { id: 'page-images', label: 'Page Images', icon: '🖼️', path: '/updates/page-images' },
+    { id: 'analytics', label: 'Website Views', icon: '📊', path: '/updates/analytics' },
+    { id: 'submissions', label: 'Form Submissions', icon: '📨', path: '/updates/submissions' }
   ];
 
   return (
@@ -353,7 +353,7 @@ export default function AdminDashboard() {
         zIndex: 2
       }}>
         <Routes>
-          <Route path="/" element={<Navigate to="/admin/companies" replace />} />
+          <Route path="/" element={<Navigate to="/updates/companies" replace />} />
           <Route path="/companies" element={<AdminCompaniesPage onLogout={handleLogout} />} />
           <Route path="/orders" element={<AdminOrdersPage />} />
           <Route path="/plans" element={<AdminPlansPage onLogout={handleLogout} />} />

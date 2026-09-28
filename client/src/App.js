@@ -258,7 +258,7 @@ function AppContent({
   handleProjectSubmit, projectSubmitted, isSubmitting 
 }) {
   const location = useLocation();
-  const isAdminPage = location.pathname.startsWith('/admin');
+  const isAdminPage = location.pathname.startsWith('/updates');
   const seoData = seoPages[location.pathname] || seoPages['/'];
   const trackedPath = useRef(null);
 
@@ -481,14 +481,14 @@ function AppContent({
             <Route path="/confirm-plan" element={<ConfirmPlan />} />
             
             {/* Admin Routes - Wrapped with Auth Provider */}
-            <Route path="/admin/login" element={
+            <Route path="/updates/login" element={
               <AdminAuthProvider>
                 <AdminLogin />
               </AdminAuthProvider>
             } />
             
             {/* Protected Admin Dashboard with all admin pages */}
-            <Route path="/admin/*" element={
+            <Route path="/updates/*" element={
               <AdminAuthProvider>
                 <ProtectedRoute>
                   <AdminDashboard />

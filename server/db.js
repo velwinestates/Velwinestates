@@ -19,8 +19,7 @@ if (!DATABASE_URL || DATABASE_URL.includes('YOUR_')) {
     isConfigured: false
   };
 } else {
-  console.log('🔧 Attempting to connect to Supabase...');
-  console.log(`📊 Database URL configured from ${databaseUrlSource}:`, DATABASE_URL.substring(0, 50) + '...');
+  console.log(`🔧 Database connection configured from ${databaseUrlSource}`);
   
   // Create a connection pool
   const pool = new Pool({
@@ -38,15 +37,6 @@ if (!DATABASE_URL || DATABASE_URL.includes('YOUR_')) {
 
   pool.on('error', (err) => {
     console.error('❌ Unexpected error on idle client', err.message);
-  });
-
-  // Test connection immediately
-  pool.query('SELECT NOW()', (err, res) => {
-    if (err) {
-      console.error('❌ Failed to connect to Supabase:', err.message);
-    } else {
-      console.log('✅ Supabase connection test successful!');
-    }
   });
 
   // Export query function

@@ -13,7 +13,7 @@ export default function AdminLogin() {
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/admin/companies', { replace: true });
+      navigate('/updates/companies', { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
@@ -28,7 +28,7 @@ export default function AdminLogin() {
       
       if (result.success) {
         // Redirect to admin dashboard on successful login
-        navigate('/admin/companies', { replace: true });
+        navigate('/updates/companies', { replace: true });
       } else {
         setError(result.error || "Invalid credentials");
         setLoading(false);
