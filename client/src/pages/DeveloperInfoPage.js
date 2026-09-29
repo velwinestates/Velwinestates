@@ -58,7 +58,7 @@ function DeveloperInfoPage() {
             </div>
             <div className="service-item">
               <FaCog className="service-icon" />
-              <span>System Services</span>
+              <span>Hardware Projects</span>
             </div>
           </div>
         </div>

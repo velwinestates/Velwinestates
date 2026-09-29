@@ -4,6 +4,7 @@ import { AdminAuthProvider } from './admin/AdminAuthProvider';
 import 'leaflet/dist/leaflet.css';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaYoutube } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import './App.css';
 import projects from './data/projects';
 import ScrollToTop from './ScrollToTop';
@@ -632,6 +633,27 @@ function AppContent({
                   }}
                 >
                   <FaYoutube aria-hidden="true" />
+                </a>
+
+                <a
+                  href="https://x.com/velusamyfzrp"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="X"
+                  title="X"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '2.25rem',
+                    height: '2.25rem',
+                    borderRadius: '50%',
+                    background: '#000',
+                    color: '#fff',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)'
+                  }}
+                >
+                  <FaXTwitter aria-hidden="true" />
                 </a>
               </div>
             </div>
