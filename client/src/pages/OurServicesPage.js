@@ -70,7 +70,7 @@ export default function OurServicesPage() {
   ];
 
   return (
-    <div style={{ 
+    <div className="our-services-page" style={{ 
       minHeight: '100vh', 
       position: 'relative',
       overflow: 'hidden'
@@ -82,14 +82,14 @@ export default function OurServicesPage() {
         padding: '2rem 1rem'
       }}>
       {/* Header Section */}
-      <div style={{ 
+      <div className="our-services-title-band" style={{ 
         maxWidth: 1200, 
         margin: '0 auto 3rem', 
         textAlign: 'center',
         padding: '2rem'
       }}>
-        <h1 style={{ 
-          color: '#2e7d32', 
+          <h1 style={{ 
+            color: 'var(--primary-color)', 
           fontSize: '3rem', 
           fontWeight: 800, 
           marginBottom: '1rem',
@@ -115,8 +115,7 @@ export default function OurServicesPage() {
         padding: '0 1rem'
       }}>
         <h2 style={{ 
-          color: '#2e7d32', 
-          fontSize: '2rem', 
+          color: 'var(--primary-color)', 
           fontWeight: 700, 
           marginBottom: '2rem',
           textAlign: 'center'
@@ -143,15 +142,15 @@ export default function OurServicesPage() {
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.transform = 'translateY(-8px)';
-                e.currentTarget.style.boxShadow = '0 8px 30px rgba(46,125,50,0.2)';
+                e.currentTarget.style.boxShadow = '0 8px 30px rgba(6,78,59,0.2)';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
               }}
             >
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{service.icon}</div>
-              <h3 style={{ color: '#2e7d32', fontSize: '1.5rem', marginBottom: '0.5rem' }}>
+              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{service.icon || '🌾'}</div>
+              <h3 style={{ color: 'var(--primary-color)', fontSize: '1.5rem', marginBottom: '0.5rem' }}>
                 {service.title}
               </h3>
               <p style={{ color: '#666', marginBottom: '1rem', lineHeight: 1.6 }}>
@@ -180,8 +179,7 @@ export default function OurServicesPage() {
         padding: '0 1rem'
       }}>
         <h2 style={{ 
-          color: '#2e7d32', 
-          fontSize: '2rem', 
+          color: 'var(--primary-color)', 
           fontWeight: 700, 
           marginBottom: '2rem',
           textAlign: 'center'
@@ -254,7 +252,7 @@ export default function OurServicesPage() {
                   left: '50%',
                   transform: 'translate(-50%, -50%)',
                   zIndex: 2,
-                  background: 'rgba(46,125,50,0.9)',
+                  background: 'rgba(6,78,59,0.9)',
                   borderRadius: '50%',
                   width: 70,
                   height: 70,
@@ -273,7 +271,7 @@ export default function OurServicesPage() {
                 </div>
               </div>
               <div style={{ padding: '1.5rem' }}>
-                <h3 style={{ color: '#2e7d32', fontSize: '1.3rem', marginBottom: '0.5rem' }}>
+                <h3 style={{ color: 'var(--primary-color)', fontSize: '1.3rem', marginBottom: '0.5rem' }}>
                   {video.title}
                 </h3>
                 <p style={{ color: '#666', lineHeight: 1.6 }}>
@@ -298,7 +296,6 @@ export default function OurServicesPage() {
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
-            zIndex: 9999,
             padding: '2rem'
           }}
           onClick={() => setSelectedVideo(null)}
@@ -351,7 +348,7 @@ export default function OurServicesPage() {
               Your browser does not support the video tag.
             </video>
             <div style={{ padding: '1.5rem' }}>
-              <h3 style={{ color: '#2e7d32', fontSize: '1.5rem', marginBottom: '0.5rem' }}>
+              <h3 style={{ color: 'var(--primary-color)', fontSize: '1.5rem', marginBottom: '0.5rem' }}>
                 {selectedVideo.title}
               </h3>
               <p style={{ color: '#666', lineHeight: 1.6 }}>
@@ -374,7 +371,7 @@ export default function OurServicesPage() {
         boxShadow: '0 8px 30px rgba(0,0,0,0.15)',
         textAlign: 'center'
       }}>
-        <h2 style={{ color: '#2e7d32', fontSize: '2rem', marginBottom: '1rem' }}>
+        <h2 style={{ color: 'var(--primary-color)', fontSize: '2rem', marginBottom: '1rem' }}>
           Ready to Transform Your Farm?
         </h2>
         <p style={{ color: '#666', fontSize: '1.1rem', marginBottom: '2rem', lineHeight: 1.6 }}>
@@ -384,7 +381,7 @@ export default function OurServicesPage() {
           <button
             onClick={() => window.location.href = '/book-team'}
             style={{
-              background: '#2e7d32',
+              background: 'var(--primary-color)',
               color: 'white',
               border: 'none',
               padding: '1rem 2rem',
@@ -394,8 +391,8 @@ export default function OurServicesPage() {
               cursor: 'pointer',
               transition: 'background 0.3s ease'
             }}
-            onMouseEnter={e => e.target.style.background = '#1b5e20'}
-            onMouseLeave={e => e.target.style.background = '#2e7d32'}
+            onMouseEnter={e => e.target.style.background = 'var(--primary-dark)'}
+            onMouseLeave={e => e.target.style.background = 'var(--primary-color)'}
           >
             Book Our Team
           </button>
@@ -403,8 +400,8 @@ export default function OurServicesPage() {
             onClick={() => window.location.href = '/request-quote'}
             style={{
               background: 'transparent',
-              color: '#2e7d32',
-              border: '2px solid #2e7d32',
+              color: 'var(--primary-color)',
+              border: '2px solid var(--primary-color)',
               padding: '1rem 2rem',
               borderRadius: 8,
               fontSize: '1.1rem',
@@ -413,12 +410,12 @@ export default function OurServicesPage() {
               transition: 'all 0.3s ease'
             }}
             onMouseEnter={e => {
-              e.target.style.background = '#2e7d32';
+              e.target.style.background = 'var(--primary-color)';
               e.target.style.color = 'white';
             }}
             onMouseLeave={e => {
               e.target.style.background = 'transparent';
-              e.target.style.color = '#2e7d32';
+              e.target.style.color = 'var(--primary-color)';
             }}
           >
             Request Quote

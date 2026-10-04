@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuHeader } from './DropdownMenu';
-import { Globe, Home, Info, Building2, Wrench, Tractor, ShoppingCart, Banknote, Map, Hammer, Images, Users } from 'lucide-react';
+import { Banknote, Building2, ChevronDown, Globe, Hammer, Home, Images, Info, Map, Menu, ShoppingCart, Tractor, Users, Wrench } from 'lucide-react';
 
 export const languages = [
   ['en', 'English'], ['af', 'Afrikaans'], ['sq', 'Albanian'], ['am', 'Amharic'], ['ar', 'Arabic'],
@@ -71,34 +71,27 @@ const NavbarMenuDemo = () => {
   return (
     <DropdownMenu
       trigger={
-        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          Menu
+        <span className="navbar-menu-trigger-content">
+          <Menu size={17} aria-hidden="true" />
+          <span>Explore</span>
+          <ChevronDown size={15} aria-hidden="true" />
         </span>
       }
       align="right"
     >
-      <DropdownMenuHeader>Navigation</DropdownMenuHeader>
-
       <div className="dropdown-translation">
         <label className="dropdown-translation-label" htmlFor="google_translate_language">
           <Globe size={16} /> Translate website
         </label>
         <LanguageSelector />
       </div>
-      
+
+      <DropdownMenuSeparator />
+
+      <DropdownMenuHeader>Company</DropdownMenuHeader>
+
       <DropdownMenuItem onClick={() => navigate('/')}>
         <><Home size={16} /> Home</>
-      </DropdownMenuItem>
-
-      <DropdownMenuItem 
-        onClick={() => navigate('/developer-info')}
-        style={{ 
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          fontWeight: '600'
-        }}
-      >
-        Developer Information
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/about')}>
@@ -115,7 +108,7 @@ const NavbarMenuDemo = () => {
       
       <DropdownMenuSeparator />
       
-      <DropdownMenuHeader>Services</DropdownMenuHeader>
+      <DropdownMenuHeader>Farm Services</DropdownMenuHeader>
       
       <DropdownMenuItem onClick={() => navigate('/manage-farm')}>
         <><Tractor size={16} /> Manage Farm</>
@@ -143,9 +136,16 @@ const NavbarMenuDemo = () => {
       
       <DropdownMenuSeparator />
       
+      <DropdownMenuHeader>More</DropdownMenuHeader>
+
       <DropdownMenuItem onClick={() => navigate('/join')}>
         <><Users size={16} /> Join Us</>
       </DropdownMenuItem>
+
+      <DropdownMenuItem onClick={() => navigate('/developer-info')}>
+        <><Info size={16} /> Developer Information</>
+      </DropdownMenuItem>
+
     </DropdownMenu>
   );
 };

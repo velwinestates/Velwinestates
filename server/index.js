@@ -1222,16 +1222,68 @@ app.delete('/api/orders/:id', async (req, res) => {
 });
 
 // Send email endpoint
-app.post('/api/send-email', async (req, res) => {
+app.post('/api/send-email', (req, res, next) => {
+  upload.single('landImage')(req, res, error => {
+    if (error) {
+      const message = error.code === 'LIMIT_FILE_SIZE'
+        ? 'Uploaded image must be 10 MB or smaller.'
+        : 'Unable to process the uploaded image.';
+      return res.status(400).json({ error: message });
+    }
+    next();
+  });
+}, async (req, res) => {
   console.log('� Form submission endpoint hit');
   console.log('� Request body:', JSON.stringify(req.body, null, 2));
   
   try {
+    req.body = req.body || {};
+    let extra = req.body.extra || {};
+    if (typeof extra === 'string') {
+      try {
+        extra = JSON.parse(extra);
+      } catch {
+        return res.status(400).json({ error: 'Invalid form details payload.' });
+      }
+    }
+    if (!extra || typeof extra !== 'object' || Array.isArray(extra)) {
+      return res.status(400).json({ error: 'Invalid form details payload.' });
+    }
+    req.body.extra = extra;
+
     // Basic phone validation when provided
     const rawPhone = req.body?.phone || req.body?.payload?.phone || '';
     const digits = String(rawPhone).replace(/\D/g, '');
     if (rawPhone && digits.length !== 10) {
       return res.status(400).json({ error: 'Invalid phone number. Provide exactly 10 digits.' });
+    }
+
+    if (req.body.formType === 'Book My Team') {
+      const name = String(req.body.name || '').trim();
+      const serviceType = String(extra['Service Type'] || '').trim();
+      const address = String(extra.Address || extra['Farm Location'] || '').trim();
+      const contactMethod = String(extra['Preferred Contact Method'] || '').trim();
+      const email = String(req.body.email || '').trim();
+      if (!name || !rawPhone || !serviceType || !address) {
+        return res.status(400).json({ error: 'Name, phone, service, and farm address are required.' });
+      }
+      if (contactMethod === 'Email' && !email) {
+        return res.status(400).json({ error: 'Email is required when email is the preferred contact method.' });
+      }
+    }
+
+    if (req.file) {
+      try {
+        const imageUpload = await uploadToCloudinary(req.file.buffer, 'uzhavar/team-bookings');
+        req.body.extra = {
+          ...extra,
+          'Land Image': imageUpload.secure_url,
+          'Land Image File Name': req.file.originalname
+        };
+      } catch (uploadError) {
+        console.error('Team booking image upload failed:', uploadError.message);
+        return res.status(502).json({ error: 'Unable to upload the farm photo. Try again or submit without it.' });
+      }
     }
 
     const now = new Date().toISOString();

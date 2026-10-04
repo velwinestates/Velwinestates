@@ -65,13 +65,13 @@ const Navbar = () => {
               fontSize: '13px',
               fontWeight: currentLanguage === 'en' ? 'bold' : '500',
               color: currentLanguage === 'en' ? '#000' : '#4a5568',
-              backgroundColor: currentLanguage === 'en' ? '#C9A86A' : 'transparent',
+              backgroundColor: currentLanguage === 'en' ? '#b87d2b' : 'transparent',
               border: '2px solid',
-              borderColor: currentLanguage === 'en' ? '#B8935A' : '#cbd5e0',
+              borderColor: currentLanguage === 'en' ? '#a36c21' : '#cbd5e0',
               borderRadius: '6px',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
-              boxShadow: currentLanguage === 'en' ? '0 2px 4px rgba(201, 168, 106, 0.4)' : 'none'
+              boxShadow: currentLanguage === 'en' ? '0 2px 4px rgba(184, 125, 43, 0.35)' : 'none'
             }}
           >
             EN
@@ -83,13 +83,13 @@ const Navbar = () => {
               fontSize: '13px',
               fontWeight: currentLanguage === 'ta' ? 'bold' : '500',
               color: currentLanguage === 'ta' ? '#000' : '#4a5568',
-              backgroundColor: currentLanguage === 'ta' ? '#C9A86A' : 'transparent',
+              backgroundColor: currentLanguage === 'ta' ? '#b87d2b' : 'transparent',
               border: '2px solid',
-              borderColor: currentLanguage === 'ta' ? '#B8935A' : '#cbd5e0',
+              borderColor: currentLanguage === 'ta' ? '#a36c21' : '#cbd5e0',
               borderRadius: '6px',
               cursor: 'pointer',
               transition: 'all 0.3s ease',
-              boxShadow: currentLanguage === 'ta' ? '0 2px 4px rgba(201, 168, 106, 0.4)' : 'none'
+              boxShadow: currentLanguage === 'ta' ? '0 2px 4px rgba(184, 125, 43, 0.35)' : 'none'
             }}
           >
             தமிழ்

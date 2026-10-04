@@ -70,7 +70,7 @@ function ManageFarmPage(props) {
     <div className="manage-farm-page" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <section className="page-header" style={{ textAlign: 'center', width: '100%' }}>
         <h1 style={{ textAlign: 'center' }}><GiFarmTractor /> Manage My Farm</h1>
-        <p style={{ color: '#388e3c', fontWeight: 'bold', textAlign: 'center' }}>For AMC (maintenance) and Projects</p>
+        <p style={{ color: 'var(--primary-color)', fontWeight: 'bold', textAlign: 'center' }}>For AMC (maintenance) and Projects</p>
       </section>
       
       <div className="farm-tabs" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -84,7 +84,7 @@ function ManageFarmPage(props) {
           </button>
           <button 
             className={`tab-btn ${activeTab === 'fertilizer' ? 'active' : ''}`}
-            style={{ background: activeTab === 'fertilizer' ? 'rgba(241, 248, 233, 0.85)' : 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.5)', color: '#388e3c', borderColor: '#388e3c' }}
+            style={{ background: activeTab === 'fertilizer' ? 'rgba(241, 248, 233, 0.85)' : 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.5)', color: 'var(--primary-color)', borderColor: 'var(--primary-color)' }}
             onClick={() => setActiveTab('fertilizer')}
           >
             <GiPlantRoots /> Fertilizer Plan
@@ -302,7 +302,7 @@ function ManageFarmPage(props) {
         <div className="cta-buttons">
           <button className="btn btn-primary" onClick={() => setActiveTab('monthly')}>Start AMC</button>
           <button className="btn btn-primary" onClick={() => setShowProjectForm(true)}>Book Project</button>
-          <Link to="/farm-details" className="btn btn-primary" style={{marginLeft:'1em',background:'#388e3c',color:'#fff'}}>Upload My Farm Details</Link>
+          <Link to="/farm-details" className="btn btn-primary" style={{marginLeft:'1em',background:'var(--primary-color)',color:'#fff'}}>Upload My Farm Details</Link>
         </div>
         {showProjectForm && (
           <div className="modal-overlay" onClick={() => setShowProjectForm(false)}>

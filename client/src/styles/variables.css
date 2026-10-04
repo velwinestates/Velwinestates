@@ -2,40 +2,40 @@
 /* Root Variables for theming and consistent styling */
 
 :root {
-  /* Primary Colors */
-  --primary-color: #285943;
-  --primary-dark: #173c2c;
-  --primary-light: #6f9b7f;
+  /* Primary Colors - Uzhavar Connect brand palette */
+  --primary-color: #064e3b;
+  --primary-dark: #022c22;
+  --primary-light: #6ee7b7;
   
   /* Secondary Colors */
-  --accent-color: #a86b2d;
-  --secondary-color: #b98545;
-  --secondary-light: #dfc29b;
+  --accent-color: #b87d2b;
+  --secondary-color: #f0ad25;
+  --secondary-light: #ffd276;
   
   /* Text Colors */
-  --text-color: #26332c;
-  --text-light: #5d6b63;
-  --text-dark: #17221b;
+  --text-color: #0e3922;
+  --text-light: #475569;
+  --text-dark: #0f2d18;
   
   /* Background Colors */
-  --bg-color: #eef3e8;
-  --bg-light: #f7f8f2;
-  --bg-alt: #dfe9d9;
-  --background-light: #f7f8f2;
-  --background-off-white: #f1f4eb;
-  --background-accent: #e5efe0;
+  --bg-color: #f8faf7;
+  --bg-light: #f0f7ef;
+  --bg-alt: #edf5eb;
+  --background-light: #f7faf6;
+  --background-off-white: #f5faf6;
+  --background-accent: #e8f2e5;
   
   /* Border & Shadow */
-  --border-color: #d6d2c7;
-  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --border-color: #d8e7d5;
+  --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
-  --shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+  --shadow: 0 2px 8px rgba(15, 46, 27, 0.08);
   
   /* Border Radius */
   --radius-sm: 4px;
   --radius-md: 8px;
-  --radius-lg: 6px;
+  --radius-lg: 10px;
   
   /* Spacing */
   --spacing-xs: 4px;
@@ -46,8 +46,8 @@
   --spacing-xxl: 48px;
   
   /* Typography */
-  --font-family: Arial, Helvetica, sans-serif;
-  --font-display: var(--font-family);
+  --font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  --font-display: 'Poppins', 'Segoe UI', Arial, sans-serif;
   
   /* Transitions */
   --transition: all 0.3s ease;

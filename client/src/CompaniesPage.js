@@ -155,7 +155,7 @@ export default function CompaniesPage() {
       onMouseOver={e => {
         e.currentTarget.style.transform = 'translateY(-8px)';
         e.currentTarget.style.boxShadow = '0 12px 32px rgba(56,142,60,0.15)';
-        e.currentTarget.style.borderColor = '#388e3c';
+        e.currentTarget.style.borderColor = 'var(--primary-color)';
       }}
       onMouseOut={e => {
         e.currentTarget.style.transform = 'translateY(0)';
@@ -202,7 +202,7 @@ export default function CompaniesPage() {
       {/* Content */}
       <div style={{ padding: '1.5em', flex: 1, display: 'flex', flexDirection: 'column' }}>
         <h3 style={{ 
-          color: '#1b5e20', 
+          color: 'var(--primary-dark)', 
           fontWeight: 700, 
           fontSize: '1.4em', 
           marginBottom: '0.5em',
@@ -227,7 +227,7 @@ export default function CompaniesPage() {
           marginTop: 'auto'
         }}>
           <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '1.5em', fontWeight: 'bold', color: '#388e3c' }}>
+            <div style={{ fontSize: '1.5em', fontWeight: 'bold', color: 'var(--primary-color)' }}>
               {c.products ? c.products.length : 0}
             </div>
             <div style={{ fontSize: '0.8em', color: '#999', marginTop: '0.2em' }}>Products</div>
@@ -264,7 +264,7 @@ export default function CompaniesPage() {
             <button 
               onClick={() => setSelectedCompany(null)}
               style={{ 
-                background: '#388e3c', 
+                background: 'var(--primary-color)', 
                 color: 'white', 
                 border: 'none', 
                 padding: '0.6em 1.2em', 
@@ -279,11 +279,11 @@ export default function CompaniesPage() {
                 transition: 'all 0.3s ease'
               }}
               onMouseOver={e => {
-                e.target.style.background = '#2e7d32';
+                e.target.style.background = 'var(--primary-color)';
                 e.target.style.transform = 'translateX(-4px)';
               }}
               onMouseOut={e => {
-                e.target.style.background = '#388e3c';
+                e.target.style.background = 'var(--primary-color)';
                 e.target.style.transform = 'translateX(0)';
               }}
             >
@@ -299,7 +299,7 @@ export default function CompaniesPage() {
                   height: 100, 
                   borderRadius: '50%', 
                   objectFit: 'cover', 
-                  border: '4px solid #388e3c',
+                  border: '4px solid var(--primary-color)',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.15)' 
                 }} 
                 onError={(e) => {
@@ -308,7 +308,7 @@ export default function CompaniesPage() {
               />
               <div style={{ flex: 1 }}>
                 <h1 style={{ 
-                  color: "#1b5e20", 
+                  color: "var(--primary-dark)", 
                   margin: 0, 
                   fontWeight: 800, 
                   fontSize: '2.5em',
@@ -338,7 +338,7 @@ export default function CompaniesPage() {
               flexWrap: 'wrap',
               gap: '1em'
             }}>
-              <h2 style={{ color: '#1b5e20', margin: 0, fontSize: '1.8em', fontWeight: 700 }}>
+              <h2 style={{ color: 'var(--primary-dark)', margin: 0, fontSize: '1.8em', fontWeight: 700 }}>
                 Products <span style={{ color: '#999', fontSize: '0.8em' }}>({filteredProducts.length})</span>
               </h2>
               
@@ -358,7 +358,7 @@ export default function CompaniesPage() {
                       outline: 'none',
                       transition: 'border-color 0.3s ease'
                     }}
-                    onFocus={(e) => e.target.style.borderColor = '#388e3c'}
+                    onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'}
                     onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}
                   />
                 </div>
@@ -450,7 +450,7 @@ export default function CompaniesPage() {
                         onClick={() => handleOrderClick(product, company)}
                         style={{
                           width: '100%',
-                          background: 'linear-gradient(135deg, #388e3c 0%, #2e7d32 100%)',
+                          background: 'linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%)',
                           color: 'white',
                           border: 'none',
                           padding: '0.8em',
@@ -467,7 +467,7 @@ export default function CompaniesPage() {
                         }}
                         onMouseEnter={e => {
                           e.target.style.transform = 'scale(1.02)';
-                          e.target.style.boxShadow = '0 4px 12px rgba(56,142,60,0.3)';
+                          e.target.style.boxShadow = '0 4px 12px rgba(21,128,61,0.25)';
                         }}
                         onMouseLeave={e => {
                           e.target.style.transform = 'scale(1)';
@@ -502,7 +502,7 @@ export default function CompaniesPage() {
                     style={{
                       marginTop: '1em',
                       padding: '0.6em 1.5em',
-                      background: '#388e3c',
+                      background: 'var(--primary-color)',
                       color: 'white',
                       border: 'none',
                       borderRadius: 8,
@@ -739,12 +739,12 @@ export default function CompaniesPage() {
             {orderSubmitted ? (
               <div style={{ textAlign: 'center', padding: '2rem 0' }}>
                 <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>✅</div>
-                <h3 style={{ color: '#2e7d32', marginBottom: '0.5rem' }}>Order Submitted!</h3>
+                <h3 style={{ color: 'var(--primary-color)', marginBottom: '0.5rem' }}>Order Submitted!</h3>
                 <p style={{ color: '#666' }}>We'll contact you shortly to confirm your order.</p>
               </div>
             ) : (
               <>
-                <h2 style={{ color: '#2e7d32', marginBottom: '1.5rem', paddingRight: '2rem' }}>
+                <h2 style={{ color: 'var(--primary-color)', marginBottom: '1.5rem', paddingRight: '2rem' }}>
                   Order: {selectedProduct.name}
                 </h2>
                 
@@ -867,7 +867,7 @@ export default function CompaniesPage() {
                     type="submit"
                     style={{
                       width: '100%',
-                      background: '#2e7d32',
+                      background: 'var(--primary-color)',
                       color: 'white',
                       border: 'none',
                       padding: '1rem',
@@ -877,8 +877,8 @@ export default function CompaniesPage() {
                       cursor: 'pointer',
                       transition: 'background 0.3s ease'
                     }}
-                    onMouseEnter={e => e.target.style.background = '#1b5e20'}
-                    onMouseLeave={e => e.target.style.background = '#2e7d32'}
+                    onMouseEnter={e => e.target.style.background = 'var(--primary-dark)'}
+                    onMouseLeave={e => e.target.style.background = 'var(--primary-color)'}
                   >
                     Place Order
                   </button>

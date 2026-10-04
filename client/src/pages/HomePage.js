@@ -1,151 +1,143 @@
 import React, { useEffect, useState } from 'react';
-import 'leaflet/dist/leaflet.css';
 import { Link } from 'react-router-dom';
-import { FaLeaf, FaImage, FaShoppingCart } from 'react-icons/fa';
-import { MdSettings, MdSell } from 'react-icons/md';
+import { FaArrowRight, FaCheck, FaLeaf } from 'react-icons/fa';
+import { MdSettings } from 'react-icons/md';
 import { BsStars } from 'react-icons/bs';
 import '../App.css';
-import {
-  GiFarmTractor,
-} from 'react-icons/gi';
+import imageUrls from '../data/imageUrls';
+import { GiFarmTractor } from 'react-icons/gi';
 import services from '../data/services';
 import trustFactors from '../data/trustFactors';
 import howItWorks from '../data/howItWorks';
 import usePageMedia from '../hooks/usePageMedia';
 
-const defaultHomeMedia = [
-  { slot: 'slide1', title: 'Construction Project' },
-  { slot: 'slide2', title: 'Farmhouse Construction' },
-  { slot: 'slide3', title: 'Swimming Pool Construction' },
-  { slot: 'slide4', title: 'Water Tank Construction' },
-  { slot: 'slide5', title: 'Farm Fencing' },
-  { slot: 'slide6', title: 'Polyhouse Construction' },
-  { slot: 'slide7', title: 'Livestock Shed Construction' },
-  { slot: 'slide8', title: 'Farm Shed Construction' },
-  { slot: 'slide9', title: 'Drip Irrigation Installation' }
+const homeSlideSlots = [
+  ['slide1', 'Farm Development'],
+  ['slide2', 'Farmhouse Construction'],
+  ['slide3', 'Swimming Pool Construction'],
+  ['slide4', 'Water Tank Construction'],
+  ['slide5', 'Farm Fencing'],
+  ['slide6', 'Polyhouse Construction'],
+  ['slide7', 'Livestock Shed Construction'],
+  ['slide8', 'Farm Shed Construction'],
+  ['slide9', 'Drip Irrigation Installation']
 ];
 
-
-function HomePage({ currentSlide, onBookProject }) {
-  const [constructionSlide, setConstructionSlide] = useState(0);
-  const homeMedia = usePageMedia('home');
-  const constructionMedia = defaultHomeMedia
-    .filter(media => homeMedia[media.slot])
-    .map(media => ({ ...media, src: homeMedia[media.slot] }));
+function HomePage() {
+  const media = usePageMedia('home');
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slides = homeSlideSlots
+    .map(([slot, title]) => ({ slot, title, src: media[slot] }))
+    .filter(slide => slide.src);
 
   useEffect(() => {
-    if (constructionMedia.length === 0) {
-      setConstructionSlide(0);
-      return undefined;
-    }
+    if (slides.length < 2) return undefined;
 
-    const interval = setInterval(() => {
-      setConstructionSlide((previousSlide) => (previousSlide + 1) % constructionMedia.length);
-    }, 5000);
+    const timer = setInterval(() => {
+      setCurrentSlide(index => (index + 1) % slides.length);
+    }, 6000);
 
-    return () => clearInterval(interval);
-  }, [constructionMedia.length]);
+    return () => clearInterval(timer);
+  }, [slides.length]);
 
   return (
     <div className="home-page">
-      {constructionMedia.length > 0 && (
-        <section className="construction-media-section home-media-top" aria-label="Home image slides">
-          <div className="construction-media-carousel">
-            <div className="construction-media-track" style={{ transform: `translateX(-${constructionSlide * 100}%)` }}>
-              {constructionMedia.map(media => (
-                <div className="construction-media-slide" key={media.slot}>
-                  <img src={media.src} alt={media.title} />
-                </div>
-              ))}
-            </div>
+      <section className="home-hero">
+        <div className="home-hero-slides" aria-label="Farm and project images">
+          {slides.map((slide, index) => (
+            <img
+              key={slide.slot}
+              className={`home-hero-slide ${index === currentSlide ? 'is-active' : ''}`}
+              src={slide.src}
+              alt={index === currentSlide ? slide.title : ''}
+              aria-hidden={index !== currentSlide}
+            />
+          ))}
+        </div>
+        <div className="home-hero-shade" />
+        <div className="home-hero-content">
+          <p className="home-hero-eyebrow">FARM DEVELOPMENT · MANAGEMENT · SUPPORT</p>
+          <h1>Grow your farm.<br /><span>Grow your future.</span></h1>
+          <p className="home-hero-copy">Practical farm development and management, from the first site visit to the work completed in your fields.</p>
+          <div className="home-hero-actions">
+            <Link to="/book-team" className="home-action-primary">Book a Service <FaArrowRight aria-hidden="true" /></Link>
+            <Link to="/our-services" className="home-action-secondary">Explore Services</Link>
           </div>
-          <div className="carousel-dots" aria-label="Home image slides">
-            {constructionMedia.map((media, index) => (
+          <div className="home-hero-promises" aria-label="Our commitments">
+            <div><FaLeaf aria-hidden="true" /><span>Healthy land<br /><strong>Better yields</strong></span></div>
+            <div><FaCheck aria-hidden="true" /><span>Clear plans<br /><strong>Visible progress</strong></span></div>
+            <div><GiFarmTractor aria-hidden="true" /><span>Local teams<br /><strong>Field-ready support</strong></span></div>
+          </div>
+        </div>
+        {slides.length > 1 && (
+          <div className="home-hero-slide-controls" role="group" aria-label="Choose a homepage image">
+            {slides.map((slide, index) => (
               <button
+                key={slide.slot}
                 type="button"
-                key={media.slot}
-                className={`dot ${constructionSlide === index ? 'active' : ''}`}
-                aria-label={`Show ${media.title}`}
-                aria-current={constructionSlide === index ? 'true' : undefined}
-                onClick={() => setConstructionSlide(index)}
+                className={index === currentSlide ? 'is-active' : ''}
+                aria-label={`Show ${slide.title}`}
+                aria-current={index === currentSlide ? 'true' : undefined}
+                onClick={() => setCurrentSlide(index)}
               />
             ))}
           </div>
-        </section>
-      )}
-      <Link
-        to="/construction"
-        className="btn btn-primary recent-projects-link"
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          zIndex: 2500,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.45rem',
-          whiteSpace: 'nowrap',
-          fontSize: '0.75rem',
-          padding: '0.6rem 0.8rem',
-          borderRadius: '999px',
-          background: '#285943',
-          boxShadow: '0 3px 10px rgba(23, 60, 44, 0.18)'
-        }}
-      >
-        <FaImage size={14} />
-        <span className="recent-projects-link-text" style={{ fontSize: '0.75rem' }}>Construction Services</span>
-      </Link>
-      <section className="hero-section">
-        <div className="hero-content">
-          <span className="eyebrow">Velwin Estates</span>
-          <h1>Smart farm management for better yields and calmer decisions.</h1>
-          <p>We help farmers with land planning, annual maintenance, irrigation, fencing, inputs, crop support, and transparent execution tracking.</p>
-          <div className="hero-cta">
-            <Link to="/manage-farm" className="btn btn-primary"><GiFarmTractor /> Manage My Farm</Link>
-            <Link to="/buy-inputs" className="btn btn-primary"><FaShoppingCart /> Buy Inputs</Link>
-            <Link to="/sell-produce" className="btn btn-primary"><MdSell /> Sell Produce</Link>
-            <Link to="/book-team" className="btn btn-primary">Book Our Team</Link>
-            <Link to="/farm-details" className="btn btn-primary">Upload Farm Details</Link>
-          </div>
-          <p className="site-visit-note">
-            Site verification visit is chargeable. <br />
-            SITE VISIT & FARM CONSULTATION <br />
-            Velwin Estates provides professional on-site visits and personalized farm consultation to help you understand your land and plan its development. <br />
-            SITE VISIT CHARGES <br />
-            Up to 50 KM - ₹4,999/- <br />
-            50 - 100 KM - ₹9,999/- <br />
-            The consultation includes direct site inspection, understanding your land requirements, and discussing suitable farm development possibilities. <br />
-            <strong>Note: Advance Booking Required.</strong><br />
-            Your time matters. Our expertise matters.<br />
-            Let’s make your land productive.
-          </p>
-        </div>
+        )}
       </section>
 
-      <section className="what-we-do-section">
+      <section className="what-we-do-section home-section">
         <div className="section-heading">
             <div className="section-heading-container">
-                <h2><FaLeaf /> Velwin Estates – What We Do</h2>
+                <span className="section-kicker">OUR SERVICES</span>
+                <h2><FaLeaf /> Everything your farm needs.</h2>
                 <p className="tagline">We are a field-ready execution partner for farmers who need clarity, accountability, and professional farm support.</p>
             </div>
         </div>
         <div className="services-grid">
-          {services.map((service, index) => (
-            <div className="service-card" key={index}>
+          {services.map((service) => (
+            <Link
+              className="service-card"
+              key={service.path + service.title}
+              to={service.path}
+              aria-label={`${service.title}: ${service.description}`}
+            >
               <div className="service-card-icon">
                 {service.icon}
               </div>
               <h3>{service.title}</h3>
               <p>{service.description}</p>
-            </div>
+              <span className="service-card-arrow" aria-hidden="true"><FaArrowRight /></span>
+            </Link>
           ))}
         </div>
-  {/* Explore All Services button removed as requested */}
+        <Link to="/our-services" className="home-text-link">View all services <FaArrowRight aria-hidden="true" /></Link>
       </section>
 
-      <section className="trust-section">
+      <section className="home-showcase" aria-label="Farm work and services">
+        <div className="home-showcase-heading">
+          <span className="section-kicker">FIELD WORK, DONE WITH CARE</span>
+          <h2>Our work in the field.</h2>
+        </div>
+        <div className="home-showcase-grid">
+          <Link to="/construction" className="home-showcase-card">
+            <img src={imageUrls.agriculture} alt="Rows of crops growing on a farm" loading="lazy" />
+            <span>Farm Development <FaArrowRight aria-hidden="true" /></span>
+          </Link>
+          <Link to="/manage-farm" className="home-showcase-card">
+            <img src={imageUrls.irrigation} alt="Drip irrigation installation for crops" loading="lazy" />
+            <span>Irrigation & Maintenance <FaArrowRight aria-hidden="true" /></span>
+          </Link>
+          <Link to="/projects" className="home-showcase-card">
+            <img src={imageUrls.coconut} alt="Young coconut palm planted on a farm" loading="lazy" />
+            <span>Plantation Projects <FaArrowRight aria-hidden="true" /></span>
+          </Link>
+        </div>
+      </section>
+
+      <section className="trust-section home-section">
         <div className="section-heading">
-          <h2><BsStars /> Why Farmers Choose Us</h2>
+          <span className="section-kicker">WHY VELWIN ESTATES</span>
+          <h2><BsStars /> Built for farmers. Driven by impact.</h2>
         </div>
         <div className="trust-factors">
           {trustFactors.map((factor, index) => (
@@ -158,10 +150,11 @@ function HomePage({ currentSlide, onBookProject }) {
         </div>
       </section>
 
-      <section className="how-it-works-section">
+      <section className="how-it-works-section home-section">
         <div className="section-heading">
             <div className="section-heading-container">
-              <h2><MdSettings /> How It Works – SOP System</h2>
+              <span className="section-kicker">HOW IT WORKS</span>
+              <h2><MdSettings /> A clear process, from visit to completion.</h2>
             </div>
         </div>
         <div className="steps-container">
@@ -174,10 +167,30 @@ function HomePage({ currentSlide, onBookProject }) {
             </div>
           ))}
         </div>
-  {/* Book Site Visit button removed as requested */}
       </section>
 
+      <section className="home-visit-band">
+        <div>
+          <span className="section-kicker">SITE VISIT & FARM CONSULTATION</span>
+          <h2>Start with a clear view of your land.</h2>
+          <p>Our team visits your site, understands your requirements, and discusses practical next steps. Advance booking is required.</p>
+        </div>
+        <div className="home-visit-prices">
+          <span>Up to 50 km <strong>₹4,999</strong></span>
+          <span>50–100 km <strong>₹9,999</strong></span>
+          <Link to="/book-team" className="home-action-primary">Book a site visit <FaArrowRight aria-hidden="true" /></Link>
+        </div>
+      </section>
 
+      <section className="home-final-cta">
+        <span className="section-kicker">LET’S GROW TOGETHER</span>
+        <h2>Make your land more productive.</h2>
+        <p>Tell us what you want to achieve. We’ll help you plan the next step.</p>
+        <div className="home-hero-actions">
+          <Link to="/book-team" className="home-action-primary">Talk to our team <FaArrowRight aria-hidden="true" /></Link>
+          <Link to="/projects" className="home-action-secondary">See our past work</Link>
+        </div>
+      </section>
     </div>
   );
 }

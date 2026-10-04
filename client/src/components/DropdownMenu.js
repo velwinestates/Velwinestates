@@ -1,9 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import './DropdownMenu.css';
 
 const DropdownMenu = ({ trigger, children, align = 'left' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
+  const panelRef = useRef(null);
+  const backdropRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (!isOpen) return;
+
+    panelRef.current?.style.setProperty('display', 'block', 'important');
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    backdropRef.current?.style.setProperty('display', isMobile ? 'block' : 'none', 'important');
+  }, [isOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -22,12 +32,13 @@ const DropdownMenu = ({ trigger, children, align = 'left' }) => {
   }, [isOpen]);
 
   return (
-    <div className="dropdown-menu-container" ref={menuRef}>
+    <div className="velwin-dropdown-container" ref={menuRef}>
       <button
-        className="dropdown-trigger"
+        className="velwin-dropdown-trigger"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-haspopup="true"
+        aria-label="Explore site navigation"
       >
         {trigger}
       </button>
@@ -36,22 +47,13 @@ const DropdownMenu = ({ trigger, children, align = 'left' }) => {
         <>
           {/* Backdrop for mobile - closes menu when clicked */}
           <div 
-            className="dropdown-backdrop"
+            className="velwin-dropdown-backdrop"
+            ref={backdropRef}
             onClick={() => setIsOpen(false)}
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(0, 0, 0, 0.3)',
-              zIndex: 999,
-              display: 'none'
-            }}
           />
           
-          <div className={`dropdown-menu ${align}`}>
-            <div className="dropdown-menu-content">
+          <div ref={panelRef} className={`velwin-dropdown-panel ${align}`}>
+            <div className="velwin-dropdown-content">
               {React.Children.map(children, (child) =>
                 child.type === DropdownMenuItem
                   ? React.cloneElement(child, {
@@ -75,7 +77,7 @@ const DropdownMenu = ({ trigger, children, align = 'left' }) => {
 const DropdownMenuItem = ({ children, onClick, disabled = false }) => {
   return (
     <button
-      className={`dropdown-menu-item ${disabled ? 'disabled' : ''}`}
+      className={`velwin-dropdown-item ${disabled ? 'disabled' : ''}`}
       onClick={onClick}
       disabled={disabled}
     >
@@ -85,11 +87,11 @@ const DropdownMenuItem = ({ children, onClick, disabled = false }) => {
 };
 
 const DropdownMenuSeparator = () => {
-  return <div className="dropdown-menu-separator" />;
+  return <div className="velwin-dropdown-separator" />;
 };
 
 const DropdownMenuHeader = ({ children }) => {
-  return <div className="dropdown-menu-header">{children}</div>;
+  return <div className="velwin-dropdown-header">{children}</div>;
 };
 
 export { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuHeader };

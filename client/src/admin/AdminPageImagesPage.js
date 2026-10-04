@@ -4,7 +4,7 @@ import { apiUrl, imageUrl } from '../api';
 const pageGroups = [
   {
     id: 'home',
-    label: 'Home page carousel',
+    label: 'Home hero carousel',
     slots: [
       ['slide1', 'Construction Project'],
       ['slide2', 'Farmhouse Construction'],
@@ -89,7 +89,7 @@ export default function AdminPageImagesPage() {
   return (
     <section style={{ fontFamily: 'var(--font-family)' }}>
       <h2 style={{ marginBottom: '0.35rem' }}>Page Images</h2>
-      <p style={{ marginTop: 0, color: '#5d6b63' }}>Add, edit, or delete images used across the home and construction pages.</p>
+      <p style={{ marginTop: 0, color: '#5d6b63' }}>Manage the rotating home hero images and construction gallery images.</p>
       {status && <p role="status">{status}</p>}
       {pageGroups.map(group => (
         <section key={group.id} style={{ marginTop: '1.5rem' }}>

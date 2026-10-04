@@ -31,7 +31,7 @@ function AboutPage() {
           <div className="team-member">
             <img src={imageUrls.founder} alt="Founder" />
             <h3>Velu Samy</h3>
-            <p style={{ color: '#388e3c', fontWeight: 'bold' }}>Founder</p>
+            <p style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>Founder</p>
           </div>
         </div>
       </section>

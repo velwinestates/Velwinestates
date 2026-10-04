@@ -1,11 +1,18 @@
 import { useEffect, useState } from 'react';
 import { apiUrl } from '../api';
+import imageUrls from '../data/imageUrls';
 
 const pageMedia = {
   home: {
-    slide1: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878959/uzhavar/page-images/Velwin_Logo.jpg',
-    slide2: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878960/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_8_19_19_PM.jpg',
-    slide3: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878961/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_8_24_16_PM.jpg'
+    slide1: imageUrls.agriculture,
+    slide2: imageUrls.farmhouse,
+    slide3: imageUrls.pool,
+    slide4: imageUrls.waterTank,
+    slide5: imageUrls.fencing,
+    slide6: imageUrls.polyhouse,
+    slide7: imageUrls.livestock,
+    slide8: imageUrls.farmShed,
+    slide9: imageUrls.irrigation
   },
   construction: {
     hero: 'https://res.cloudinary.com/ddenqoijd/image/upload/v1788878900/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_17_PM.jpg',

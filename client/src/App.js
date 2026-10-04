@@ -550,8 +550,11 @@ function AppContent({
               <h3>Quick Links</h3>
               <ul>
                 <li><Link to="/about">About Us</Link></li>
-                <li><Link to="/contact">Contact</Link></li>
-                <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+                <li><Link to="/our-services">Our Services</Link></li>
+                <li><Link to="/projects">Past Work</Link></li>
+                <li><Link to="/book-team">Book a Service</Link></li>
+                <li><Link to="/companies">Our Companies</Link></li>
+                <li><Link to="/manage-farm">Manage My Farm</Link></li>
                 <li><Link to="/join">Careers</Link></li>
               </ul>
             </div>
@@ -569,8 +572,8 @@ function AppContent({
             {/* Column 3 - Contact Us */}
             <div className="footer-section">
               <h3>Contact Us</h3>
-              <p>Email: velwinestates@gmail.com</p>
-              <p>Phone: +91 81100 13838 </p>
+              <p>Email: <a href="mailto:velwinestates@gmail.com">velwinestates@gmail.com</a></p>
+              <p>Phone: <a href="tel:+918110013838">+91 81100 13838</a></p>
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginTop: '0.75rem' }}>
                 <a
                   href="https://www.instagram.com/velwinestates?stkn=MWVpaWl0aHBiYnV3aA=="
@@ -663,19 +666,15 @@ function AppContent({
           <div className="footer-cta">
             <h2>Start with a One-Time Project or Choose a Monthly Plan</h2>
             <div className="cta-buttons">
-              <Link to="/book-team">
-                <button className="btn btn-primary">Book Now</button>
-              </Link>
-              <Link to="/join">
-                <button className="btn btn-primary">Join US</button>
-              </Link>
+              <Link to="/book-team" className="btn btn-primary">Book Now</Link>
+              <Link to="/join" className="btn btn-primary">Join Us</Link>
             </div>
           </div>
 
           {/* Footer Bottom */}
           <div className="footer-bottom">
             <p>&copy; {new Date().getFullYear()} Velwin Estates. All rights reserved.</p>
-            <p>Powered by Netcraft Studio</p>
+            <p>Powered by <a href="https://www.netcraftstudios.org" target="_blank" rel="noopener noreferrer">Netcraft Studio</a></p>
           </div>
         </footer>
         {!isAdminPage && (
@@ -716,7 +715,9 @@ function AppContent({
 
             <a
               className="whatsapp-chat"
-              href="https://wa.me/918110013838?text=Dear%20Velwin%20Estates%20Team%2C%0A%0AI%20am%20contacting%20you%20through%20your%20website%20to%20enquire%20about%20your%20services.%0A%0AName%3A%0AContact%20number%3A%0AService%20or%20requirement%3A%0AFarm%20location%3A%0APreferred%20date%3A%0AAdditional%20details%3A%0A%0AThank%20you."
+              href={`https://wa.me/918110013838?text=${encodeURIComponent(
+                "Hello Velwin Estates team,\n\nI'm interested in your farm services and would like to discuss my requirements.\n\nName:\nFarm location:\nService I'm interested in:\nFarm size (optional):\nPreferred time to contact:\n\nPlease let me know the next steps. Thank you!"
+              )}`}
               target="_blank"
               rel="noreferrer"
               aria-label="Chat with Velwin Estates on WhatsApp"

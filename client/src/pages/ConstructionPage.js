@@ -20,6 +20,10 @@ function ConstructionPage() {
 
   return (
     <div className="construction-page" style={{ padding: '2rem' }}>
+      <section className="page-header">
+        <h1>Farm Construction Projects</h1>
+        <p>Explore our completed construction, irrigation, fencing, and farm infrastructure work.</p>
+      </section>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
         {images.map(constructionImage => (
           <button

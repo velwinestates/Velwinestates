@@ -105,10 +105,10 @@ function ConfirmPlan() {
     <div className="confirm-plan-page" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #e0f7fa 0%, #fff 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div className="confirm-card" style={{ background: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(15px)', border: '1px solid rgba(255, 255, 255, 0.6)', borderRadius: '20px', boxShadow: '0 12px 40px rgba(56,142,60,0.15)', padding: '3rem 2.5rem', maxWidth: '520px', width: '100%' }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{ background: 'linear-gradient(135deg, #2e7d32, #4caf50)', width: '70px', height: '70px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+          <div style={{ background: 'linear-gradient(135deg, var(--primary-color), var(--primary-dark))', width: '70px', height: '70px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
             <FaSeedling style={{ fontSize: '2em', color: 'white' }} />
           </div>
-          <h2 style={{ margin: '0 0 0.5rem 0', color: '#2e7d32', fontWeight: 700, fontSize: '1.8em' }}>Confirm Your Plan</h2>
+          <h2 style={{ margin: '0 0 0.5rem 0', color: 'var(--primary-color)', fontWeight: 700, fontSize: '1.8em' }}>Confirm Your Plan</h2>
           <div style={{ fontSize: '1.1em', color: '#00838f', marginBottom: '0.5em' }}>
             Selected Plan: <strong style={{ textTransform: 'capitalize' }}>{planType}</strong>
           </div>
@@ -116,46 +116,46 @@ function ConfirmPlan() {
         {!submitted ? (
           <form onSubmit={handleSubmit} className="confirm-plan-form" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div style={{ position: 'relative' }}>
-              <FaUser style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#2e7d32', fontSize: '1.1em' }} />
-              <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Your Name" required style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+              <FaUser style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary-color)', fontSize: '1.1em' }} />
+              <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Your Name" required style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
             </div>
             <div style={{ position: 'relative' }}>
-              <FaPhone style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#2e7d32', fontSize: '1.1em' }} />
-              <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number" required inputMode="numeric" pattern="^[0-9]{10}$" maxLength="10" title="Enter a valid 10-digit phone number" style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+              <FaPhone style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary-color)', fontSize: '1.1em' }} />
+              <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="Phone Number" required inputMode="numeric" pattern="^[0-9]{10}$" maxLength="10" title="Enter a valid 10-digit phone number" style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
             </div>
             <div style={{ position: 'relative' }}>
-              <FaEnvelope style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#2e7d32', fontSize: '1.1em' }} />
-              <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email" required style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+              <FaEnvelope style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary-color)', fontSize: '1.1em' }} />
+              <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Email" required style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
             </div>
             <div>
               <div style={{ position: 'relative', marginBottom: '1rem' }}>
-                <FaMapMarkerAlt style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#2e7d32', fontSize: '1.1em' }} />
-                <input type="text" name="landLocation" value={form.landLocation} onChange={handleChange} placeholder="Land Location (address or area)" required style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+                <FaMapMarkerAlt style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary-color)', fontSize: '1.1em' }} />
+                <input type="text" name="landLocation" value={form.landLocation} onChange={handleChange} placeholder="Land Location (address or area)" required style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
               </div>
               <div>
-                <label style={{ display: 'block', fontWeight: 600, color: '#2e7d32', marginBottom: '0.5rem', fontSize: '0.95em' }}>Select Land Location on Map:</label>
+                <label style={{ display: 'block', fontWeight: 600, color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '0.95em' }}>Select Land Location on Map:</label>
                 <MapContainer center={[11.0168, 76.9558]} zoom={7} style={{ height: '220px', width: '100%', borderRadius: '12px', border: '2px solid #e0e0e0' }}>
                   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                   {form.coordinates && <Marker position={[form.coordinates.lat, form.coordinates.lng]} />}
                   <LocationPicker onSelect={coords => setForm(prev => ({ ...prev, coordinates: coords }))} />
                 </MapContainer>
                 {form.coordinates && (
-                  <div style={{ fontSize: '0.9em', color: '#2e7d32', marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(46,125,50,0.1)', borderRadius: '8px', fontWeight: 500 }}>
+                  <div style={{ fontSize: '0.9em', color: 'var(--primary-color)', marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(21,128,61,0.1)', borderRadius: '8px', fontWeight: 500 }}>
                     ✓ Selected: <strong>{form.coordinates.lat.toFixed(5)}, {form.coordinates.lng.toFixed(5)}</strong>
                   </div>
                 )}
               </div>
             </div>
             <div style={{ position: 'relative' }}>
-              <FaCheckCircle style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#2e7d32', fontSize: '1.1em' }} />
-              <input type="text" name="landSize" value={form.landSize} onChange={handleChange} placeholder="Land Size (in acres)" required style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+              <FaCheckCircle style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary-color)', fontSize: '1.1em' }} />
+              <input type="text" name="landSize" value={form.landSize} onChange={handleChange} placeholder="Land Size (in acres)" required style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
             </div>
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: 10, fontWeight: 600, fontSize: '1.05em', background: 'linear-gradient(135deg, #2e7d32, #4caf50)', color: 'white', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 4px 15px rgba(46, 125, 50, 0.3)', marginTop: '0.5rem' }} onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>Confirm Plan</button>
+            <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: 10, fontWeight: 600, fontSize: '1.05em', background: 'linear-gradient(135deg, var(--primary-color), var(--primary-dark))', color: 'white', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 4px 15px rgba(46, 125, 50, 0.3)', marginTop: '0.5rem' }} onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>Confirm Plan</button>
           </form>
         ) : (
           <div style={{ textAlign: 'center', padding: '2.5rem 0' }}>
-            <div style={{ background: 'linear-gradient(135deg, #2e7d32, #4caf50)', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', fontSize: '2.5em', color: 'white' }}>✓</div>
-            <h3 style={{ color: '#2e7d32', marginBottom: '0.5rem', fontSize: '1.5em' }}>Thank You!</h3>
+            <div style={{ background: 'linear-gradient(135deg, var(--primary-color), var(--primary-dark))', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', fontSize: '2.5em', color: 'white' }}>✓</div>
+            <h3 style={{ color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '1.5em' }}>Thank You!</h3>
             <p style={{ color: '#666', margin: 0 }}>Your confirmation has been received.<br />We will contact you soon.</p>
           </div>
         )}

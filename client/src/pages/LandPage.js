@@ -146,7 +146,7 @@ export default function LandPage() {
               <LocationPicker onLocationSelect={handleLocation} />
             </MapContainer>
             {form.latlng && (
-              <div style={{fontSize:'0.9em',color:'#388e3c'}}>Selected: Lat {form.latlng.lat}, Lng {form.latlng.lng}</div>
+              <div style={{fontSize:'0.9em',color:'var(--primary-color)'}}>Selected: Lat {form.latlng.lat}, Lng {form.latlng.lng}</div>
             )}
           </div>
           <div className="form-group">
@@ -172,7 +172,7 @@ export default function LandPage() {
           <div className="form-group">
             <label>Land Image</label>
             <input type="file" name="landImage" accept="image/*" onChange={handleChange} required />
-            {form.landImage && <span style={{fontSize:'0.9em',color:'#388e3c'}}>Selected: {form.landImage.name}</span>}
+            {form.landImage && <span style={{fontSize:'0.9em',color:'var(--primary-color)'}}>Selected: {form.landImage.name}</span>}
           </div>
           <button type="submit" className="btn btn-primary" style={{width:'100%',marginTop:'1em'}}>Submit</button>
         </form>

@@ -229,7 +229,7 @@
 }
 
 .modal-card h2 {
-  color: #388e3c;
+  color: var(--primary-color);
   font-size: 2em;
   font-weight: 800;
   margin-bottom: 0.5em;
@@ -257,7 +257,7 @@
 .project-form .form-group label {
   display: block;
   font-weight: 600;
-  color: #2e7d32;
+  color: var(--primary-color);
   margin-bottom: 0.5em;
   font-size: 0.95em;
   letter-spacing: 0.3px;
@@ -281,7 +281,7 @@
 .project-form .form-group select:focus,
 .project-form .form-group textarea:focus {
   outline: none;
-  border-color: #388e3c;
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 4px rgba(56, 142, 60, 0.1);
   transform: translateY(-2px);
 }
@@ -347,14 +347,14 @@
 }
 
 .project-form .form-actions .btn-primary {
-  background: linear-gradient(135deg, #388e3c 0%, #2e7d32 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: white;
   flex: 1;
   max-width: 200px;
 }
 
 .project-form .form-actions .btn-primary:hover {
-  background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(56, 142, 60, 0.4);
 }

@@ -96,25 +96,25 @@ export default function RequestQuotePage() {
   return (
     <div className="request-quote-page" style={{ minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem 1rem' }}>
       <div style={{ maxWidth: 520, width: '100%', background: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(15px)', border: '1px solid rgba(255, 255, 255, 0.6)', borderRadius: 20, boxShadow: '0 12px 40px rgba(0,0,0,0.15)', padding: '3rem 2.5rem', position: 'relative' }}>
-        <h2 style={{ marginBottom: '0.5rem', color: '#2e7d32', fontWeight: 700, fontSize: '1.8em', textAlign: 'center' }}>Request a Construction Quote</h2>
+        <h2 style={{ marginBottom: '0.5rem', color: 'var(--primary-color)', fontWeight: 700, fontSize: '1.8em', textAlign: 'center' }}>Request a Construction Quote</h2>
         <p style={{ textAlign: 'center', color: '#666', marginBottom: '2rem', fontSize: '0.95em' }}>Fill in the details and we'll get back to you soon</p>
         {!quoteSubmitted ? (
           <form onSubmit={handleQuoteSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2em' }} encType="multipart/form-data">
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, color: '#2e7d32', marginBottom: '0.5rem', fontSize: '0.95em' }}>Name *</label>
-              <input type="text" name="name" value={quoteForm.name} onChange={handleQuoteInput} required pattern="^[A-Za-z ]+$" title="Name should contain only letters and spaces" style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+              <label style={{ display: 'block', fontWeight: 600, color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '0.95em' }}>Name *</label>
+              <input type="text" name="name" value={quoteForm.name} onChange={handleQuoteInput} required pattern="^[A-Za-z ]+$" title="Name should contain only letters and spaces" style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, color: '#2e7d32', marginBottom: '0.5rem', fontSize: '0.95em' }}>Phone *</label>
-              <input type="tel" name="phone" value={quoteForm.phone} onChange={handleQuoteInput} required pattern="^[0-9]{10}$" maxLength="10" title="Enter a valid 10-digit phone number" style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+              <label style={{ display: 'block', fontWeight: 600, color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '0.95em' }}>Phone *</label>
+              <input type="tel" name="phone" value={quoteForm.phone} onChange={handleQuoteInput} required pattern="^[0-9]{10}$" maxLength="10" title="Enter a valid 10-digit phone number" style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, color: '#2e7d32', marginBottom: '0.5rem', fontSize: '0.95em' }}>Email *</label>
-              <input type="email" name="email" value={quoteForm.email} onChange={handleQuoteInput} required style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+              <label style={{ display: 'block', fontWeight: 600, color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '0.95em' }}>Email *</label>
+              <input type="email" name="email" value={quoteForm.email} onChange={handleQuoteInput} required style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, color: '#2e7d32', marginBottom: '0.5rem', fontSize: '0.95em' }}>Project Type *</label>
-              <select name="projectType" value={quoteForm.projectType} onChange={handleQuoteInput} required style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)', cursor: 'pointer' }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}>
+              <label style={{ display: 'block', fontWeight: 600, color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '0.95em' }}>Project Type *</label>
+              <select name="projectType" value={quoteForm.projectType} onChange={handleQuoteInput} required style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)', cursor: 'pointer' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'}>
                 <option value="">Select Type</option>
                 <option value="Farmhouse">Farmhouse</option>
                 <option value="Swimming Pool">Swimming Pool</option>
@@ -126,24 +126,24 @@ export default function RequestQuotePage() {
               </select>
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, color: '#2e7d32', marginBottom: '0.5rem', fontSize: '0.95em' }}>Description *</label>
-              <textarea name="description" value={quoteForm.description} onChange={handleQuoteInput} rows="3" required maxLength="500" title="Describe your project (max 500 characters)" style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)', resize: 'vertical', minHeight: 80 }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+              <label style={{ display: 'block', fontWeight: 600, color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '0.95em' }}>Description *</label>
+              <textarea name="description" value={quoteForm.description} onChange={handleQuoteInput} rows="3" required maxLength="500" title="Describe your project (max 500 characters)" style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)', resize: 'vertical', minHeight: 80 }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, color: '#2e7d32', marginBottom: '0.5rem', fontSize: '0.95em' }}>Land Type</label>
-              <input type="text" name="landType" value={quoteForm.landType} onChange={handleQuoteInput} placeholder="e.g. Red soil, Clay, Sandy" style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = '#2e7d32'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+              <label style={{ display: 'block', fontWeight: 600, color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '0.95em' }}>Land Type</label>
+              <input type="text" name="landType" value={quoteForm.landType} onChange={handleQuoteInput} placeholder="e.g. Red soil, Clay, Sandy" style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, color: '#2e7d32', marginBottom: '0.5rem', fontSize: '0.95em' }}>Land Image</label>
+              <label style={{ display: 'block', fontWeight: 600, color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '0.95em' }}>Land Image</label>
               <input type="file" name="landImage" accept="image/*" onChange={handleQuoteInput} style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)', cursor: 'pointer' }} />
-              {quoteForm.landImage && <span style={{ fontSize: '0.9em', color: '#2e7d32', marginTop: '0.5rem', display: 'block', fontWeight: 500 }}>✓ Selected: {quoteForm.landImage.name}</span>}
+              {quoteForm.landImage && <span style={{ fontSize: '0.9em', color: 'var(--primary-color)', marginTop: '0.5rem', display: 'block', fontWeight: 500 }}>✓ Selected: {quoteForm.landImage.name}</span>}
             </div>
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: 10, fontWeight: 600, fontSize: '1.05em', background: 'linear-gradient(135deg, #2e7d32, #4caf50)', color: 'white', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 4px 15px rgba(46, 125, 50, 0.3)' }} onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>Submit Quote Request</button>
+            <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: 10, fontWeight: 600, fontSize: '1.05em', background: 'linear-gradient(135deg, var(--primary-color), var(--primary-dark))', color: 'white', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 4px 15px rgba(46, 125, 50, 0.3)' }} onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>Submit Quote Request</button>
           </form>
         ) : (
           <div style={{ textAlign: 'center', padding: '2rem 0' }}>
             <div style={{ fontSize: '3em', marginBottom: '1rem' }}>✓</div>
-            <h3 style={{ color: '#2e7d32', marginBottom: '0.5rem' }}>Thank You!</h3>
+            <h3 style={{ color: 'var(--primary-color)', marginBottom: '0.5rem' }}>Thank You!</h3>
             <p style={{ color: '#666' }}>Your construction quote request has been submitted successfully.</p>
           </div>
         )}
