@@ -1,70 +1,84 @@
-import React, { useState } from 'react';
+import React from 'react';
 import imageUrls from '../data/imageUrls';
 import usePageMedia from '../hooks/usePageMedia';
 
 export default function OurServicesPage() {
-  const [selectedVideo, setSelectedVideo] = useState(null);
   const media = usePageMedia('services');
   const image = (slot, fallback) => media[slot] || fallback;
-
-  // Log the PUBLIC_URL for debugging
-  console.log('PUBLIC_URL:', process.env.PUBLIC_URL);
-
-  // Demo videos configuration
-  const demoVideos = [
-    {
-      id: 1,
-      title: 'Farm Management Services',
-      description: 'Comprehensive farm management and consultation services',
-      thumbnail: image('farmWorkers', imageUrls.farmWorkers),
-      videoUrl: `${process.env.PUBLIC_URL}/videos/demo1.mp4`,
-      type: 'video/mp4'
-    },
-    {
-      id: 2,
-      title: 'Drone Technology',
-      description: 'Advanced drone services for crop monitoring and spraying',
-      thumbnail: image('drone', imageUrls.drone),
-      videoUrl: `${process.env.PUBLIC_URL}/videos/demo2.mp4`,
-      type: 'video/mp4'
-    },
-    {
-      id: 3,
-      title: 'Agricultural Consultation',
-      description: 'Expert guidance for sustainable farming practices',
-      thumbnail: image('fertilizer', imageUrls.fertilizer),
-      videoUrl: `${process.env.PUBLIC_URL}/videos/demo3.mp4`,
-      type: 'video/mp4'
-    }
-  ];
-
-  // Log video URLs for debugging
-  console.log('Demo Videos:', demoVideos);
 
   const services = [
     {
       title: 'Aadhivelan Drone Services',
       description: 'Advanced aerial solutions for modern farming',
+      images: [
+        {
+          src: image('droneSpraying', 'https://images.unsplash.com/photo-1713952160156-bb59cac789a9?auto=format&fit=crop&w=1200&q=85'),
+          alt: 'Agricultural drone spraying crops in rows'
+        }
+      ],
       features: ['Crop monitoring', 'Precision spraying', 'Land surveying', 'Thermal imaging','Manufacturing Drones']
     },
     {
       title: 'Motors & Pumps',
-      description: 'Complete motor and pump solutions for agriculture',
-      features: ['Manufacturing motors & pumps', 'Sales & distribution', 'Installation services', 'Maintenance & repair', 'AMC contracts']
+      description: 'We manufacture all types of motors and pumps, from basic models to high-pressure units, including open-well and submersible pumps.',
+      images: [{
+        src: image('motorPump', 'https://images.pexels.com/photos/28240873/pexels-photo-28240873.jpeg?auto=compress&cs=tinysrgb&w=1200'),
+        alt: 'Irrigation water pump operating in a farm field'
+      }],
+      features: ['Basic to high-pressure pump models', 'Open-well and submersible systems', 'Motor sizing for flow and pressure needs', 'Manufacturing, supply, and installation', 'Maintenance, repair, and AMC support']
+    },
+    {
+      title: 'Drip Irrigation',
+      description: 'Plan and install drip systems to deliver water directly to crop root zones.',
+      images: [{ src: image('irrigation', imageUrls.irrigation), alt: 'Drip irrigation lines delivering water across crop rows' }],
+      features: ['Crop-specific system layout', 'Drip lines and filter installation', 'Water flow checks', 'System maintenance support']
+    },
+    {
+      title: 'Water Tank Construction',
+      description: 'Build farm water storage planned around your site and irrigation requirements.',
+      images: [{ src: image('farmTank', imageUrls.farmTank), alt: 'Completed farm water-storage tank among coconut palms' }],
+      features: ['Site and capacity planning', 'Farm water-storage construction', 'Inlet and outlet planning', 'Irrigation supply integration']
+    },
+    {
+      title: 'Farm Fencing',
+      description: 'Define and secure farm boundaries with fencing selected for your site.',
+      images: [{ src: image('fencing', imageUrls.farmFencing), alt: 'Installed chain-link boundary fence beside a farm field' }],
+      features: ['Boundary layout planning', 'Fencing material selection', 'Post and mesh installation', 'Gate and access planning']
+    },
+    {
+      title: 'Land Preparation',
+      description: 'Prepare farm land for planting with field clearing, soil work, and layout planning.',
+      images: [{ src: image('landPreparation', 'https://images.unsplash.com/photo-1783515594515-0691dbdd629b?auto=format&fit=crop&w=1200&q=85'), alt: 'Tractor plowing and preparing farm soil' }],
+      features: ['Field clearing and preparation', 'Soil cultivation', 'Field and row layout', 'Planting-area preparation']
+    },
+    {
+      title: 'Planting Services',
+      description: 'Planting support for all types of farm plants, planned for your land and crop goals.',
+      images: [{ src: image('planting', imageUrls.coconut), alt: 'Young coconut palms established in a farm plantation' }],
+      features: ['Fruit, timber, coconut, and crop plants', 'Site-specific spacing and layout', 'Planting team coordination', 'Initial establishment guidance']
     },
     {
       title: 'Farm Management',
       description: 'Complete farm management and AMC services',
+      images: [{ src: image('agriculture', imageUrls.agriculture), alt: 'Cultivated crop rows across a managed farm' }],
       features: ['Regular maintenance', 'Soil testing', 'Crop planning', 'Expert consultation']
+    },
+    {
+      title: 'Construction of Sheds',
+      description: 'Durable farm sheds planned around your equipment, harvest, or livestock needs.',
+      images: [{ src: image('farmShed', '/assert/commercial-goat-farm-shed.jpeg'), alt: 'Commercial goat farm shed with raised livestock housing' }],
+      features: ['Equipment and harvest storage', 'Livestock shelters', 'Site-specific layout planning', 'Construction and finishing']
     },
     {
       title: 'Equipment & Tools',
       description: 'Modern farming equipment and machinery',
+      images: [{ src: image('construction', imageUrls.construction), alt: 'Construction equipment used for farm project work' }],
       features: ['Equipment rental', 'Installation support', 'Maintenance services', 'Training programs']
     },
     {
       title: 'Consultation',
       description: 'Expert agricultural guidance and support',
+      images: [{ src: image('farmWorkers', imageUrls.farmWorkers), alt: 'Farm team reviewing crop information together in the field' }],
       features: ['Crop selection', 'Pest management', 'Yield optimization', 'Market insights']
     }
   ];
@@ -129,7 +143,8 @@ export default function OurServicesPage() {
         }}>
           {services.map((service, index) => (
             <div 
-              key={index}
+              key={service.title}
+              className="services-offer-card"
               style={{ 
                 background: 'rgba(255, 255, 255, 0.75)', 
                 backdropFilter: 'blur(10px)',
@@ -149,7 +164,11 @@ export default function OurServicesPage() {
                 e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
               }}
             >
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{service.icon || '🌾'}</div>
+              <div className={`services-offer-image ${service.images.length > 1 ? 'is-pair' : ''}`}>
+                {service.images.map(serviceImage => (
+                  <img key={serviceImage.src} src={serviceImage.src} alt={serviceImage.alt} loading="lazy" referrerPolicy="no-referrer" />
+                ))}
+              </div>
               <h3 style={{ color: 'var(--primary-color)', fontSize: '1.5rem', marginBottom: '0.5rem' }}>
                 {service.title}
               </h3>
@@ -172,192 +191,6 @@ export default function OurServicesPage() {
         </div>
       </div>
 
-      {/* Demo Videos Section */}
-      <div style={{ 
-        maxWidth: 1200, 
-        margin: '0 auto 4rem',
-        padding: '0 1rem'
-      }}>
-        <h2 style={{ 
-          color: 'var(--primary-color)', 
-          fontWeight: 700, 
-          marginBottom: '2rem',
-          textAlign: 'center'
-        }}>
-          Demo Videos
-        </h2>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-          gap: '2rem' 
-        }}>
-          {demoVideos.map((video) => (
-            <div 
-              key={video.id}
-              style={{ 
-                background: 'rgba(255, 255, 255, 0.75)', 
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.5)',
-                borderRadius: 16, 
-                overflow: 'hidden',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                cursor: 'pointer',
-                transition: 'transform 0.3s ease'
-              }}
-              onClick={() => setSelectedVideo(video)}
-              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              <div style={{ 
-                width: '100%', 
-                height: 200, 
-                background: '#f0f0f0',
-                position: 'relative',
-                overflow: 'hidden',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                {video.thumbnail && (
-                  <img 
-                    src={video.thumbnail} 
-                    alt={video.title}
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      objectFit: 'cover' 
-                    }}
-                    onError={(e) => {
-                      console.error('Failed to load thumbnail:', e.target.src);
-                      e.target.style.display = 'none';
-                      e.target.parentElement.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
-                    }}
-                    onLoad={(e) => {
-                      console.log('Successfully loaded thumbnail:', e.target.src);
-                    }}
-                  />
-                )}
-                <div style={{ 
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  background: 'rgba(0,0,0,0.3)',
-                  zIndex: 1
-                }} />
-                <div style={{ 
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  zIndex: 2,
-                  background: 'rgba(6,78,59,0.9)',
-                  borderRadius: '50%',
-                  width: 70,
-                  height: 70,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '2rem',
-                  color: 'white',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                  transition: 'transform 0.3s ease'
-                }}
-                onMouseEnter={e => e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1.1)'}
-                onMouseLeave={e => e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1)'}
-                >
-                  ▶
-                </div>
-              </div>
-              <div style={{ padding: '1.5rem' }}>
-                <h3 style={{ color: 'var(--primary-color)', fontSize: '1.3rem', marginBottom: '0.5rem' }}>
-                  {video.title}
-                </h3>
-                <p style={{ color: '#666', lineHeight: 1.6 }}>
-                  {video.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Video Modal */}
-      {selectedVideo && (
-        <div 
-          style={{ 
-            position: 'fixed', 
-            top: 0, 
-            left: 0, 
-            right: 0, 
-            bottom: 0, 
-            background: 'rgba(0,0,0,0.9)', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            padding: '2rem'
-          }}
-          onClick={() => setSelectedVideo(null)}
-        >
-          <div 
-            style={{ 
-              maxWidth: 900, 
-              width: '100%',
-              background: 'rgba(255, 255, 255, 0.85)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.5)',
-              borderRadius: 16,
-              overflow: 'hidden',
-              position: 'relative'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedVideo(null)}
-              style={{
-                position: 'absolute',
-                top: 10,
-                right: 10,
-                background: 'rgba(255,255,255,0.9)',
-                border: 'none',
-                borderRadius: '50%',
-                width: 40,
-                height: 40,
-                fontSize: '1.5rem',
-                cursor: 'pointer',
-                zIndex: 10,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#333'
-              }}
-            >
-              ×
-            </button>
-            <video 
-              controls 
-              autoPlay
-              style={{ 
-                width: '100%', 
-                maxHeight: '70vh',
-                display: 'block'
-              }}
-            >
-              <source src={selectedVideo.videoUrl} type={selectedVideo.type} />
-              Your browser does not support the video tag.
-            </video>
-            <div style={{ padding: '1.5rem' }}>
-              <h3 style={{ color: 'var(--primary-color)', fontSize: '1.5rem', marginBottom: '0.5rem' }}>
-                {selectedVideo.title}
-              </h3>
-              <p style={{ color: '#666', lineHeight: 1.6 }}>
-                {selectedVideo.description}
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Call to Action */}
       <div style={{ 

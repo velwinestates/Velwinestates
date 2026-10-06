@@ -67,31 +67,29 @@ function ManageFarmPage(props) {
   };
   
   return (
-    <div className="manage-farm-page" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-      <section className="page-header" style={{ textAlign: 'center', width: '100%' }}>
-        <h1 style={{ textAlign: 'center' }}><GiFarmTractor /> Manage My Farm</h1>
-        <p style={{ color: 'var(--primary-color)', fontWeight: 'bold', textAlign: 'center' }}>For AMC (maintenance) and Projects</p>
+    <div className="manage-farm-page">
+      <section className="page-header manage-farm-header">
+        <p className="page-kicker">Farm care, planned around your needs</p>
+        <h1><GiFarmTractor /> Manage My Farm</h1>
+        <p>Choose a maintenance plan, schedule a service, or start a farm development project.</p>
       </section>
       
-      <div className="farm-tabs" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div className="tab-headers" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+      <div className="farm-tabs">
+        <nav className="tab-headers" aria-label="Farm management services">
           <button 
             className={`tab-btn ${activeTab === 'monthly' ? 'active' : ''}`}
-            style={{ background: activeTab === 'monthly' ? 'rgba(227, 242, 253, 0.85)' : 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.5)', color: '#1976d2', borderColor: '#1976d2' }}
             onClick={() => setActiveTab('monthly')}
           >
             <BsCalendarCheck /> Monthly AMC
           </button>
           <button 
             className={`tab-btn ${activeTab === 'fertilizer' ? 'active' : ''}`}
-            style={{ background: activeTab === 'fertilizer' ? 'rgba(241, 248, 233, 0.85)' : 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.5)', color: 'var(--primary-color)', borderColor: 'var(--primary-color)' }}
             onClick={() => setActiveTab('fertilizer')}
           >
             <GiPlantRoots /> Fertilizer Plan
           </button>
           <button 
             className={`tab-btn ${activeTab === 'pruning' ? 'active' : ''}`}
-            style={{ background: activeTab === 'pruning' ? 'rgba(255, 253, 231, 0.85)' : 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.5)', color: '#fbc02d', borderColor: '#fbc02d' }}
             onClick={() => setActiveTab('pruning')}
           >
             <FaSeedling /> Pruning & Pest Control
@@ -99,19 +97,17 @@ function ManageFarmPage(props) {
           {/* Project Work tab fully removed as requested */}
           <button 
             className={`tab-btn ${activeTab === 'construction' ? 'active' : ''}`}
-            style={{ background: activeTab === 'construction' ? 'rgba(237, 231, 246, 0.85)' : 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.5)', color: '#512da8', borderColor: '#512da8' }}
             onClick={() => setActiveTab('construction')}
           >
             <GiWoodenFence /> Construction
           </button>
           <button 
             className={`tab-btn ${activeTab === 'reports' ? 'active' : ''}`}
-            style={{ background: activeTab === 'reports' ? 'rgba(224, 247, 250, 0.85)' : 'rgba(255, 255, 255, 0.75)', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.5)', color: '#00838f', borderColor: '#00838f' }}
             onClick={() => setActiveTab('reports')}
           >
             <FaClipboardList /> Reports & Approval
           </button>
-        </div>
+        </nav>
         
           {activeTab === 'monthly' && (
             <div className="tab-pane">
@@ -205,26 +201,35 @@ function ManageFarmPage(props) {
           {activeTab === 'pruning' && (
             <div className="tab-pane">
               <h2>Pruning & Pest Control</h2>
-              <p>Maintain healthy growth and protect your crops from pests.</p>
+              <p>Keep crops productive with timely pruning and crop-appropriate pest management.</p>
               <div className="service-details">
                 <div className="service-image">
                   <img src={imageUrls.mango} alt="Pruning & Pest Control" />
                 </div>
                 <div className="service-text">
                   <h3>Expert Pruning Services</h3>
-                  <p>Our trained teams use proper techniques to encourage healthy growth and maximum yield.</p>
+                  <p>We plan pruning around crop type and season to manage canopy growth, remove damaged branches, and support healthy flowering and harvest access.</p>
                   <ul>
-                    <li>Seasonal maintenance pruning</li>
-                    <li>Structural pruning for young trees</li>
-                    <li>Rejuvenation pruning for older plants</li>
-                    <li>Post-harvest pruning</li>
+                    <li>Seasonal and post-harvest pruning</li>
+                    <li>Structural shaping for young trees</li>
+                    <li>Rejuvenation of mature plants</li>
+                    <li>Removal of damaged or unproductive growth</li>
                   </ul>
                 </div>
               </div>
               <div className="service-details reversed">
+                <div className="service-image">
+                  <img src={imageUrls.farmWorkers} alt="Farm workers inspecting crop health" />
+                </div>
                 <div className="service-text">
                   <h3>Integrated Pest Management</h3>
-                  <p>Our pest management program uses eco-friendly solutions and expert monitoring to keep your crops healthy.</p>
+                  <p>Our team monitors crop conditions, identifies pest risks, and recommends targeted controls suited to the crop and its growth stage.</p>
+                  <ul>
+                    <li>Field scouting and pest identification</li>
+                    <li>Preventive and crop-appropriate control measures</li>
+                    <li>Targeted treatment when required</li>
+                    <li>Follow-up checks to review crop health</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -240,9 +245,9 @@ function ManageFarmPage(props) {
                   <p>Storage solutions for irrigation needs.</p>
                 </div>
                 <div className="construction-item">
-                    <img src={imageUrls.farmShed} alt="Storage Shed" />
-                  <h3>Storage Sheds</h3>
-                  <p>Protect equipment and harvest.</p>
+                  <img src={imageUrls.farmShed} alt="Farm shed for equipment and harvest storage" />
+                  <h3>Farm Shed Construction</h3>
+                  <p>Site-planned covered storage for farm equipment, tools, and harvested produce, designed around your day-to-day farm workflow.</p>
                 </div>
                 <div className="construction-item">
                   <img src={imageUrls.farmhouse} alt="Farmhouse" />

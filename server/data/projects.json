@@ -1,0 +1,209 @@
+[
+  {
+    "id": 1,
+    "title": "Fencing",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878900/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_17_PM.jpg",
+    "imageAlt": "Completed agricultural field fencing",
+    "location": "Erode",
+    "category": "fencing",
+    "description": "High-quality farm fencing for security and livestock management."
+  },
+  {
+    "id": 2,
+    "title": "Mango AMC",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878904/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_38_PM.jpg",
+    "imageAlt": "Mango orchard maintenance work",
+    "location": "Salem",
+    "category": "maintenance",
+    "description": "Annual Maintenance Contract for Mango orchards."
+  },
+  {
+    "id": 3,
+    "title": "Water Tank Construction",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878913/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_39_PM.jpg",
+    "imageAlt": "Farm water tank construction",
+    "location": "Coimbatore",
+    "category": "construction",
+    "description": "Custom-built water tanks for farm irrigation."
+  },
+  {
+    "id": 4,
+    "title": "Drip Irrigation",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878916/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_56_PM.jpg",
+    "imageAlt": "Drip irrigation system installed on a farm",
+    "location": "Madurai",
+    "category": "irrigation",
+    "description": "Efficient drip irrigation systems for water conservation."
+  },
+  {
+    "id": 5,
+    "title": "Coconut Plantation",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878918/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_58_PM.jpg",
+    "imageAlt": "New coconut plantation",
+    "location": "Tirupur",
+    "category": "plantation",
+    "description": "Coconut plantation setup and management."
+  },
+  {
+    "id": 6,
+    "title": "Farm Shed Construction",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878920/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_59_PM.jpg",
+    "imageAlt": "Completed farm shed construction",
+    "location": "Pollachi",
+    "category": "construction",
+    "description": "Durable sheds for farm equipment and storage."
+  },
+  {
+    "id": 7,
+    "title": "Farm Workers",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878926/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_00_PM.jpg",
+    "imageAlt": "Agricultural workers in a field",
+    "location": "Tamil Nadu",
+    "category": "field-work",
+    "description": "Skilled farm workers for all agricultural needs."
+  },
+  {
+    "id": 8,
+    "title": "Farmhouse",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878929/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_10_PM.jpg",
+    "imageAlt": "Farmhouse construction project",
+    "location": "Tamil Nadu",
+    "category": "construction",
+    "description": "Farmhouse construction and renovation."
+  },
+  {
+    "id": 9,
+    "title": "Swimming Pool",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878931/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_11_PM.jpg",
+    "imageAlt": "Farm property swimming pool",
+    "location": "Tamil Nadu",
+    "category": "construction",
+    "description": "Swimming pool construction for farms and resorts."
+  },
+  {
+    "id": 10,
+    "title": "Water Tank",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878934/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_14_PM.jpg",
+    "imageAlt": "Agricultural water storage tank",
+    "location": "Tamil Nadu",
+    "category": "water-management",
+    "description": "Water tank installation and maintenance."
+  },
+  {
+    "id": 11,
+    "title": "Polyhouse",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878936/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_29_PM.jpg",
+    "imageAlt": "Protected cultivation polyhouse",
+    "location": "Tamil Nadu",
+    "category": "protected-cultivation",
+    "description": "Polyhouse setup for protected cultivation."
+  },
+  {
+    "id": 12,
+    "title": "Goat Shed",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878938/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_22_30_PM.jpg",
+    "imageAlt": "Livestock shed for goats",
+    "location": "Tamil Nadu",
+    "category": "livestock",
+    "description": "Goat shed construction for livestock."
+  },
+  {
+    "id": 13,
+    "title": "Farm Land Preparation",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878900/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_17_PM.jpg",
+    "imageAlt": "Prepared agricultural land ready for cultivation",
+    "location": "Namakkal",
+    "category": "land-preparation",
+    "description": "Complete field preparation, leveling, and soil-ready groundwork for productive cultivation."
+  },
+  {
+    "id": 14,
+    "title": "Orchard Management",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878904/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_38_PM.jpg",
+    "imageAlt": "Healthy mango orchard under professional care",
+    "location": "Krishnagiri",
+    "category": "maintenance",
+    "description": "Ongoing orchard maintenance with crop care, pruning, and seasonal farm support."
+  },
+  {
+    "id": 15,
+    "title": "Farm Irrigation Upgrade",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878916/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_56_PM.jpg",
+    "imageAlt": "Modern drip irrigation system across a farm",
+    "location": "Dharmapuri",
+    "category": "irrigation",
+    "description": "Water-efficient irrigation planning and installation to improve crop health and reduce wastage."
+  },
+  {
+    "id": 16,
+    "title": "Solar-Powered Water System",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878913/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_39_PM.jpg",
+    "imageAlt": "Water storage system connected to a farm irrigation setup",
+    "location": "Thanjavur",
+    "category": "water-management",
+    "description": "Reliable water access with durable storage infrastructure designed for long-term farm use."
+  },
+  {
+    "id": 17,
+    "title": "Protected Cultivation",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878936/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_29_PM.jpg",
+    "imageAlt": "Protected polyhouse cultivation",
+    "location": "Coimbatore",
+    "category": "protected-cultivation",
+    "description": "Polyhouse installation that supports controlled growing conditions and better crop protection."
+  },
+  {
+    "id": 18,
+    "title": "Livestock Housing",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878938/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_22_30_PM.jpg",
+    "imageAlt": "Well-constructed livestock shelter",
+    "location": "Erode",
+    "category": "livestock",
+    "description": "Safe and durable livestock housing designed for animal comfort and day-to-day farm operations."
+  },
+  {
+    "id": 19,
+    "title": "Equipment Storage Shed",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878920/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_59_PM.jpg",
+    "imageAlt": "Durable farm equipment storage shed",
+    "location": "Perambalur",
+    "category": "construction",
+    "description": "Purpose-built storage sheds for tools, machinery, and harvested produce."
+  },
+  {
+    "id": 20,
+    "title": "Farm Boundary Protection",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878900/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_17_PM.jpg",
+    "imageAlt": "Completed field boundary fencing",
+    "location": "Sivagangai",
+    "category": "fencing",
+    "description": "Strong, practical fencing solutions for safety, livestock control, and field protection."
+  },
+  {
+    "id": 21,
+    "title": "Coconut Orchard Development",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878918/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_16_58_PM.jpg",
+    "imageAlt": "Developed coconut plantation",
+    "location": "Tirunelveli",
+    "category": "plantation",
+    "description": "Plantation planning and support for healthy, productive coconut orchards."
+  },
+  {
+    "id": 22,
+    "title": "Farm Visit and Planning",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878926/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_00_PM.jpg",
+    "imageAlt": "Farm team conducting a site inspection",
+    "location": "Madurai",
+    "category": "planning",
+    "description": "Hands-on farm visits with practical recommendations and a clear development plan."
+  },
+  {
+    "id": 23,
+    "title": "Farm Infrastructure Renewal",
+    "image": "https://res.cloudinary.com/ddenqoijd/image/upload/v1788878929/uzhavar/page-images/WhatsApp_Image_2026-09-04_at_7_17_10_PM.jpg",
+    "imageAlt": "Renovated farmhouse and farm infrastructure",
+    "location": "Salem",
+    "category": "construction",
+    "description": "Infrastructure improvements that bring comfort, utility, and long-term value to farm properties."
+  }
+]

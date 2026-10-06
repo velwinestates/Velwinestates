@@ -347,9 +347,10 @@
 
 .gallery-project-card {
   background-color: #fff;
-  border-radius: 12px;
+  border: 1px solid rgba(46, 92, 53, 0.08);
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px rgba(26, 57, 40, 0.08);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   height: 100%;
   display: flex;
@@ -359,43 +360,92 @@
 
 .gallery-project-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 18px 38px rgba(26, 57, 40, 0.14);
 }
 
 .gallery-project-card .project-image {
-  height: 240px;
+  height: 270px;
   overflow: hidden;
   position: relative;
+  background: #dfeee2;
 }
 
 .gallery-project-card .project-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s ease;
+  transition: transform 0.55s ease;
 }
 
 .gallery-project-card:hover .project-image img {
-  transform: scale(1.05);
+  transform: scale(1.06);
+}
+
+.gallery-project-card .project-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.48));
+}
+
+.gallery-project-card .project-category {
+  position: absolute;
+  z-index: 1;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1d4d39;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .gallery-project-card .project-info {
-  padding: 1.5rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  padding: 1.5rem;
+  margin: -1.25rem 1rem 1rem;
+  border-radius: 12px;
+  background: #ffffff;
+  position: relative;
+  z-index: 1;
 }
 
-.gallery-project-card h3 {
-  font-size: 1.4rem;
-  margin-bottom: 0.8rem;
-  color: #2e5c35;
+.construction-gallery-card {
+  width: 100%;
+  border-radius: 16px;
+  color: inherit;
+}
+
+.construction-gallery-card .project-image {
+  height: 290px;
+}
+
+.gallery-project-card .project-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: #5d6b63;
+  font-size: 0.76rem;
   font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.gallery-project-card h2 {
+  margin: 0.9rem 0 0.6rem;
+  font-size: 1.35rem;
+  color: #1d4d39;
 }
 
 .gallery-project-card p {
   color: #555;
-  margin-bottom: 0.5rem;
+  margin: 0;
   line-height: 1.6;
 }
 

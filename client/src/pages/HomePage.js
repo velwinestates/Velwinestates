@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaCheck, FaLeaf } from 'react-icons/fa';
 import { MdSettings } from 'react-icons/md';
@@ -9,51 +9,12 @@ import { GiFarmTractor } from 'react-icons/gi';
 import services from '../data/services';
 import trustFactors from '../data/trustFactors';
 import howItWorks from '../data/howItWorks';
-import usePageMedia from '../hooks/usePageMedia';
-
-const homeSlideSlots = [
-  ['slide1', 'Farm Development'],
-  ['slide2', 'Farmhouse Construction'],
-  ['slide3', 'Swimming Pool Construction'],
-  ['slide4', 'Water Tank Construction'],
-  ['slide5', 'Farm Fencing'],
-  ['slide6', 'Polyhouse Construction'],
-  ['slide7', 'Livestock Shed Construction'],
-  ['slide8', 'Farm Shed Construction'],
-  ['slide9', 'Drip Irrigation Installation']
-];
 
 function HomePage() {
-  const media = usePageMedia('home');
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = homeSlideSlots
-    .map(([slot, title]) => ({ slot, title, src: media[slot] }))
-    .filter(slide => slide.src);
-
-  useEffect(() => {
-    if (slides.length < 2) return undefined;
-
-    const timer = setInterval(() => {
-      setCurrentSlide(index => (index + 1) % slides.length);
-    }, 6000);
-
-    return () => clearInterval(timer);
-  }, [slides.length]);
-
   return (
     <div className="home-page">
       <section className="home-hero">
-        <div className="home-hero-slides" aria-label="Farm and project images">
-          {slides.map((slide, index) => (
-            <img
-              key={slide.slot}
-              className={`home-hero-slide ${index === currentSlide ? 'is-active' : ''}`}
-              src={slide.src}
-              alt={index === currentSlide ? slide.title : ''}
-              aria-hidden={index !== currentSlide}
-            />
-          ))}
-        </div>
+        <img className="home-hero-image" src="/assert/WhatsApp Image 2026-09-04 at 7.23.36 PM.jpeg" alt="Natural farm landscape" />
         <div className="home-hero-shade" />
         <div className="home-hero-content">
           <p className="home-hero-eyebrow">FARM DEVELOPMENT · MANAGEMENT · SUPPORT</p>
@@ -69,20 +30,6 @@ function HomePage() {
             <div><GiFarmTractor aria-hidden="true" /><span>Local teams<br /><strong>Field-ready support</strong></span></div>
           </div>
         </div>
-        {slides.length > 1 && (
-          <div className="home-hero-slide-controls" role="group" aria-label="Choose a homepage image">
-            {slides.map((slide, index) => (
-              <button
-                key={slide.slot}
-                type="button"
-                className={index === currentSlide ? 'is-active' : ''}
-                aria-label={`Show ${slide.title}`}
-                aria-current={index === currentSlide ? 'true' : undefined}
-                onClick={() => setCurrentSlide(index)}
-              />
-            ))}
-          </div>
-        )}
       </section>
 
       <section className="what-we-do-section home-section">

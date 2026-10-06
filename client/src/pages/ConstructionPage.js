@@ -24,19 +24,23 @@ function ConstructionPage() {
         <h1>Farm Construction Projects</h1>
         <p>Explore our completed construction, irrigation, fencing, and farm infrastructure work.</p>
       </section>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem' }}>
+      <div className="projects-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
         {images.map(constructionImage => (
           <button
             type="button"
             key={constructionImage.id}
             onClick={() => setSelectedImage(constructionImage)}
-            style={{ padding: 0, border: 0, background: 'transparent', cursor: 'pointer' }}
+            className="gallery-project-card construction-gallery-card"
+            style={{ padding: 0, border: 0, textAlign: 'left', overflow: 'hidden' }}
           >
-            <img
-              src={constructionImage.src}
-              alt=""
-              style={{ display: 'block', width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: 8 }}
-            />
+            <div className="project-image">
+              <img
+                src={constructionImage.src}
+                alt={constructionImage.title}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </button>
         ))}
       </div>

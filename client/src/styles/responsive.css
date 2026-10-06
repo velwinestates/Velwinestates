@@ -38,6 +38,21 @@
   .service-details {
     flex-direction: column;
   }
+
+  .fertilizer-image,
+  .service-image,
+  .service-text,
+  .fertilizer-info {
+    width: 100%;
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .service-image img,
+  .fertilizer-image img {
+    height: min(62vw, 420px);
+    object-fit: cover;
+  }
   
   .reports-demo {
     flex-direction: column;
@@ -294,6 +309,19 @@
   /* Construction items mobile */
   .construction-items {
     grid-template-columns: 1fr;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .gallery-project-card .project-image {
+    height: 240px;
+  }
+
+  .construction-gallery-card .project-image {
+    height: 220px;
   }
   
   /* Features preview mobile */

@@ -243,6 +243,45 @@ async function ensureSiteMediaTable() {
   }
 }
 
+async function ensureProjectsTable() {
+  if (!db.isConfigured) return false;
+  await databaseReady;
+  const statements = [
+    `CREATE TABLE IF NOT EXISTS projects (
+      id SERIAL PRIMARY KEY,
+      title VARCHAR(255) NOT NULL,
+      image TEXT DEFAULT '',
+      image_alt VARCHAR(255) DEFAULT '',
+      location VARCHAR(255) DEFAULT '',
+      category VARCHAR(255) DEFAULT '',
+      description TEXT DEFAULT '',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )`,
+    'ALTER TABLE projects ADD COLUMN IF NOT EXISTS image_alt VARCHAR(255) DEFAULT \'\'',
+    'ALTER TABLE projects ADD COLUMN IF NOT EXISTS location VARCHAR(255) DEFAULT \'\'',
+    'ALTER TABLE projects ADD COLUMN IF NOT EXISTS category VARCHAR(255) DEFAULT \'\'',
+    'ALTER TABLE projects ADD COLUMN IF NOT EXISTS description TEXT DEFAULT \'\'',
+    'ALTER TABLE projects ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+  ];
+
+  for (const statement of statements) {
+    try {
+      await db.query(statement);
+    } catch (error) {
+      console.warn('Projects schema statement skipped:', error.message);
+    }
+  }
+
+  try {
+    await db.query('SELECT id, title FROM projects LIMIT 1');
+    return true;
+  } catch (error) {
+    console.error('Projects table is unavailable:', error.message);
+    return false;
+  }
+}
+
 async function ensurePlansTable() {
   if (!db.isConfigured) return false;
   await databaseReady;
@@ -1600,6 +1639,206 @@ app.get('/api/analytics/page-views', async (req, res) => {
   } catch (error) {
     console.error('Error reading page views:', error.message);
     res.status(500).json({ error: 'Unable to load website views', details: error.message });
+  }
+});
+
+const projectsPath = path.join(__dirname, 'data', 'projects.json');
+
+function readProjectsFromFile() {
+  if (!fs.existsSync(projectsPath)) return [];
+  try {
+    return JSON.parse(fs.readFileSync(projectsPath, 'utf8'));
+  } catch (error) {
+    console.error('Unable to read projects data:', error.message);
+    return [];
+  }
+}
+
+function writeProjectsToFile(projects) {
+  fs.mkdirSync(path.dirname(projectsPath), { recursive: true });
+  fs.writeFileSync(projectsPath, JSON.stringify(projects, null, 2));
+}
+
+function projectPayload(project) {
+  return {
+    id: project.id,
+    title: project.title,
+    image: project.image || '',
+    imageAlt: project.image_alt || project.imageAlt || '',
+    location: project.location || '',
+    category: project.category || '',
+    description: project.description || ''
+  };
+}
+
+function validateProjectInput(body) {
+  const errors = [];
+  const title = String(body.title || '').trim();
+  const location = String(body.location || '').trim();
+  const category = String(body.category || '').trim();
+
+  if (!title) errors.push('Title is required');
+  if (!location) errors.push('Location is required');
+  if (!category) errors.push('Category is required');
+
+  return { errors, title, location, category };
+}
+
+// Get all projects
+app.get('/api/projects', async (req, res) => {
+  try {
+    const projectsTableAvailable = await ensureProjectsTable();
+    if (db.isConfigured && projectsTableAvailable) {
+      let result = await db.query('SELECT * FROM projects ORDER BY id ASC');
+
+      if (result.rows.length === 0) {
+        const projects = readProjectsFromFile();
+        for (const project of projects) {
+          await db.query(
+            'INSERT INTO projects (title, image, image_alt, location, category, description) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING',
+            [project.title, project.image || '', project.imageAlt || '', project.location || '', project.category || '', project.description || '']
+          );
+        }
+        result = await db.query('SELECT * FROM projects ORDER BY id ASC');
+      }
+
+      const projects = result.rows.map(projectPayload);
+      return res.json(projects);
+    }
+
+    const projects = readProjectsFromFile();
+    return res.json(projects);
+  } catch (error) {
+    console.error('Error reading projects:', error.message);
+    res.status(500).json({ error: 'Unable to load projects' });
+  }
+});
+
+// Create a project
+app.post('/api/projects', upload.single('image'), async (req, res) => {
+  const validation = validateProjectInput(req.body);
+  if (validation.errors.length) {
+    return res.status(400).json({ error: validation.errors.join(', ') });
+  }
+
+  try {
+    let imageUrl = String(req.body.image || '').trim();
+    if (req.file) {
+      const uploadResult = await uploadToCloudinary(req.file.buffer, 'uzhavar/projects');
+      imageUrl = uploadResult.secure_url;
+    }
+
+    if (db.isConfigured) {
+      const result = await db.query(
+        'INSERT INTO projects (title, image, image_alt, location, category, description) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+        [validation.title, imageUrl, req.body.imageAlt || '', validation.location, validation.category, String(req.body.description || '').trim()]
+      );
+      return res.status(201).json(projectPayload(result.rows[0]));
+    }
+
+    const projects = readProjectsFromFile();
+    const project = {
+      id: Date.now(),
+      title: validation.title,
+      image: imageUrl || '',
+      imageAlt: String(req.body.imageAlt || '').trim(),
+      location: validation.location,
+      category: validation.category,
+      description: String(req.body.description || '').trim()
+    };
+    writeProjectsToFile([...projects, project]);
+    return res.status(201).json(project);
+  } catch (error) {
+    console.error('Error creating project:', error.message);
+    res.status(500).json({ error: 'Unable to create project' });
+  }
+});
+
+// Update a project
+app.put('/api/projects/:id', upload.single('image'), async (req, res) => {
+  const validation = validateProjectInput(req.body);
+  if (validation.errors.length) {
+    return res.status(400).json({ error: validation.errors.join(', ') });
+  }
+
+  try {
+    let imageUrl = String(req.body.image || '').trim();
+    if (db.isConfigured) {
+      const existing = await db.query('SELECT * FROM projects WHERE id = $1', [req.params.id]);
+      if (existing.rows.length === 0) return res.status(404).json({ error: 'Project not found' });
+      if (req.file) {
+        const uploadResult = await uploadToCloudinary(req.file.buffer, 'uzhavar/projects');
+        imageUrl = uploadResult.secure_url;
+        if (existing.rows[0].image) {
+          const publicId = new URL(existing.rows[0].image).pathname.split('/').slice(-2).join('/').replace(/\.[^/.]+$/, '');
+          await deleteFromCloudinary(publicId);
+        }
+      }
+      const result = await db.query(
+        'UPDATE projects SET title = $1, image = $2, image_alt = $3, location = $4, category = $5, description = $6, updated_at = CURRENT_TIMESTAMP WHERE id = $7 RETURNING *',
+        [validation.title, imageUrl, req.body.imageAlt || '', validation.location, validation.category, String(req.body.description || '').trim(), req.params.id]
+      );
+      return res.json(projectPayload(result.rows[0]));
+    }
+
+    const projects = readProjectsFromFile();
+    const index = projects.findIndex(project => String(project.id) === String(req.params.id));
+    if (index === -1) return res.status(404).json({ error: 'Project not found' });
+    const existingProject = projects[index];
+
+    if (req.file) {
+      const uploadResult = await uploadToCloudinary(req.file.buffer, 'uzhavar/projects');
+      imageUrl = uploadResult.secure_url;
+      if (existingProject.image && existingProject.image.startsWith('https://res.cloudinary.com/')) {
+        const publicId = new URL(existingProject.image).pathname.split('/').slice(-2).join('/').replace(/\.[^/.]+$/, '');
+        await deleteFromCloudinary(publicId);
+      }
+    }
+
+    projects[index] = {
+      ...existingProject,
+      title: validation.title,
+      image: imageUrl || existingProject.image,
+      imageAlt: String(req.body.imageAlt || '').trim(),
+      location: validation.location,
+      category: validation.category,
+      description: String(req.body.description || '').trim()
+    };
+    writeProjectsToFile(projects);
+    return res.json(projects[index]);
+  } catch (error) {
+    console.error('Error updating project:', error.message);
+    res.status(500).json({ error: 'Unable to update project' });
+  }
+});
+
+// Delete a project
+app.delete('/api/projects/:id', async (req, res) => {
+  try {
+    if (db.isConfigured) {
+      const existing = await db.query('SELECT image FROM projects WHERE id = $1', [req.params.id]);
+      if (existing.rows.length === 0) return res.status(404).json({ error: 'Project not found' });
+      if (existing.rows[0].image) {
+        const publicId = new URL(existing.rows[0].image).pathname.split('/').slice(-2).join('/').replace(/\.[^/.]+$/, '');
+        await deleteFromCloudinary(publicId);
+      }
+      await db.query('DELETE FROM projects WHERE id = $1', [req.params.id]);
+      return res.json({ message: 'Project deleted successfully' });
+    }
+
+    const projects = readProjectsFromFile();
+    const index = projects.findIndex(project => String(project.id) === String(req.params.id));
+    if (index === -1) return res.status(404).json({ error: 'Project not found' });
+    const [project] = projects.splice(index, 1);
+    if (project.image && project.image.startsWith('https://res.cloudinary.com/')) {
+      const publicId = new URL(project.image).pathname.split('/').slice(-2).join('/').replace(/\.[^/.]+$/, '');
+      await deleteFromCloudinary(publicId);
+    }
+    writeProjectsToFile(projects);
+    return res.json({ message: 'Project deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting project:', error.message);
+    res.status(500).json({ error: 'Unable to delete project' });
   }
 });
 

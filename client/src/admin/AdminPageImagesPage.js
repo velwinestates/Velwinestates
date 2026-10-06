@@ -3,21 +3,6 @@ import { apiUrl, imageUrl } from '../api';
 
 const pageGroups = [
   {
-    id: 'home',
-    label: 'Home hero carousel',
-    slots: [
-      ['slide1', 'Construction Project'],
-      ['slide2', 'Farmhouse Construction'],
-      ['slide3', 'Swimming Pool Construction'],
-      ['slide4', 'Water Tank Construction'],
-      ['slide5', 'Farm Fencing'],
-      ['slide6', 'Polyhouse Construction'],
-      ['slide7', 'Livestock Shed Construction'],
-      ['slide8', 'Farm Shed Construction'],
-      ['slide9', 'Drip Irrigation Installation']
-    ]
-  },
-  {
     id: 'construction',
     label: 'Construction page gallery',
     slots: [
@@ -87,28 +72,28 @@ export default function AdminPageImagesPage() {
   }
 
   return (
-    <section style={{ fontFamily: 'var(--font-family)' }}>
+    <section className="admin-page-images" style={{ fontFamily: 'var(--font-family)' }}>
       <h2 style={{ marginBottom: '0.35rem' }}>Page Images</h2>
-      <p style={{ marginTop: 0, color: '#5d6b63' }}>Manage the rotating home hero images and construction gallery images.</p>
+      <p className="admin-page-images-description" style={{ marginTop: 0, color: '#5d6b63' }}>Manage construction gallery images.</p>
       {status && <p role="status">{status}</p>}
       {pageGroups.map(group => (
-        <section key={group.id} style={{ marginTop: '1.5rem' }}>
+        <section className="admin-page-image-group" key={group.id}>
           <h3>{group.label}</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '1rem' }}>
+          <div className="admin-page-image-grid">
             {group.slots.map(([slot, label]) => {
               const key = `${group.id}.${slot}`;
               const isBusy = busy === key;
               return (
-                <article key={key} style={{ border: '1px solid #d6d2c7', borderRadius: 8, padding: '0.8rem', background: '#fff' }}>
-                  <div style={{ fontWeight: 600, marginBottom: '0.6rem' }}>{label}</div>
-                  <div style={{ aspectRatio: '16 / 9', background: '#f1f3ed', marginBottom: '0.7rem', overflow: 'hidden' }}>
+                <article className="admin-page-image-card" key={key}>
+                  <div className="admin-page-image-label">{label}</div>
+                  <div className="admin-page-image-preview">
                     {media[key] ? <img src={imageUrl(media[key])} alt={label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ padding: '1rem', color: '#68736c' }}>Using default image</div>}
                   </div>
-                  <label style={{ display: 'block', fontSize: '0.9rem', color: '#285943', cursor: isBusy ? 'wait' : 'pointer' }}>
+                  <label className="admin-page-image-upload" style={{ cursor: isBusy ? 'wait' : 'pointer' }}>
                     {isBusy ? 'Saving...' : 'Choose image'}
-                    <input type="file" accept="image/*" disabled={isBusy} onChange={event => uploadImage(group.id, slot, event.target.files[0])} style={{ display: 'block', marginTop: '0.35rem', width: '100%' }} />
+                    <input type="file" accept="image/*" disabled={isBusy} onChange={event => uploadImage(group.id, slot, event.target.files[0])} />
                   </label>
-                  {media[key] && <button type="button" disabled={isBusy} onClick={() => deleteImage(group.id, slot)} style={{ marginTop: '0.65rem', border: 0, background: 'transparent', color: '#a33b32', cursor: isBusy ? 'wait' : 'pointer', padding: 0 }}>Delete image</button>}
+                  {media[key] && <button className="admin-page-image-delete" type="button" disabled={isBusy} onClick={() => deleteImage(group.id, slot)} style={{ cursor: isBusy ? 'wait' : 'pointer' }}>Delete image</button>}
                 </article>
               );
             })}

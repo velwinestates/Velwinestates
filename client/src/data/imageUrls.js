@@ -4,12 +4,15 @@ import fencingImage from '../assert/fencing.jpg';
 import farmWorkersImage from '../assert/farm workers.jpg';
 import founderImage from '../assert/founder.jpg';
 import farmShedImage from '../assert/Farm Shed Construction.jpg';
+import farmFencingImage from '../assert/farm-fencing.jpeg';
 import farmhouseImage from '../assert/FArmhouse.jpeg';
 import irrigationImage from '../assert/Drip Irrigation.webp';
 import mangoImage from '../assert/Mango AMC.jpg';
 import goatImage from '../assert/goat.jpg';
 import poolImage from '../assert/Swimmingpool.jpeg';
 import polyhouseImage from '../assert/polly.jpeg';
+import submersiblePumpImage from '../assert/submersible-pump.jpeg';
+import farmTankImage from '../assert/tank.jpeg';
 import waterTankImage from '../assert/Water Tank Construction.jpg';
 
 const imageUrls = {
@@ -18,6 +21,7 @@ const imageUrls = {
   farmerMobile: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1200&q=85',
   construction: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1600&q=85',
   fencing: fencingImage,
+  farmFencing: farmFencingImage,
   mango: mangoImage,
   waterTank: waterTankImage,
   irrigation: irrigationImage,
@@ -26,6 +30,8 @@ const imageUrls = {
   farmhouse: farmhouseImage,
   pool: poolImage,
   polyhouse: polyhouseImage,
+  submersiblePump: submersiblePumpImage,
+  farmTank: farmTankImage,
   livestock: goatImage,
   agriculture: agricultureImage,
   fertilizer: 'https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&w=1200&q=85',

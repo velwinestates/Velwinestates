@@ -1,0 +1,49 @@
+[
+  {
+    "id": "essential-farm-care",
+    "name": "Essential Farm Care",
+    "duration": "Monthly",
+    "description": "Reliable scheduled maintenance for farms that need regular oversight.",
+    "popular": false,
+    "features": [
+      "Monthly farm inspection",
+      "Basic irrigation and pump check",
+      "Weed and field condition review",
+      "Pest and disease observation",
+      "Monthly activity report",
+      "Phone support during working hours"
+    ]
+  },
+  {
+    "id": "complete-farm-care",
+    "name": "Complete Farm Care",
+    "duration": "Monthly",
+    "description": "A balanced maintenance plan for farms that need proactive field support.",
+    "popular": true,
+    "features": [
+      "Fortnightly farm visits",
+      "Irrigation and fertigation monitoring",
+      "Crop nutrition schedule",
+      "Preventive pest management guidance",
+      "Seasonal pruning recommendations",
+      "Photo-based progress reports",
+      "Priority support"
+    ]
+  },
+  {
+    "id": "premium-farm-management",
+    "name": "Premium Farm Management",
+    "duration": "Monthly",
+    "description": "Hands-on coordination for owners who want end-to-end farm management support.",
+    "popular": false,
+    "features": [
+      "Weekly farm visit and supervision",
+      "Complete irrigation and fertigation coordination",
+      "Crop nutrition and protection planning",
+      "Pruning, harvest, and labour coordination",
+      "Detailed weekly reports with photos",
+      "Emergency issue escalation",
+      "Dedicated farm coordinator"
+    ]
+  }
+]

@@ -124,6 +124,105 @@ const projects = [
     location: 'Tamil Nadu',
     category: 'livestock',
     description: 'Goat shed construction for livestock.'
+  },
+  {
+    id: 13,
+    title: 'Farm Land Preparation',
+    image: constructionImages[0],
+    imageAlt: 'Prepared agricultural land ready for cultivation',
+    location: 'Namakkal',
+    category: 'land-preparation',
+    description: 'Complete field preparation, leveling, and soil-ready groundwork for productive cultivation.'
+  },
+  {
+    id: 14,
+    title: 'Orchard Management',
+    image: constructionImages[1],
+    imageAlt: 'Healthy mango orchard under professional care',
+    location: 'Krishnagiri',
+    category: 'maintenance',
+    description: 'Ongoing orchard maintenance with crop care, pruning, and seasonal farm support.'
+  },
+  {
+    id: 15,
+    title: 'Farm Irrigation Upgrade',
+    image: constructionImages[3],
+    imageAlt: 'Modern drip irrigation system across a farm',
+    location: 'Dharmapuri',
+    category: 'irrigation',
+    description: 'Water-efficient irrigation planning and installation to improve crop health and reduce wastage.'
+  },
+  {
+    id: 16,
+    title: 'Solar-Powered Water System',
+    image: constructionImages[2],
+    imageAlt: 'Water storage system connected to a farm irrigation setup',
+    location: 'Thanjavur',
+    category: 'water-management',
+    description: 'Reliable water access with durable storage infrastructure designed for long-term farm use.'
+  },
+  {
+    id: 17,
+    title: 'Protected Cultivation',
+    image: constructionImages[10],
+    imageAlt: 'Protected polyhouse cultivation',
+    location: 'Coimbatore',
+    category: 'protected-cultivation',
+    description: 'Polyhouse installation that supports controlled growing conditions and better crop protection.'
+  },
+  {
+    id: 18,
+    title: 'Livestock Housing',
+    image: constructionImages[11],
+    imageAlt: 'Well-constructed livestock shelter',
+    location: 'Erode',
+    category: 'livestock',
+    description: 'Safe and durable livestock housing designed for animal comfort and day-to-day farm operations.'
+  },
+  {
+    id: 19,
+    title: 'Equipment Storage Shed',
+    image: constructionImages[5],
+    imageAlt: 'Durable farm equipment storage shed',
+    location: 'Perambalur',
+    category: 'construction',
+    description: 'Purpose-built storage sheds for tools, machinery, and harvested produce.'
+  },
+  {
+    id: 20,
+    title: 'Farm Boundary Protection',
+    image: constructionImages[0],
+    imageAlt: 'Completed field boundary fencing',
+    location: 'Sivagangai',
+    category: 'fencing',
+    description: 'Strong, practical fencing solutions for safety, livestock control, and field protection.'
+  },
+  {
+    id: 21,
+    title: 'Coconut Orchard Development',
+    image: constructionImages[4],
+    imageAlt: 'Developed coconut plantation',
+    location: 'Tirunelveli',
+    category: 'plantation',
+    description: 'Plantation planning and support for healthy, productive coconut orchards.'
+  },
+  {
+    id: 22,
+    title: 'Farm Visit and Planning',
+    image: constructionImages[6],
+    imageAlt: 'Farm team conducting a site inspection',
+    location: 'Madurai',
+    category: 'planning',
+    description: 'Hands-on farm visits with practical recommendations and a clear development plan.'
+  },
+  {
+    id: 23,
+    title: 'Farm Infrastructure Renewal',
+    image: constructionImages[7],
+    imageAlt: 'Renovated farmhouse and farm infrastructure',
+    location: 'Salem',
+    category: 'construction',
+    description: 'Infrastructure improvements that bring comfort, utility, and long-term value to farm properties.'
   }
 ];
 

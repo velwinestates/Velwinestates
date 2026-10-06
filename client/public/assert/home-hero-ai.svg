@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
+  <title id="title">AI-generated agricultural landscape</title>
+  <desc id="description">A modern farm landscape with rolling fields, irrigation lines, crops, and a farm structure.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#dff4d5"/>
+      <stop offset="45%" stop-color="#c9e7d4"/>
+      <stop offset="100%" stop-color="#86b79c"/>
+    </linearGradient>
+    <linearGradient id="hillBack" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7ea985"/>
+      <stop offset="100%" stop-color="#4d7d68"/>
+    </linearGradient>
+    <linearGradient id="field" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8ec75d"/>
+      <stop offset="100%" stop-color="#4d8a3d"/>
+    </linearGradient>
+    <linearGradient id="soil" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7d5b3e"/>
+      <stop offset="100%" stop-color="#4c3120"/>
+    </linearGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="1240" cy="170" r="84" fill="#fff6bf" opacity="0.9"/>
+  <g opacity="0.65" fill="none" stroke="#f5fff4" stroke-width="3">
+    <path d="M290 250c120-60 200-90 310-32"/>
+    <path d="M600 220c90-42 170-60 280-20"/>
+    <path d="M930 260c110-52 188-40 250 8"/>
+  </g>
+
+  <path d="M0 500c180-96 304-94 464 10 153 100 260 120 432 34 154-77 275-70 404 31v325H0V500z" fill="url(#hillBack)"/>
+  <path d="M0 620c205-82 323-82 507-4 118 50 240 68 367 22 218-78 403-52 726 64v198H0V620z" fill="url(#field)"/>
+  <path d="M0 680c214-60 346-48 534 42 141 68 298 72 422 8 142-72 330-64 644 54v116H0V680z" fill="#3e7d3f" opacity="0.9"/>
+
+  <g stroke="#d7a95a" stroke-width="6" opacity="0.7">
+    <path d="M305 690v-62m76 0v62m152 0v-62m77 0v62m153 0v-62m76 0v62"/>
+    <path d="M165 745h1270"/>
+  </g>
+
+  <g stroke="#d1eed0" stroke-width="4" opacity="0.75">
+    <path d="M172 778c63-44 120-67 175-72 79-8 154 14 231-14 86-33 160-40 245-7 108 42 190 35 270-10 126-71 254-46 360 19" fill="none"/>
+    <path d="M146 822c78-50 146-77 211-79 90-2 157 24 238-11 96-42 177-34 253 13 111 68 186 64 338-14" fill="none"/>
+  </g>
+
+  <g transform="translate(1030 462)">
+    <path d="M0 130h230l-26 92H26z" fill="#6d9f5e"/>
+    <path d="M34 88h93l46-51h82l-32 51h-95z" fill="#e2d7b7"/>
+    <rect x="62" y="26" width="58" height="72" fill="#b98359"/>
+    <rect x="124" y="26" width="58" height="72" fill="#b98359"/>
+    <rect x="186" y="28" width="30" height="60" fill="#d9a96a"/>
+    <path d="M8 130h212v26H8z" fill="#d4a15d"/>
+    <path d="M40 134l-30 35 30 26 18-25 39 25 29-18 22 18 17-26-16-13 16-26-24 12-17-26-21 16-32-13-22 20z" fill="#d8d8d8" opacity="0.75"/>
+  </g>
+
+  <g transform="translate(1160 590)" fill="none" stroke="#d7dbd8" stroke-width="7">
+    <path d="M0 50l35-33 34 31 34-29 35 32" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(0 0)" opacity="0.9">
+    <g transform="translate(610 615)">
+      <path d="M0 58h90l-18 54H17z" fill="#7b4f2a"/>
+      <path d="M10 34l65-29 11 33-16 14H27z" fill="#5d3823"/>
+      <circle cx="35" cy="60" r="15" fill="#414d43"/>
+      <circle cx="85" cy="60" r="15" fill="#414d43"/>
+      <circle cx="27" cy="60" r="5" fill="#f4f7f1"/>
+      <circle cx="77" cy="60" r="5" fill="#f4f7f1"/>
+    </g>
+    <g transform="translate(730 672)">
+      <path d="M0 0h40l12 58H12z" fill="#7d5d3d"/>
+      <path d="M13 0l19-23 19 23" fill="none" stroke="#5a402f" stroke-width="6"/>
+      <path d="M0 58h40" stroke="#4f3623" stroke-width="6"/>
+    </g>
+  </g>
+
+  <g fill="#d9f0a6" filter="url(#blur)" opacity="0.5">
+    <ellipse cx="280" cy="628" rx="112" ry="40"/>
+    <ellipse cx="510" cy="648" rx="135" ry="46"/>
+    <ellipse cx="865" cy="618" rx="122" ry="38"/>
+    <ellipse cx="1270" cy="640" rx="140" ry="44"/>
+  </g>
+
+  <g fill="#b9df6f">
+    <path d="M190 718c13-50 26-70 39-70 24 0 26 70 63 70-21-43-33-72-63-72-17 0-27 22-39 72z"/>
+    <path d="M470 732c11-52 23-74 34-74 27 0 28 74 63 74-20-42-31-71-63-71-14 0-24 21-34 71z"/>
+    <path d="M880 710c12-44 25-66 39-66 25 0 26 66 62 66-20-40-31-67-62-67-16 0-27 18-39 67z"/>
+    <path d="M1205 754c11-50 23-68 36-68 24 0 25 68 59 68-19-38-29-67-59-67-14 0-24 19-36 67z"/>
+  </g>
+</svg>

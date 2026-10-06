@@ -636,11 +636,12 @@
 }
 
 .projects-page .page-header h1 {
-  font-size: 2.5rem;
-  color: #2e5c35;
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  color: #f3f7f2;
   margin-bottom: 0.5rem;
   position: relative;
   display: inline-block;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .projects-page .page-header h1::after {
@@ -654,10 +655,17 @@
 }
 
 .projects-page .page-header p {
-  font-size: 1.2rem;
-  color: #555;
-  max-width: 600px;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.82);
+  max-width: 620px;
   margin: 0 auto;
+}
+
+.projects-page .page-header {
+  padding: clamp(2rem, 6vw, 5rem) 1.5rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #0f4d3c 0%, #1a6a4d 50%, #2e7d5d 100%);
+  box-shadow: 0 20px 45px rgba(15, 77, 60, 0.2);
 }
 
 .projects-filter {

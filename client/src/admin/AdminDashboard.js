@@ -3,6 +3,7 @@ import { useNavigate, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { useAdminAuth } from './AdminAuthProvider';
 import AdminCompaniesPage from './AdminCompaniesPage';
 import AdminPlansPage from './AdminPlansPage';
+import AdminProjectsPage from './AdminProjectsPage';
 import AdminSubmissionsPage from './AdminSubmissionsPage';
 import AdminAnalyticsPage from './AdminAnalyticsPage';
 import AdminPageImagesPage from './AdminPageImagesPage';
@@ -32,6 +33,7 @@ export default function AdminDashboard() {
     { id: 'companies', label: 'Companies & Products', icon: '🏢', path: '/updates/companies' },
     { id: 'orders', label: 'Product Orders', icon: '🛒', path: '/updates/orders' },
     { id: 'plans', label: 'Plans Management', icon: '📋', path: '/updates/plans' },
+    { id: 'projects', label: 'Projects', icon: '🖼️', path: '/updates/projects' },
     { id: 'page-images', label: 'Page Images', icon: '🖼️', path: '/updates/page-images' },
     { id: 'analytics', label: 'Website Views', icon: '📊', path: '/updates/analytics' },
     { id: 'submissions', label: 'Form Submissions', icon: '📨', path: '/updates/submissions' }
@@ -344,7 +346,7 @@ export default function AdminDashboard() {
       </nav>
 
       {/* Main Content Area */}
-      <div style={{
+      <div className="admin-dashboard-content" style={{
         maxWidth: '1400px',
         margin: '0 auto',
         padding: '2em',
@@ -357,6 +359,7 @@ export default function AdminDashboard() {
           <Route path="/companies" element={<AdminCompaniesPage onLogout={handleLogout} />} />
           <Route path="/orders" element={<AdminOrdersPage />} />
           <Route path="/plans" element={<AdminPlansPage onLogout={handleLogout} />} />
+          <Route path="/projects" element={<AdminProjectsPage />} />
           <Route path="/page-images" element={<AdminPageImagesPage />} />
           <Route path="/analytics" element={<AdminAnalyticsPage />} />
           <Route path="/submissions" element={<AdminSubmissionsPage onLogout={handleLogout} />} />
