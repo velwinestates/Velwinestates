@@ -345,6 +345,15 @@ function AppContent({
 
   useEffect(() => {
     if (isAdminPage || trackedPath.current === location.pathname) return;
+
+    const isLocalDevWithoutBackend = !process.env.REACT_APP_API_URL &&
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+    if (isLocalDevWithoutBackend) {
+      trackedPath.current = location.pathname;
+      return;
+    }
+
     trackedPath.current = location.pathname;
     fetch(apiUrl('/api/analytics/page-view'), {
       method: 'POST',
