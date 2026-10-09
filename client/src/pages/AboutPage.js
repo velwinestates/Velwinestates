@@ -30,7 +30,7 @@ function AboutPage() {
         <div className="team-grid">
           <div className="team-member">
             <img src={imageUrls.founder} alt="Founder" />
-            <h3>Vettrivel</h3>
+            <h3>Veetrivel</h3>
             <p style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>Founder</p>
           </div>
         </div>
