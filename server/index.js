@@ -2118,17 +2118,26 @@ app.use((err, req, res, next) => {
   }
 });
 
-// Serve React frontend in production
-if (process.env.NODE_ENV === 'production') {
-  const frontendBuildPath = path.join(__dirname, '../client/build');
-  
-  // Serve static files from React build
+// Serve React frontend when a production build exists. This must work on Render
+// regardless of whether NODE_ENV is explicitly set in the platform environment.
+const frontendBuildPath = path.join(__dirname, '../client/build');
+if (fs.existsSync(frontendBuildPath) && fs.existsSync(path.join(frontendBuildPath, 'index.html'))) {
   app.use(express.static(frontendBuildPath));
-  
-  // All non-API GET routes serve React app (this should be last!)
+
   app.get('*', (req, res) => {
-    // Serve React app for all GET requests (API routes are already handled above)
+    if (req.path.startsWith('/api') || req.path.startsWith('/health')) {
+      return res.status(404).end();
+    }
     res.sendFile(path.join(frontendBuildPath, 'index.html'));
+  });
+} else {
+  app.get('*', (req, res) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/health')) {
+      return res.status(404).end();
+    }
+    res.status(500).json({
+      error: 'Frontend build missing. Run "npm run build --prefix client" before starting the server.'
+    });
   });
 }
 
