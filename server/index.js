@@ -391,6 +391,16 @@ app.use(express.json({ limit: '1mb' }));
 // Serve static files - uploads directory
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+const clientPublicPath = path.join(__dirname, '..', 'client', 'public');
+if (fs.existsSync(clientPublicPath)) {
+  // Serve the public files directly so browser assets like /assert/... resolve in production.
+  app.use(express.static(clientPublicPath));
+  const clientAssertPath = path.join(clientPublicPath, 'assert');
+  if (fs.existsSync(clientAssertPath)) {
+    app.use('/assert', express.static(clientAssertPath));
+  }
+}
+
 // Serve static files - assets directory (if you have one in server folder)
 // If assets are in client folder, you'll need to copy them or adjust the path
 const clientAssetsPath = path.join(__dirname, '..', 'client', 'public', 'assets');
@@ -1587,7 +1597,13 @@ app.post('/api/analytics/page-view', async (req, res) => {
   const normalizedPath = pagePath.startsWith('/') ? pagePath.slice(0, 255) : `/${pagePath}`.slice(0, 255);
 
   try {
-    const databaseAvailable = await databaseReady;
+    let databaseAvailable = false;
+    try {
+      databaseAvailable = await databaseReady;
+    } catch (error) {
+      console.warn('Analytics DB unavailable, ignoring page view:', error.message);
+    }
+
     if (!db.isConfigured || !databaseAvailable) return res.status(204).end();
 
     await db.query(`

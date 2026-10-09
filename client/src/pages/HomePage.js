@@ -14,7 +14,11 @@ function HomePage() {
   return (
     <div className="home-page">
       <section className="home-hero">
-        <img className="home-hero-image" src="/assert/WhatsApp Image 2026-09-04 at 7.23.36 PM.jpeg" alt="Natural farm landscape" />
+        <img
+          className="home-hero-image"
+          src={`${process.env.PUBLIC_URL}/assert/home-hero-whatsapp-2026-09-04-7-23-36-pm.jpeg`}
+          alt="Natural farm landscape"
+        />
         <div className="home-hero-shade" />
         <div className="home-hero-content">
           <p className="home-hero-eyebrow">FARM DEVELOPMENT · MANAGEMENT · SUPPORT</p>

@@ -71,7 +71,6 @@ function ManageFarmPage(props) {
       <section className="page-header manage-farm-header">
         <p className="page-kicker">Farm care, planned around your needs</p>
         <h1><GiFarmTractor /> Manage My Farm</h1>
-        <p>Choose a maintenance plan, schedule a service, or start a farm development project.</p>
       </section>
       
       <div className="farm-tabs">
@@ -204,7 +203,7 @@ function ManageFarmPage(props) {
               <p>Keep crops productive with timely pruning and crop-appropriate pest management.</p>
               <div className="service-details">
                 <div className="service-image">
-                  <img src={imageUrls.mango} alt="Pruning & Pest Control" />
+                  <img src={imageUrls.pruning} alt="Expert Pruning Services" />
                 </div>
                 <div className="service-text">
                   <h3>Expert Pruning Services</h3>

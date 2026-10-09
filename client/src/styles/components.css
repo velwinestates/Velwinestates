@@ -37,10 +37,11 @@
   padding: 2.5rem 2rem 2rem 2rem;
   min-width: 340px;
   max-width: 95vw;
-  width: 100%;
+  width: min(100%, 480px);
   display: flex;
   flex-direction: column;
   gap: 1.5em;
+  align-items: stretch;
   position: relative;
   animation: modalFadeIn 0.3s;
   border: 1px solid rgba(255, 255, 255, 0.6);

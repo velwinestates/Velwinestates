@@ -29,6 +29,7 @@ const LandPage = lazy(() => import('./pages/LandPage'));
 const ConstructionPage = lazy(() => import('./pages/ConstructionPage'));
 const OurServicesPage = lazy(() => import('./pages/OurServicesPage'));
 const DeveloperInfoPage = lazy(() => import('./pages/DeveloperInfoPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 const seoPages = {
   '/': {
@@ -480,6 +481,7 @@ function AppContent({
             <Route path="/join" element={<JoinUsPage />} />
             <Route path="/developer-info" element={<DeveloperInfoPage />} />
             <Route path="/confirm-plan" element={<ConfirmPlan />} />
+            <Route path="*" element={<NotFoundPage />} />
             
             {/* Admin Routes - Wrapped with Auth Provider */}
             <Route path="/updates/login" element={
