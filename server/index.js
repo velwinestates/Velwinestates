@@ -392,9 +392,16 @@ app.use(express.json({ limit: '1mb' }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const clientPublicPath = path.join(__dirname, '..', 'client', 'public');
+const frontendBuildPath = path.join(__dirname, '..', 'client', 'build');
+const hasFrontendBuild = fs.existsSync(frontendBuildPath);
+
+if (process.env.NODE_ENV === 'production' && hasFrontendBuild) {
+  app.use(express.static(frontendBuildPath));
+}
+
 if (fs.existsSync(clientPublicPath)) {
-  // Serve the public files directly so browser assets like /assert/... resolve in production.
-  app.use(express.static(clientPublicPath));
+  // In production, do not serve the raw public index.html before the built app.
+  app.use(express.static(clientPublicPath, { index: false }));
   const clientAssertPath = path.join(clientPublicPath, 'assert');
   if (fs.existsSync(clientAssertPath)) {
     app.use('/assert', express.static(clientAssertPath));
@@ -2119,12 +2126,7 @@ app.use((err, req, res, next) => {
 });
 
 // Serve React frontend in production
-if (process.env.NODE_ENV === 'production') {
-  const frontendBuildPath = path.join(__dirname, '../client/build');
-  
-  // Serve static files from React build
-  app.use(express.static(frontendBuildPath));
-  
+if (process.env.NODE_ENV === 'production' && hasFrontendBuild) {
   // All non-API GET routes serve React app (this should be last!)
   app.get('*', (req, res) => {
     // Serve React app for all GET requests (API routes are already handled above)
