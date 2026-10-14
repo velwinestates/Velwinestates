@@ -41,7 +41,6 @@ export default function ProjectsPage() {
               <div className="project-info">
                 <div className="project-meta">
                   <span className="project-location">{project.location}</span>
-                  <span className="project-id">Project {project.id}</span>
                 </div>
                 <h2>{project.title}</h2>
                 <p>{project.description}</p>

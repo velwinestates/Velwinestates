@@ -13,8 +13,7 @@ const initialForm = {
   crop: '',
   preferredContact: 'Phone call',
   preferredContactTime: '',
-  notes: '',
-  landImage: null
+  notes: ''
 };
 
 export default function BookTeamPage() {
@@ -25,26 +24,11 @@ export default function BookTeamPage() {
   const formRef = useRef(null);
 
   function handleChange(e) {
-    const { name, value, files } = e.target;
+    const { name, value } = e.target;
     setSubmitted(false);
-    if (name === 'landImage' && files?.[0]) {
-      if (!files[0].type.startsWith('image/')) {
-        setNotification({ show: true, success: false, message: 'Please choose an image file.' });
-        setTimeout(() => setNotification({ show: false, success: false, message: '' }), 5000);
-        e.target.value = '';
-        return;
-      }
-      if (files[0].size > 10 * 1024 * 1024) {
-        setNotification({ show: true, success: false, message: 'Farm photo must be 10 MB or smaller.' });
-        setTimeout(() => setNotification({ show: false, success: false, message: '' }), 5000);
-        e.target.value = '';
-        return;
-      }
-    }
-    const v = files ? files[0] : (name === 'contact' ? sanitizePhone(value) : value);
     setForm(f => ({
       ...f,
-      [name]: v
+      [name]: name === 'contact' ? sanitizePhone(value) : value
     }));
   }
 
@@ -75,7 +59,6 @@ export default function BookTeamPage() {
     payload.append('phone', form.contact);
     payload.append('message', `Service: ${form.serviceType}\nFarm location: ${form.address}\n${form.notes}`);
     payload.append('extra', JSON.stringify(extra));
-    if (form.landImage) payload.append('landImage', form.landImage);
 
     try {
       const response = await fetch(apiUrl('/api/send-email'), {
@@ -86,6 +69,7 @@ export default function BookTeamPage() {
       if (!response.ok) {
         const error = new Error(result.error || 'Unable to submit booking request.');
         error.storedLocally = result.storedLocally === true;
+        error.warning = result.warning;
         throw error;
       }
 
@@ -95,7 +79,7 @@ export default function BookTeamPage() {
       setNotification({
         show: true,
         success: true,
-        message: `Thank you ${form.name}! Your team booking request has been submitted successfully. Our team will contact you soon!`
+        message: result.warning || `Thank you ${form.name}! Your team booking request has been submitted successfully. Our team will contact you soon!`
       });
       setTimeout(() => setNotification({ show: false, success: false, message: '' }), 5000);
     } catch (error) {
@@ -104,7 +88,7 @@ export default function BookTeamPage() {
         show: true,
         success: false,
         message: error.storedLocally
-          ? 'Your request was received, but a backup service is temporarily unavailable. Our team will follow up.'
+          ? `${error.warning ? `${error.warning} ` : ''}Your request was received, but a backup service is temporarily unavailable. Our team will follow up.`
           : error.message || 'Failed to submit booking request. Please try again.'
       });
       setTimeout(() => setNotification({ show: false, success: false, message: '' }), 6000);
@@ -195,10 +179,6 @@ export default function BookTeamPage() {
           <div className="book-team-field">
             <label htmlFor="team-notes">Additional Requirements (optional)</label>
             <textarea id="team-notes" name="notes" value={form.notes} onChange={handleChange} maxLength="1000" />
-          </div>
-          <div className="book-team-field">
-            <label htmlFor="team-image">Farm Photo (optional, max 10 MB)</label>
-            <input id="team-image" type="file" name="landImage" accept="image/*" onChange={handleChange} />
           </div>
           <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Submitting...' : 'Submit Booking Request'}

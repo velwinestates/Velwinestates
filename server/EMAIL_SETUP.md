@@ -33,34 +33,19 @@ This application is configured to send form submissions to `velwinestates@gmail.
    ```env
    SMTP_USER=velwinestates@gmail.com
    SMTP_PASS=your_16_character_app_password_here
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=587
    SEND_EMAILS=true
    ```
 
-   `SMTP_USER` and `SMTP_PASS` are required. `SMTP_HOST` and `SMTP_PORT` are
-   optional and default to Gmail SMTP (`smtp.gmail.com:587`). Every website
-   form uses `/api/send-email`; submissions are saved locally even when SMTP
-   is unavailable, and the email is sent to `TO_EMAIL`.
+   `SMTP_USER` and `SMTP_PASS` are required. The host and port above use Gmail
+   SMTP; for another provider, use its SMTP host, port, and credentials. The
+   server sends the submission notification to `TO_EMAIL` and a separate
+   acknowledgement to the user's submitted email address when provided.
 
-### Google Apps Script Mail Delivery
-
-When forms are also sent to the Google Apps Script endpoint, the script can
-send the same submission using `MailApp`. Add the following after
-`sheet.appendRow(rowData);` and before the success response:
-
-```javascript
-const emailData = { ...data };
-delete emailData.secret;
-
-MailApp.sendEmail({
-   to: 'velwinestates@gmail.com',
-   subject: `New ${data.formType || 'website'} form submission`,
-   body: JSON.stringify(emailData, null, 2)
-});
-```
-
-Save the Apps Script, authorize the mail permission when prompted, and deploy
-a new web-app version. Keep the delete-action branch before `sheet.appendRow`
-so delete requests do not send notification emails.
+   Keep these credentials out of source control. For the hosted site, add the
+   same variables to the hosting provider's server environment and redeploy;
+   changing the local `.env` only affects local development.
 
 3. **Restart the server:**
    ```bash

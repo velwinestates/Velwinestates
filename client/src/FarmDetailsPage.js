@@ -9,9 +9,9 @@ export default function FarmDetailsPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     ownerName: '',
+    email: '',
     contact: '',
     address: '',
-    landImage: null,
     area: '',
     crop: '',
     irrigationType: '',
@@ -22,11 +22,10 @@ export default function FarmDetailsPage() {
   const [submitted, setSubmitted] = useState(false);
 
   function handleChange(e) {
-    const { name, value, files } = e.target;
-    const v = files ? files[0] : (name === 'contact' ? sanitizePhone(value) : value);
+    const { name, value } = e.target;
     setForm(f => ({
       ...f,
-      [name]: v
+      [name]: name === 'contact' ? sanitizePhone(value) : value
     }));
   }
 
@@ -54,18 +53,18 @@ export default function FarmDetailsPage() {
       formType: 'Upload Your Farm Details',
       name: form.ownerName,
       phone: form.contact,
-      email: '', // No email field in this form
+      email: form.email,
       message: `Farm details submitted by ${form.ownerName}`,
       extra: {
         'Owner Name': form.ownerName,
+        'Email': form.email,
         'Phone Number': form.contact,
         'Address': form.address,
         'Farm Location': marker ? `Lat: ${marker.lat}, Lng: ${marker.lng}` : 'Not selected',
         'Area (acres)': form.area,
         'Crop Planted': form.crop || 'Not specified',
         'Irrigation Type': form.irrigationType || 'Not specified',
-        'Additional Notes': form.notes || 'None',
-        'Land Image': form.landImage ? form.landImage.name : 'Not uploaded'
+        'Additional Notes': form.notes || 'None'
       },
       toEmail: 'velwinestates@gmail.com'
     };
@@ -144,12 +143,12 @@ export default function FarmDetailsPage() {
             <input name="contact" value={form.contact} onChange={handleChange} required type="tel" inputMode="numeric" pattern="^[0-9]{10}$" maxLength="10" title="Enter a valid 10-digit phone number" style={{width:'100%',padding:'0.85rem 1rem',borderRadius:'10px',border:'2px solid #e0e0e0',fontSize:'1em',transition:'all 0.3s ease',outline:'none',background:'rgba(255,255,255,0.9)'}} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
           </div>
           <div style={{marginBottom:'1.5rem'}}>
-            <label style={{display:'block',fontWeight:600,color:'var(--primary-color)',marginBottom:'0.5rem',fontSize:'0.95em'}}>Address *</label>
-            <textarea name="address" value={form.address} onChange={handleChange} required style={{width:'100%',padding:'0.85rem 1rem',borderRadius:'10px',border:'2px solid #e0e0e0',fontSize:'1em',transition:'all 0.3s ease',outline:'none',background:'rgba(255,255,255,0.9)',minHeight:'80px',resize:'vertical'}} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
+            <label style={{display:'block',fontWeight:600,color:'var(--primary-color)',marginBottom:'0.5rem',fontSize:'0.95em'}}>Email *</label>
+            <input name="email" value={form.email} onChange={handleChange} required type="email" style={{width:'100%',padding:'0.85rem 1rem',borderRadius:'10px',border:'2px solid #e0e0e0',fontSize:'1em',transition:'all 0.3s ease',outline:'none',background:'rgba(255,255,255,0.9)'}} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
           </div>
           <div style={{marginBottom:'1.5rem'}}>
-            <label style={{display:'block',fontWeight:600,color:'var(--primary-color)',marginBottom:'0.5rem',fontSize:'0.95em'}}>Land Image *</label>
-            <input type="file" name="landImage" accept="image/*" onChange={handleChange} required style={{width:'100%',padding:'0.85rem 1rem',borderRadius:'10px',border:'2px solid #e0e0e0',fontSize:'1em',transition:'all 0.3s ease',outline:'none',background:'rgba(255,255,255,0.9)',cursor:'pointer'}} />
+            <label style={{display:'block',fontWeight:600,color:'var(--primary-color)',marginBottom:'0.5rem',fontSize:'0.95em'}}>Address *</label>
+            <textarea name="address" value={form.address} onChange={handleChange} required style={{width:'100%',padding:'0.85rem 1rem',borderRadius:'10px',border:'2px solid #e0e0e0',fontSize:'1em',transition:'all 0.3s ease',outline:'none',background:'rgba(255,255,255,0.9)',minHeight:'80px',resize:'vertical'}} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
           </div>
           <div style={{marginBottom:'1.5rem'}}>
             <label style={{display:'block',fontWeight:600,color:'var(--primary-color)',marginBottom:'0.5rem',fontSize:'0.95em'}}>Area (in acres) *</label>

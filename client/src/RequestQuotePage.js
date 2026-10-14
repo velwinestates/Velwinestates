@@ -8,19 +8,14 @@ export default function RequestQuotePage() {
     email: '',
     projectType: '',
     description: '',
-    landType: '',
-    landImage: null
+    landType: ''
   });
   const [quoteSubmitted, setQuoteSubmitted] = useState(false);
   const [notification, setNotification] = useState({ show: false, success: false, message: '' });
 
   const handleQuoteInput = (e) => {
-    const { name, value, files } = e.target;
-    if (name === 'landImage') {
-      setQuoteForm(prev => ({ ...prev, landImage: files[0] }));
-    } else {
-      setQuoteForm(prev => ({ ...prev, [name]: value }));
-    }
+    const { name, value } = e.target;
+    setQuoteForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleQuoteSubmit = (e) => {
@@ -38,8 +33,7 @@ export default function RequestQuotePage() {
         'Phone': quoteForm.phone,
         'Email': quoteForm.email,
         'Project Type': quoteForm.projectType,
-        'Description': quoteForm.description || 'Not provided',
-        'Uploaded File': quoteForm.file ? quoteForm.file.name : 'No file uploaded'
+        'Description': quoteForm.description || 'Not provided'
       }
     };
 
@@ -69,8 +63,7 @@ export default function RequestQuotePage() {
           email: '',
           projectType: '',
           description: '',
-          landType: '',
-          landImage: null
+          landType: ''
         });
         setQuoteSubmitted(false);
       }, 3000);
@@ -132,11 +125,6 @@ export default function RequestQuotePage() {
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', fontWeight: 600, color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '0.95em' }}>Land Type</label>
               <input type="text" name="landType" value={quoteForm.landType} onChange={handleQuoteInput} placeholder="e.g. Red soil, Clay, Sandy" style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
-            </div>
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontWeight: 600, color: 'var(--primary-color)', marginBottom: '0.5rem', fontSize: '0.95em' }}>Land Image</label>
-              <input type="file" name="landImage" accept="image/*" onChange={handleQuoteInput} style={{ width: '100%', padding: '0.85rem 1rem', borderRadius: 10, border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)', cursor: 'pointer' }} />
-              {quoteForm.landImage && <span style={{ fontSize: '0.9em', color: 'var(--primary-color)', marginTop: '0.5rem', display: 'block', fontWeight: 500 }}>✓ Selected: {quoteForm.landImage.name}</span>}
             </div>
             <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: 10, fontWeight: 600, fontSize: '1.05em', background: 'linear-gradient(135deg, var(--primary-color), var(--primary-dark))', color: 'white', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 4px 15px rgba(46, 125, 50, 0.3)' }} onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>Submit Quote Request</button>
           </form>

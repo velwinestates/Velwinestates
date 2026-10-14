@@ -7,6 +7,7 @@ import { apiUrl } from '../api';
 export default function LandPage() {
   const [form, setForm] = useState({
     ownerName: '',
+    email: '',
     contact: '',
     location: '',
     latlng: null,
@@ -14,8 +15,7 @@ export default function LandPage() {
     soilType: '',
     waterSource: '',
     description: '',
-    pattaNumber: '',
-    landImage: null
+    pattaNumber: ''
   });
   const [submitted, setSubmitted] = useState(false);
   const [notification, setNotification] = useState({ show: false, success: false, message: '' });
@@ -25,12 +25,8 @@ export default function LandPage() {
   }
 
   function handleChange(e) {
-    const { name, value, files } = e.target;
-    if (name === 'landImage') {
-      setForm(prev => ({ ...prev, landImage: files[0] }));
-    } else {
-      setForm(prev => ({ ...prev, [name]: value }));
-    }
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
   }
 
   function handleSubmit(e) {
@@ -40,16 +36,17 @@ export default function LandPage() {
     // Prepare email data
     const emailData = {
       formType: 'List Your Land for Buy/Sell (Main Page)',
-      name: form.owner,
+      name: form.ownerName,
       phone: form.contact,
+      email: form.email,
       message: `Land listing details submitted from main page`,
       extra: {
-        'Owner Name': form.owner,
+        'Owner Name': form.ownerName,
+        'Email': form.email,
         'Area (acres)': form.area,
         'Contact': form.contact,
         'Location': form.location ? `Lat: ${form.location.lat}, Lng: ${form.location.lng}` : 'Not selected',
-        'Land Image': form.landImage ? form.landImage.name : 'No image uploaded',
-        'Patta Details': form.patta ? form.patta.name : 'No document uploaded'
+        'Patta Details': form.pattaNumber || 'No document uploaded'
       }
     };
 
@@ -74,6 +71,7 @@ export default function LandPage() {
       setTimeout(() => {
         setForm({
           ownerName: '',
+          email: '',
           contact: '',
           location: '',
           latlng: null,
@@ -81,8 +79,7 @@ export default function LandPage() {
           soilType: '',
           waterSource: '',
           description: '',
-          pattaNumber: '',
-          landImage: null
+          pattaNumber: ''
         });
         setSubmitted(false);
       }, 3000);
@@ -136,6 +133,10 @@ export default function LandPage() {
             <input type="tel" name="contact" value={form.contact} onChange={handleChange} required inputMode="numeric" pattern="^[0-9]{10}$" maxLength="10" title="Enter a valid 10-digit phone number" />
           </div>
           <div className="form-group">
+            <label>Email</label>
+            <input type="email" name="email" value={form.email} onChange={handleChange} required />
+          </div>
+          <div className="form-group">
             <label>Location</label>
             <input type="text" name="location" value={form.location} onChange={handleChange} required />
           </div>
@@ -168,11 +169,6 @@ export default function LandPage() {
           <div className="form-group">
             <label>Patta Number</label>
             <input type="text" name="pattaNumber" value={form.pattaNumber} onChange={handleChange} required />
-          </div>
-          <div className="form-group">
-            <label>Land Image</label>
-            <input type="file" name="landImage" accept="image/*" onChange={handleChange} required />
-            {form.landImage && <span style={{fontSize:'0.9em',color:'var(--primary-color)'}}>Selected: {form.landImage.name}</span>}
           </div>
           <button type="submit" className="btn btn-primary" style={{width:'100%',marginTop:'1em'}}>Submit</button>
         </form>

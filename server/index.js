@@ -453,6 +453,42 @@ function removeEmptyFields(value) {
   return value;
 }
 
+function extractCustomerEmail(body = {}, extra = {}) {
+  const candidates = [
+    body?.email,
+    body?.Email,
+    body?.payload?.email,
+    body?.payload?.Email,
+    body?.payload?.contactEmail,
+    body?.contactEmail,
+    body?.userEmail,
+    body?.customerEmail,
+    body?.data?.email,
+    extra?.Email,
+    extra?.email,
+    extra?.['Email Address'],
+    extra?.['Contact Email'],
+    extra?.['Customer Email'],
+    extra?.['Email ID'],
+    extra?.['E-mail'],
+    extra?.mail,
+    extra?.['Email']
+  ];
+
+  for (const candidate of candidates) {
+    if (typeof candidate !== 'string') {
+      continue;
+    }
+
+    const normalized = candidate.trim();
+    if (normalized && normalized.includes('@') && normalized.includes('.')) {
+      return normalized;
+    }
+  }
+
+  return '';
+}
+
 // Get all submissions
 app.get('/api/submissions', async (req, res) => {
   console.log('📥 GET /api/submissions - Fetching submissions');
@@ -1319,7 +1355,7 @@ app.post('/api/send-email', (req, res, next) => {
       const serviceType = String(extra['Service Type'] || '').trim();
       const address = String(extra.Address || extra['Farm Location'] || '').trim();
       const contactMethod = String(extra['Preferred Contact Method'] || '').trim();
-      const email = String(req.body.email || '').trim();
+      const email = extractCustomerEmail(req.body, extra);
       if (!name || !rawPhone || !serviceType || !address) {
         return res.status(400).json({ error: 'Name, phone, service, and farm address are required.' });
       }
@@ -1328,6 +1364,7 @@ app.post('/api/send-email', (req, res, next) => {
       }
     }
 
+    const warnings = [];
     if (req.file) {
       try {
         const imageUpload = await uploadToCloudinary(req.file.buffer, 'uzhavar/team-bookings');
@@ -1338,7 +1375,12 @@ app.post('/api/send-email', (req, res, next) => {
         };
       } catch (uploadError) {
         console.error('Team booking image upload failed:', uploadError.message);
-        return res.status(502).json({ error: 'Unable to upload the farm photo. Try again or submit without it.' });
+        warnings.push('Your booking was received, but the farm photo could not be uploaded. Our team will contact you soon.');
+        req.body.extra = {
+          ...extra,
+          'Land Image File Name': req.file.originalname,
+          'Land Image Upload': 'Failed; booking submitted without photo'
+        };
       }
     }
 
@@ -1346,6 +1388,7 @@ app.post('/api/send-email', (req, res, next) => {
     const formType = req.body?.formType || 'Form Submission';
     const name = req.body?.name || req.body?.payload?.name || 'Unknown';
     const subject = req.body?.subject || `${formType} from ${name}`;
+    const customerEmail = extractCustomerEmail(req.body, extra);
 
     const submission = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
@@ -1393,7 +1436,7 @@ app.post('/api/send-email', (req, res, next) => {
           timestamp: now,
           formType: formType,
           name: name,
-          email: req.body?.email || extra['Email'] || '',
+          email: customerEmail || req.body?.email || extra['Email'] || extra['Email Address'] || '',
           phone: req.body?.phone || extra['Phone'] || extra['Phone Number'] || '',
           subject: subject,
           message: req.body?.message || extra['Message'] || extra['Description'] || '',
@@ -1454,26 +1497,26 @@ app.post('/api/send-email', (req, res, next) => {
     }
 
     if (!googleSheetsSaved) {
-      return res.status(502).json({
-        error: 'Google Sheets rejected the submission. Check the deployed Apps Script secret and version.',
-        storedLocally: true
-      });
+      warnings.push('Your request was saved locally, but it could not be synced to the backup service. Our team will follow up.');
     }
 
     const smtpUser = process.env.SMTP_USER;
     const smtpPass = process.env.SMTP_PASS;
     if (smtpUser && smtpPass && process.env.SEND_EMAILS !== 'false') {
+      const fromEmail = process.env.FROM_EMAIL || smtpUser;
+      const notificationRecipient = req.body?.toEmail || process.env.TO_EMAIL || 'velwinestates@gmail.com';
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: Number(process.env.SMTP_PORT || 587),
+        secure: String(process.env.SMTP_PORT || '587') === '465',
+        auth: { user: smtpUser, pass: smtpPass }
+      });
+
       try {
-        const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST || 'smtp.gmail.com',
-          port: Number(process.env.SMTP_PORT || 587),
-          secure: String(process.env.SMTP_PORT || '587') === '465',
-          auth: { user: smtpUser, pass: smtpPass }
-        });
         await transporter.sendMail({
-          from: process.env.FROM_EMAIL || smtpUser,
-          to: req.body?.toEmail || process.env.TO_EMAIL || 'velwinestates@gmail.com',
-          replyTo: req.body?.email || undefined,
+          from: fromEmail,
+          to: notificationRecipient,
+          replyTo: customerEmail || undefined,
           subject,
           text: JSON.stringify(removeEmptyFields(req.body), null, 2)
         });
@@ -1481,12 +1524,32 @@ app.post('/api/send-email', (req, res, next) => {
       } catch (emailError) {
         console.error('❌ Notification email failed:', emailError.message);
       }
+
+      if (customerEmail) {
+        try {
+          await transporter.sendMail({
+            from: fromEmail,
+            to: customerEmail,
+            replyTo: notificationRecipient,
+            subject: `We received your ${formType} request`,
+            text: `Hello${name !== 'Unknown' ? ` ${name}` : ''},\n\nThank you for contacting Velwin Estates. We have received your ${formType} request and our team will get back to you soon.\n\nRegards,\nVelwin Estates`
+          });
+          console.log('✅ Customer acknowledgement email sent');
+        } catch (emailError) {
+          console.error('❌ Customer acknowledgement email failed:', emailError.message);
+        }
+      }
     } else {
       console.warn('⚠️ SMTP is not configured; submission was stored but no email was sent');
     }
 
     console.log('✅ Submission stored locally and processing completed');
-    return res.json({ success: true, message: 'Submission stored successfully' });
+    return res.json({
+      success: true,
+      message: 'Submission stored successfully',
+      storedLocally: !googleSheetsSaved,
+      warning: warnings.length ? warnings.join(' ') : undefined
+    });
   } catch (error) {
     console.error('❌ Error in /api/send-email:', error);
     console.error('❌ Error name:', error.name);

@@ -30,6 +30,12 @@ describe('BookTeamPage', () => {
     expect(extra['Preferred Contact Time']).toBe('Evening');
   });
 
+  it('does not offer a farm photo upload', () => {
+    render(<BookTeamPage />);
+    expect(screen.queryByLabelText(/Farm Photo/)).not.toBeInTheDocument();
+    expect(document.querySelector('input[type="file"]')).toBeNull();
+  });
+
   it('shows validation errors returned by the backend', async () => {
     global.fetch.mockResolvedValue({
       ok: false,
