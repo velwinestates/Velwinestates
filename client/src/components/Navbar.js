@@ -120,7 +120,7 @@ const Navbar = () => {
         <ul id="primary-navigation" className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
           <li><NavLink to="/" end onClick={() => setIsMenuOpen(false)}>Home</NavLink></li>
           <li><NavLink to="/about" onClick={() => setIsMenuOpen(false)}>About</NavLink></li>
-          <li><NavLink to="/companies" onClick={() => setIsMenuOpen(false)}>Our Companies</NavLink></li>
+          <li><NavLink to="/companies" onClick={() => setIsMenuOpen(false)}>Our Products</NavLink></li>
           <li><NavLink to="/manage-farm" onClick={() => setIsMenuOpen(false)}>Manage Farm</NavLink></li>
           <li><NavLink to="/buy-inputs" onClick={() => setIsMenuOpen(false)}>Buy Inputs</NavLink></li>
           <li><NavLink to="/sell-produce" onClick={() => setIsMenuOpen(false)}>Sell Produce</NavLink></li>

@@ -564,7 +564,7 @@ function AppContent({
                 <li><Link to="/our-services">Our Services</Link></li>
                 <li><Link to="/projects">Past Work</Link></li>
                 <li><Link to="/book-team">Book a Service</Link></li>
-                <li><Link to="/companies">Our Companies</Link></li>
+                <li><Link to="/companies">Our Products</Link></li>
                 <li><Link to="/manage-farm">Manage My Farm</Link></li>
                 <li><Link to="/join">Careers</Link></li>
               </ul>

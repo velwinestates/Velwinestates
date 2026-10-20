@@ -72,15 +72,19 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 
 
-## Configuring backend API
+## Configuring the Render backend API
 
-The client must be pointed at the deployed backend by setting the `REACT_APP_API_URL` environment variable before starting or building the app.
+The frontend and Express API can run together in one Render **Web Service**, or as a Render **Static Site** and a separate **Web Service**.
 
-1. Create a `.env` file in the `client` folder (you can copy `.env.example`).
-2. Set `REACT_APP_API_URL=https://your-backend-host.example.com` (no trailing slash), replacing the example with the actual deployed server URL.
-3. Restart the dev server (`npm start`) so the env var is picked up. When building for production, ensure the variable is set during the build step.
+### One Render Web Service
 
-When `REACT_APP_API_URL` is not set, the client uses relative API paths. This works locally with the CRA proxy, but a separately deployed static frontend will send upload and media requests to the frontend host and they will fail.
+Set the service root to the repository root, build command to `npm run build`, and start command to `npm start`. The root start script uses Render's assigned `PORT`; the Express server serves `client/build` and the `/api/*` routes from the same origin, so `REACT_APP_API_URL` can remain unset. Verify that `<render-web-service-url>/api/hello` returns JSON.
+
+### Separate Render services
+
+If the frontend is a Render **Static Site**, add `REACT_APP_API_URL` to that Static Site's environment variables, using the public origin of the Render **Web Service** that runs Express (for example, `https://your-service.onrender.com`, with no trailing slash or `/api` suffix). Rebuild/redeploy the Static Site after changing it, because Create React App embeds `REACT_APP_*` values at build time. Verify `<render-web-service-url>/api/hello` returns JSON and the Static Site's `/api/companies` request reaches that Web Service.
+
+For local development, CRA can continue using the configured proxy with relative API paths.
 
 The deployed server also needs `DATABASE_POOLER_URL` (recommended for IPv4-only hosts; use the Supabase pooler connection string) or `DATABASE_URL`, plus `CLOUDINARY_URL` (or `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, and `CLOUDINARY_API_SECRET`) configured in its hosting provider. The frontend variable is embedded during `npm run build`, so set it before triggering a production deployment.
 

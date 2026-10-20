@@ -8,7 +8,7 @@ export default function OurServicesPage() {
 
   const services = [
     {
-      title: 'Aadhivelan Drone Services',
+      title: 'Veetrivel Drone Services',
       description: 'Advanced aerial solutions for modern farming',
       images: [
         {

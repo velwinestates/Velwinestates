@@ -64,6 +64,27 @@ function HomePage() {
         <Link to="/our-services" className="home-text-link">View all services <FaArrowRight aria-hidden="true" /></Link>
       </section>
 
+      <section className="home-astrology-section home-section">
+        <div className="section-heading">
+          <span className="section-kicker">ASTROLOGY CONSULTATION</span>
+          <h2><BsStars aria-hidden="true" /> Shree Karthik Science of Astrology</h2>
+        </div>
+        <article className="home-astrology-card">
+          <div className="home-astrology-icon" aria-hidden="true"><BsStars /></div>
+          <div className="home-astrology-content">
+            <p>
+              Receive thoughtful, personalised guidance rooted in traditional astrology.
+              Consultations can cover birth-chart insights, important life questions, and
+              choosing auspicious timings for special occasions.
+            </p>
+          </div>
+          <div className="home-astrology-contact">
+            <a href="tel:+919655375550">Call +91 96553 75550</a>
+            <a href="mailto:shreekarthikscienceofastrology@gmail.com">shreekarthikscienceofastrology@gmail.com</a>
+          </div>
+        </article>
+      </section>
+
       <section className="home-showcase" aria-label="Farm work and services">
         <div className="home-showcase-heading">
           <span className="section-kicker">FIELD WORK, DONE WITH CARE</span>

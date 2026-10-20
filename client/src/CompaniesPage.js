@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { apiUrl, imageUrl } from './api';
+import { API_BASE, apiUrl, imageUrl } from './api';
 import imageUrls from './data/imageUrls';
+import { FaArrowRight, FaSyncAlt } from 'react-icons/fa';
 
 export default function CompaniesPage() {
   const [companies, setCompanies] = useState(null);
@@ -35,6 +36,13 @@ export default function CompaniesPage() {
     })
       .then(r => {
         if (!r.ok) throw new Error(`HTTP error! status: ${r.status}`);
+        const contentType = r.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          const missingProductionApi = process.env.NODE_ENV === 'production' && !API_BASE;
+          throw new Error(missingProductionApi
+            ? 'No backend API URL is configured. If this is a Render Static Site, set REACT_APP_API_URL to your Render Web Service URL in the Static Site environment, then redeploy.'
+            : 'The products API returned a webpage instead of JSON. Check that /api/* requests reach the Render Web Service.');
+        }
         return r.json();
       })
       .then(data => {
@@ -79,7 +87,6 @@ export default function CompaniesPage() {
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
-    
     try {
       const orderData = {
         companyId: selectedProduct.companyId,
@@ -112,131 +119,51 @@ export default function CompaniesPage() {
 
       const response = await fetch(apiUrl('/api/send-email'), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData)
       });
 
-      if (response.ok) {
-        setOrderSubmitted(true);
-        setOrderForm({ name: '', phone: '', email: '', address: '', quantity: 1 });
-        setTimeout(() => {
-          setShowOrderModal(false);
-          setOrderSubmitted(false);
-        }, 3000);
-      } else {
-        alert('Failed to submit order. Please try again.');
-      }
+      if (!response.ok) throw new Error('Failed to send order notification');
+      setOrderSubmitted(true);
+      setOrderForm({ name: '', phone: '', email: '', address: '', quantity: 1 });
+      setTimeout(() => {
+        setShowOrderModal(false);
+        setOrderSubmitted(false);
+      }, 3000);
     } catch (error) {
       console.error('Error submitting order:', error);
       alert('Failed to submit order. Please check your connection and try again.');
     }
   };
 
-  const renderCompanyCard = (c, fallbackImg) => (
-    <div 
-      key={c.id} 
-      className="company-card" 
-      onClick={() => setSelectedCompany(c)}
-      style={{ 
-        background: 'rgba(255,255,255,0.7)',
-        borderRadius: 16,
-        overflow: 'hidden',
-        boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-        cursor: 'pointer',
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        border: '1px solid rgba(255,255,255,0.5)',
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        backdropFilter: 'blur(10px)'
-      }}
-      onMouseOver={e => {
-        e.currentTarget.style.transform = 'translateY(-8px)';
-        e.currentTarget.style.boxShadow = '0 12px 32px rgba(56,142,60,0.15)';
-        e.currentTarget.style.borderColor = 'var(--primary-color)';
-      }}
-      onMouseOut={e => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)';
-        e.currentTarget.style.borderColor = '#e8e8e8';
-      }}
-    >
-      {/* Header Image */}
-      <div style={{
-        height: 180,
-        background: 'linear-gradient(135deg, rgba(232,245,233,0.6) 0%, rgba(200,230,201,0.6) 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        <div style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          background: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23388e3c\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")',
-          opacity: 0.4
-        }} />
-        <img 
-          src={c.logo ? imageUrl(c.logo) : (c.products && c.products.length > 0 && c.products[0].image ? imageUrl(c.products[0].image) : fallbackImg)} 
-          alt={c.name} 
-          style={{ 
-            width: 120, 
-            height: 120, 
-            borderRadius: '50%', 
-            objectFit: 'cover',
-            border: '4px solid white',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-            position: 'relative',
-            zIndex: 1
-          }} 
-          onError={(e) => {
-            e.target.src = fallbackImg;
-          }}
-        />
-      </div>
-      
-      {/* Content */}
-      <div style={{ padding: '1.5em', flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <h3 style={{ 
-          color: 'var(--primary-dark)', 
-          fontWeight: 700, 
-          fontSize: '1.4em', 
-          marginBottom: '0.5em',
-          textAlign: 'center'
-        }}>{c.name}</h3>
-        
-        <p style={{ 
-          color: '#666', 
-          fontSize: '0.95em', 
-          textAlign: 'center', 
-          lineHeight: 1.6,
-          marginBottom: '1.5em',
-          flex: 1
-        }}>{c.description}</p>
-        
-        {/* Stats */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          padding: '1em 0',
-          borderTop: '1px solid #f0f0f0',
-          marginTop: 'auto'
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontSize: '1.5em', fontWeight: 'bold', color: 'var(--primary-color)' }}>
-              {c.products ? c.products.length : 0}
-            </div>
-            <div style={{ fontSize: '0.8em', color: '#999', marginTop: '0.2em' }}>Products</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const renderCompanyCard = (company, fallbackImg) => {
+      const productCount = company.products?.length || 0;
 
+      return (
+        <article key={company.id} className="product-brand-card">
+          <div className="product-brand-image">
+            <img
+              src={company.logo ? imageUrl(company.logo) : (productCount && company.products[0].image ? imageUrl(company.products[0].image) : fallbackImg)}
+              alt={`${company.name} brand`}
+              loading="lazy"
+              onError={event => { event.currentTarget.src = fallbackImg; }}
+            />
+            <span>VELWIN COLLECTION</span>
+          </div>
+          <div className="product-brand-info">
+            <div className="product-brand-meta">
+              <span>BRAND CATALOG</span>
+              <span>{productCount} {productCount === 1 ? 'product' : 'products'}</span>
+            </div>
+            <h2>{company.name}</h2>
+            <p>{company.description || 'Explore products from this Velwin Estates brand.'}</p>
+            <button type="button" className="product-brand-action" onClick={() => setSelectedCompany(company)}>
+              Browse products <FaArrowRight aria-hidden="true" />
+            </button>
+          </div>
+        </article>
+      );
+    };
   const fallbackMasala = imageUrls.produce;
   const fallbackOrganics = imageUrls.coconut;
 
@@ -246,14 +173,10 @@ export default function CompaniesPage() {
     ) || [];
 
     return (
-      <div style={{ 
-        minHeight: '100vh',
-        background: 'transparent',
-        padding: '2em 1em'
-      }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+      <div className="product-detail-page">
+        <div className="product-detail-shell">
           {/* Header */}
-          <div style={{
+          <div className="product-detail-header" style={{
             background: 'rgba(255,255,255,0.85)',
             borderRadius: 16,
             padding: '2em',
@@ -287,7 +210,7 @@ export default function CompaniesPage() {
                 e.target.style.transform = 'translateX(0)';
               }}
             >
-              Back to Companies
+              Back to Products
             </button>
             
             <div style={{ display: 'flex', alignItems: 'center', gap: '2em', flexWrap: 'wrap' }}>
@@ -322,7 +245,7 @@ export default function CompaniesPage() {
           </div>
 
           {/* Products Section */}
-          <div style={{
+          <div className="product-detail-catalog" style={{
             background: 'rgba(255,255,255,0.85)',
             borderRadius: 16,
             padding: '2em',
@@ -338,7 +261,7 @@ export default function CompaniesPage() {
               flexWrap: 'wrap',
               gap: '1em'
             }}>
-              <h2 style={{ color: 'var(--primary-dark)', margin: 0, fontSize: '1.8em', fontWeight: 700 }}>
+              <h2 className="product-detail-title" style={{ color: 'var(--primary-dark)', margin: 0, fontSize: '1.8em', fontWeight: 700 }}>
                 Products <span style={{ color: '#999', fontSize: '0.8em' }}>({filteredProducts.length})</span>
               </h2>
               
@@ -346,6 +269,7 @@ export default function CompaniesPage() {
                 <div style={{ position: 'relative', minWidth: 250 }}>
                   <input
                     type="text"
+                    aria-label="Search products"
                     placeholder="🔍 Search products..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -366,13 +290,9 @@ export default function CompaniesPage() {
             </div>
             
             {filteredProducts.length > 0 ? (
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-                gap: '1.5em' 
-              }}>
+              <div className="product-detail-grid">
                 {filteredProducts.map((product, index) => (
-                  <div key={index} style={{ 
+                  <article key={index} className="product-detail-card" style={{
                     background: 'rgba(250,250,250,0.9)', 
                     borderRadius: 12, 
                     overflow: 'hidden',
@@ -391,7 +311,7 @@ export default function CompaniesPage() {
                     e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)';
                   }}
                   >
-                    <div style={{ 
+                    <div className="product-detail-image" style={{
                       width: '100%', 
                       height: 200, 
                       overflow: 'hidden', 
@@ -426,7 +346,7 @@ export default function CompaniesPage() {
                       )}
                     </div>
                     
-                    <div style={{ padding: '1.2em', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <div className="product-detail-card-info" style={{ padding: '1.2em', flex: 1, display: 'flex', flexDirection: 'column' }}>
                       <h4 style={{ 
                         color: '#333', 
                         fontSize: '1.1em', 
@@ -478,7 +398,7 @@ export default function CompaniesPage() {
                       </button>
                       )}
                     </div>
-                  </div>
+                  </article>
                 ))}
               </div>
             ) : (
@@ -523,118 +443,36 @@ export default function CompaniesPage() {
   };
 
   return (
-    <div translate="" style={{ 
-      minHeight: '100vh',
-      background: 'transparent',
-      paddingTop: '80px',
-      paddingBottom: '2em'
-    }}>
+    <div translate="" className="our-products-page">
       {selectedCompany ? (
         renderCompanyDetail(selectedCompany)
       ) : (
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 1em" }}>
-          {/* Hero Header */}
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(27,94,32,0.75) 0%, rgba(56,142,60,0.75) 100%)',
-            borderRadius: 20,
-            padding: '3em 2em',
-            marginBottom: '2em',
-            color: 'white',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
-            position: 'relative',
-            overflow: 'hidden',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255,255,255,0.2)'
-          }}>
-            <div style={{
-              position: 'absolute',
-              top: -50,
-              right: -50,
-              width: 200,
-              height: 200,
-              background: 'rgba(255,255,255,0.1)',
-              borderRadius: '50%'
-            }} />
-            <div style={{
-              position: 'absolute',
-              bottom: -30,
-              left: -30,
-              width: 150,
-              height: 150,
-              background: 'rgba(255,255,255,0.08)',
-              borderRadius: '50%'
-            }} />
-            
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <h1 style={{ 
-                margin: 0, 
-                fontWeight: 900, 
-                fontSize: '3em',
-                marginBottom: '0.3em',
-                textShadow: '0 2px 4px rgba(0,0,0,0.2)'
-              }}>
-                Our Companies
-              </h1>
-              <p style={{ 
-                fontSize: '1.2em',
-                margin: 0,
-                opacity: 0.95,
-                maxWidth: 600
-              }}>
-                Discover premium products from our trusted brands
-              </p>
-              
-              <div style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '2em',
-                marginTop: '2em',
-                flexWrap: 'wrap'
-              }}>
-                {lastUpdated && (
-                  <div style={{ 
-                    background: 'rgba(255,255,255,0.2)',
-                    padding: '0.5em 1em',
-                    borderRadius: 20,
-                    fontSize: '0.9em',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.5em'
-                  }}>
-                  </div>
-                )}
-                <button 
-                  onClick={loadCompanies}
-                  disabled={loading}
-                  style={{ 
-                    background: loading ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.25)', 
-                    color: 'white', 
-                    border: '2px solid rgba(255,255,255,0.5)', 
-                    padding: '0.6em 1.5em', 
-                    borderRadius: 25, 
-                    cursor: loading ? 'not-allowed' : 'pointer',
-                    fontSize: '0.95em',
-                    fontWeight: '600',
-                    transition: 'all 0.3s ease',
-                    backdropFilter: 'blur(10px)'
-                  }}
-                  onMouseOver={e => { 
-                    if (!loading) {
-                      e.target.style.background = 'rgba(255,255,255,0.35)';
-                      e.target.style.transform = 'translateY(-2px)';
-                    }
-                  }}
-                  onMouseOut={e => { 
-                    if (!loading) {
-                      e.target.style.background = 'rgba(255,255,255,0.25)';
-                      e.target.style.transform = 'translateY(0)';
-                    }
-                  }}
-                >
-                  {loading ? '🔄 Loading...' : '🔄 Refresh'}
+        <div className="products-catalog-shell">
+          <header className="products-hero">
+            <div className="products-hero-copy">
+              <p className="products-eyebrow"><span /> VELWIN ESTATES / CATALOG</p>
+              <h1>Our Products</h1>
+              <p className="products-hero-description">Good things for growing, chosen from the brands and makers we trust.</p>
+              <div className="products-hero-meta">
+                <span>{companies?.length || 0} featured brands</span>
+                {lastUpdated && <span>Updated {lastUpdated.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>}
+                <button type="button" className="products-refresh-button" onClick={loadCompanies} disabled={loading}>
+                  <FaSyncAlt aria-hidden="true" /> {loading ? 'Refreshing' : 'Refresh catalog'}
                 </button>
               </div>
             </div>
+            <div className="products-hero-image">
+              <img src={imageUrls.coconut} alt="A sunlit coconut plantation" />
+              <span>Rooted in the region<br />Made for everyday growing</span>
+            </div>
+          </header>
+
+          <div className="products-section-heading">
+            <div>
+              <p className="products-eyebrow">EXPLORE THE COLLECTION</p>
+              <h2>Shop by brand</h2>
+            </div>
+            <span>{companies?.length || 0} {companies?.length === 1 ? 'brand' : 'brands'}</span>
           </div>
           
           {error && (
@@ -652,29 +490,20 @@ export default function CompaniesPage() {
               <div style={{ fontSize: '2em', marginBottom: '0.5em' }}>⚠️</div>
               <strong style={{ fontSize: '1.1em' }}>Connection Error</strong>
               <p style={{ margin: '0.5em 0 0 0' }}>{error}</p>
-              <small style={{ opacity: 0.8 }}>Make sure the backend server is running on port 4000</small>
+              <small style={{ opacity: 0.8 }}>Check that the Render frontend is connected to the Web Service serving the product API.</small>
             </div>
           )}
           
           {/* Companies Grid */}
-          <div style={{ 
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: '2em'
-          }}>
-            {companies && companies.length > 0 ? (
-              companies.map(c => renderCompanyCard(c, c.name && c.name.includes('Masala') ? fallbackMasala : fallbackOrganics))
+          <div className="product-brand-grid">
+            {loading && (!companies || companies.length === 0) ? (
+              <p className="products-empty-state">Loading the product catalog…</p>
+            ) : companies && companies.length > 0 ? (
+              companies.map(company => renderCompanyCard(company, company.name && company.name.includes('Masala') ? fallbackMasala : fallbackOrganics))
             ) : (
-              <div style={{
-                gridColumn: '1 / -1',
-                padding: '3rem 1.5rem',
-                textAlign: 'center',
-                color: '#5d6b63',
-                background: '#f7f8f2',
-                borderRadius: 8
-              }}>
-                <h3 style={{ marginBottom: '0.5rem' }}>No companies available</h3>
-                <p style={{ margin: 0 }}>New company information will appear here after it is added from the admin page.</p>
+              <div className="products-empty-state">
+                <h3>{error ? 'Catalog unavailable' : 'No products available yet'}</h3>
+                <p>{error ? 'Please try refreshing the catalog shortly.' : 'New products will appear here when they are added.'}</p>
               </div>
             )}
           </div>
@@ -684,6 +513,7 @@ export default function CompaniesPage() {
       {/* Order Modal */}
       {showOrderModal && selectedProduct && (
         <div 
+          className="product-order-overlay"
           style={{ 
             position: 'fixed', 
             top: 0, 
@@ -700,6 +530,7 @@ export default function CompaniesPage() {
           onClick={() => !orderSubmitted && setShowOrderModal(false)}
         >
           <div 
+            className="product-order-dialog"
             style={{ 
               maxWidth: 500, 
               width: '100%',
@@ -716,6 +547,7 @@ export default function CompaniesPage() {
           >
             <button
               onClick={() => setShowOrderModal(false)}
+              aria-label="Close order form"
               style={{
                 position: 'absolute',
                 top: 15,

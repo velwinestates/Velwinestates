@@ -99,7 +99,7 @@ const NavbarMenuDemo = () => {
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/companies')}>
-        <><Building2 size={16} /> Our Companies</>
+        <><Building2 size={16} /> Our Products</>
       </DropdownMenuItem>
       
       <DropdownMenuItem onClick={() => navigate('/our-services')}>

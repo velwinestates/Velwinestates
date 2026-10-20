@@ -59,7 +59,7 @@ export default function AdminDashboard() {
         zIndex: 1002,
         borderBottom: '1px solid rgba(201, 168, 106, 0.2)'
       }}>
-        <div style={{
+        <div className="admin-topbar-inner" style={{
           maxWidth: '1400px',
           margin: '0 auto',
           display: 'flex',
@@ -68,7 +68,7 @@ export default function AdminDashboard() {
           padding: '0 2em'
         }}>
           {/* Logo/Brand */}
-          <div style={{
+          <div className="admin-dashboard-brand" style={{
             display: 'flex',
             alignItems: 'center',
             gap: '1em',
@@ -115,7 +115,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Desktop: Logout Button | Mobile: Burger + Logout */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1em' }}>
+          <div className="admin-topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '1em' }}>
             <a
               href="/"
               target="_blank"
@@ -129,6 +129,9 @@ export default function AdminDashboard() {
             {/* Burger Menu Button (visible on mobile) */}
             <button
               onClick={toggleMenu}
+              aria-label={menuOpen ? 'Close dashboard navigation' : 'Open dashboard navigation'}
+              aria-controls="admin-mobile-navigation"
+              aria-expanded={menuOpen}
               style={{
                 background: 'linear-gradient(135deg, #C9A86A 0%, #B8935A 100%)',
                 color: 'white',
@@ -254,7 +257,7 @@ export default function AdminDashboard() {
             borderRadius: '0 0 12px 12px'
           }}
           className="mobile-nav">
-            <div style={{
+            <div id="admin-mobile-navigation" role="navigation" aria-label="Dashboard navigation" style={{
               maxWidth: '1400px',
               margin: '0 auto',
               padding: '1em 2em'

@@ -141,8 +141,37 @@ export default function AdminProjectsPage() {
     return formData.image || defaultImage;
   }, [formData.image, imageFile]);
 
+  const projectEditor = showForm && (
+    <form onSubmit={handleSubmit} className="admin-project-editor">
+      <div className="admin-project-editor-fields">
+        <label>Project title<input name="title" value={formData.title} onChange={handleInputChange} required style={inputStyle} /></label>
+        <label>Location<input name="location" value={formData.location} onChange={handleInputChange} required style={inputStyle} /></label>
+        <label>Category<input name="category" value={formData.category} onChange={handleInputChange} required style={inputStyle} /></label>
+        <label>Image alt text<input name="imageAlt" value={formData.imageAlt} onChange={handleInputChange} style={inputStyle} /></label>
+      </div>
+
+      <div className="admin-project-editor-image-fields">
+        <label>Project image URL<input name="image" value={formData.image} onChange={handleInputChange} placeholder="https://..." style={inputStyle} /></label>
+        <label>Upload image<input type="file" accept="image/*" onChange={event => setImageFile(event.target.files[0])} style={{ ...inputStyle, padding: '0.7em' }} /></label>
+      </div>
+
+      <div className="admin-project-editor-preview">
+        <img src={imagePreview} alt={formData.imageAlt || formData.title || 'Project preview'} onError={event => { event.target.src = defaultImage; }} />
+      </div>
+
+      <label className="admin-project-editor-description">Description<textarea name="description" value={formData.description} onChange={handleInputChange} rows="4" style={{ ...inputStyle, resize: 'vertical' }} /></label>
+
+      <div className="admin-project-editor-actions">
+        <button type="button" onClick={resetForm} disabled={saving} style={{ background: '#666', color: 'white', border: 0, borderRadius: 8, padding: '0.75em 1.25em', cursor: saving ? 'wait' : 'pointer' }}>Cancel</button>
+        <button type="submit" disabled={saving} style={{ background: '#388e3c', color: 'white', border: 0, borderRadius: 8, padding: '0.75em 1.25em', cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1 }}>
+          {saving ? 'Saving...' : editingProject ? 'Update Project' : 'Add Project'}
+        </button>
+      </div>
+    </form>
+  );
+
   return (
-    <section style={{ maxWidth: 1200, margin: '0 auto', padding: '2em' }}>
+    <section className="admin-projects-page" style={{ maxWidth: 1200, margin: '0 auto', padding: '2em' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1em', flexWrap: 'wrap', marginBottom: '2em' }}>
         <div>
           <h1 style={{ color: '#388e3c', margin: 0 }}>🖼️ Manage Projects</h1>
@@ -157,39 +186,12 @@ export default function AdminProjectsPage() {
 
       {status && <p role="status" style={{ marginBottom: '1em', color: status.includes('Failed') || status.includes('required') || status.includes('Failed') ? '#a33b32' : '#285943' }}>{status}</p>}
 
-      {showForm && (
-        <form onSubmit={handleSubmit} style={{ background: '#fff', border: '1px solid #d6d2c7', borderRadius: 12, padding: '1.5em', marginBottom: '2em' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1em' }}>
-            <label style={{ display: 'grid', gap: '0.4em', fontWeight: 600 }}>Project title<input name="title" value={formData.title} onChange={handleInputChange} required style={inputStyle} /></label>
-            <label style={{ display: 'grid', gap: '0.4em', fontWeight: 600 }}>Location<input name="location" value={formData.location} onChange={handleInputChange} required style={inputStyle} /></label>
-            <label style={{ display: 'grid', gap: '0.4em', fontWeight: 600 }}>Category<input name="category" value={formData.category} onChange={handleInputChange} required style={inputStyle} /></label>
-            <label style={{ display: 'grid', gap: '0.4em', fontWeight: 600 }}>Image alt text<input name="imageAlt" value={formData.imageAlt} onChange={handleInputChange} style={inputStyle} /></label>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 220px', gap: '1em', marginTop: '1em', alignItems: 'center' }}>
-            <label style={{ display: 'grid', gap: '0.4em', fontWeight: 600 }}>Project image URL<input name="image" value={formData.image} onChange={handleInputChange} placeholder="https://..." style={inputStyle} /></label>
-            <label style={{ display: 'grid', gap: '0.4em', fontWeight: 600, cursor: 'pointer' }}>Upload image<input type="file" accept="image/*" onChange={event => setImageFile(event.target.files[0])} style={{ ...inputStyle, padding: '0.7em' }} /></label>
-          </div>
-
-          <div style={{ aspectRatio: '16 / 9', maxWidth: 420, background: '#f1f3ed', borderRadius: 10, overflow: 'hidden', marginTop: '1em' }}>
-            <img src={imagePreview} alt={formData.imageAlt || formData.title || 'Project preview'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={event => { event.target.src = defaultImage; }} />
-          </div>
-
-          <label style={{ display: 'grid', gap: '0.4em', fontWeight: 600, marginTop: '1em' }}>Description<textarea name="description" value={formData.description} onChange={handleInputChange} rows="4" style={{ ...inputStyle, resize: 'vertical' }} /></label>
-
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75em', marginTop: '1.5em' }}>
-            <button type="button" onClick={resetForm} disabled={saving} style={{ background: '#666', color: 'white', border: 0, borderRadius: 8, padding: '0.75em 1.25em', cursor: saving ? 'wait' : 'pointer' }}>Cancel</button>
-            <button type="submit" disabled={saving} style={{ background: '#388e3c', color: 'white', border: 0, borderRadius: 8, padding: '0.75em 1.25em', cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.7 : 1 }}>
-              {saving ? 'Saving...' : editingProject ? 'Update Project' : 'Add Project'}
-            </button>
-          </div>
-        </form>
-      )}
+      {showForm && !editingProject && projectEditor}
 
       {loading ? <p>Loading projects...</p> : projects.length === 0 ? <p>No projects found.</p> : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1.25em' }}>
+        <div className="admin-project-grid">
           {projects.map(project => (
-            <article key={project.id} style={{ background: '#fff', border: '1px solid #d6d2c7', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+            <article key={project.id} className="admin-project-card">
               <div style={{ aspectRatio: '16 / 10', overflow: 'hidden', background: '#eef2ed' }}>
                 <img src={imageUrl(project.image)} alt={project.imageAlt || project.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={event => { event.target.src = defaultImage; }} />
               </div>
@@ -205,6 +207,7 @@ export default function AdminProjectsPage() {
                   <button type="button" onClick={() => handleDelete(project)} style={{ flex: 1, background: '#a33b32', color: 'white', border: 0, borderRadius: 8, padding: '0.65em', cursor: 'pointer', fontWeight: 600 }}>Delete</button>
                 </div>
               </div>
+              {editingProject?.id === project.id && projectEditor}
             </article>
           ))}
         </div>

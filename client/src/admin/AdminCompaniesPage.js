@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { apiUrl, imageUrl } from '../api';
+import { API_BASE, apiUrl, imageUrl } from '../api';
 
 export default function AdminCompaniesPage({ onLogout }) {
   const [companies, setCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [form, setForm] = useState({ name: '', description: '', logo: '', logoFile: null });
   const [editingId, setEditingId] = useState(null);
@@ -237,10 +238,18 @@ export default function AdminCompaniesPage({ onLogout }) {
     setLoadError('');
     fetch(apiUrl('/api/companies'))
       .then(async r => {
-        const data = await r.json().catch(() => ({}));
         if (!r.ok) {
+          const data = await r.json().catch(() => ({}));
           throw new Error(data.error || `Failed to load companies (${r.status})`);
         }
+        const contentType = r.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          const missingProductionApi = process.env.NODE_ENV === 'production' && !API_BASE;
+          throw new Error(missingProductionApi
+            ? 'No backend API URL is configured. If this is a Render Static Site, set REACT_APP_API_URL to your Render Web Service URL in the Static Site environment, then redeploy.'
+            : 'The companies API returned a webpage instead of JSON. Check that /api/* requests reach the Render Web Service.');
+        }
+        const data = await r.json();
         if (!Array.isArray(data)) {
           throw new Error('The companies API returned an invalid response.');
         }
@@ -251,7 +260,8 @@ export default function AdminCompaniesPage({ onLogout }) {
         console.error('Failed to load companies', err);
         setLoadError(err.message);
         setCompanies([]);
-      });
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -277,10 +287,10 @@ export default function AdminCompaniesPage({ onLogout }) {
             fontSize: '2em',
             fontWeight: 700
           }}>
-            🏢 Companies Management
+            📦 Products Management
           </h1>
           <p style={{ margin: '0.5rem 0 0 0', opacity: 0.95, fontSize: '1.05em' }}>
-            Manage your companies and their product catalogs
+            Manage your brands and product catalog
           </p>
         </header>
 
@@ -527,7 +537,7 @@ export default function AdminCompaniesPage({ onLogout }) {
               fontSize: '1.5em',
               fontWeight: 700
             }}>
-              📊 Companies ({companies.length})
+              📦 Products ({companies.reduce((count, company) => count + (company.products?.length || 0), 0)})
             </h2>
           </div>
 
@@ -552,12 +562,16 @@ export default function AdminCompaniesPage({ onLogout }) {
               textAlign: 'center',
               boxShadow: theme.shadowSm
             }}>
-              <div style={{ fontSize: '4em', marginBottom: '1rem' }}>🏢</div>
+              <div style={{ fontSize: '4em', marginBottom: '1rem' }}>{loading ? '⏳' : loadError ? '⚠️' : '📦'}</div>
               <h3 style={{ color: theme.textSecondary, fontWeight: 600, margin: '0 0 0.5rem 0' }}>
-                No companies yet
+                {loading ? 'Loading products' : loadError ? 'Products could not be loaded' : 'No products yet'}
               </h3>
               <p style={{ color: theme.textMuted, margin: 0 }}>
-                Add your first company using the form above
+                {loading
+                  ? 'Connecting to the product catalog…'
+                  : loadError
+                    ? 'Check that the Render frontend points to the Web Service API, or that the Web Service serves the frontend and API together.'
+                    : 'Add a brand and its products using the form above'}
               </p>
             </div>
           ) : (
