@@ -4,20 +4,23 @@ import "leaflet/dist/leaflet.css";
 import { MdLandscape } from "react-icons/md";
 import { apiUrl } from '../api';
 
+const initialForm = {
+  ownerName: '',
+  email: '',
+  contact: '',
+  location: '',
+  latlng: null,
+  area: '',
+  soilType: '',
+  waterSource: '',
+  description: '',
+  pattaNumber: ''
+};
+
 export default function LandPage() {
-  const [form, setForm] = useState({
-    ownerName: '',
-    email: '',
-    contact: '',
-    location: '',
-    latlng: null,
-    area: '',
-    soilType: '',
-    waterSource: '',
-    description: '',
-    pattaNumber: ''
-  });
+  const [form, setForm] = useState(initialForm);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState({ show: false, success: false, message: '' });
 
   function handleLocation(latlng) {
@@ -29,9 +32,10 @@ export default function LandPage() {
     setForm(prev => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    setSubmitted(true);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     
     // Prepare email data
     const emailData = {
@@ -45,51 +49,37 @@ export default function LandPage() {
         'Email': form.email,
         'Area (acres)': form.area,
         'Contact': form.contact,
-        'Location': form.location ? `Lat: ${form.location.lat}, Lng: ${form.location.lng}` : 'Not selected',
+        'Location': form.latlng ? `Lat: ${form.latlng.lat}, Lng: ${form.latlng.lng}` : form.location,
         'Patta Details': form.pattaNumber || 'No document uploaded'
       }
     };
 
     // Send email
-    fetch(apiUrl('/api/send-email'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(emailData),
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Land listing from main page submitted successfully:', data);
+    try {
+      const response = await fetch(apiUrl('/api/send-email'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to submit land listing.');
+      }
+      console.log('Land listing from main page submitted successfully:', result);
+      setForm(initialForm);
+      setSubmitted(true);
       setNotification({ 
         show: true, 
         success: true, 
         message: `Thank you ${form.ownerName}! Your land listing has been submitted successfully. We'll contact you soon with potential buyers!` 
       });
-      
-      // Reset form after 3 seconds
       setTimeout(() => {
-        setForm({
-          ownerName: '',
-          email: '',
-          contact: '',
-          location: '',
-          latlng: null,
-          area: '',
-          soilType: '',
-          waterSource: '',
-          description: '',
-          pattaNumber: ''
-        });
         setSubmitted(false);
-      }, 3000);
-      
-      // Hide notification after 3 seconds
-      setTimeout(() => {
         setNotification({ show: false, success: false, message: '' });
       }, 3000);
-    })
-    .catch(error => {
+    } catch (error) {
       console.error('Error submitting land listing from main page:', error);
       setNotification({ 
         show: true, 
@@ -99,14 +89,14 @@ export default function LandPage() {
       setTimeout(() => {
         setNotification({ show: false, success: false, message: '' });
       }, 3000);
-    });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
-  function LocationPicker({ onLocationSelect }) {
-    const [marker, setMarker] = useState(null);
+  function LocationPicker({ onLocationSelect, marker }) {
     useMapEvents({
       click(e) {
-        setMarker(e.latlng);
         onLocationSelect(e.latlng);
       }
     });
@@ -144,7 +134,7 @@ export default function LandPage() {
             <label>Mark Land Location on Map</label>
             <MapContainer center={[11.0168, 76.9558]} zoom={7} style={{ height: '250px', width: '100%', marginBottom: '1em' }}>
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-              <LocationPicker onLocationSelect={handleLocation} />
+              <LocationPicker onLocationSelect={handleLocation} marker={form.latlng} />
             </MapContainer>
             {form.latlng && (
               <div style={{fontSize:'0.9em',color:'var(--primary-color)'}}>Selected: Lat {form.latlng.lat}, Lng {form.latlng.lng}</div>
@@ -170,7 +160,7 @@ export default function LandPage() {
             <label>Patta Number</label>
             <input type="text" name="pattaNumber" value={form.pattaNumber} onChange={handleChange} required />
           </div>
-          <button type="submit" className="btn btn-primary" style={{width:'100%',marginTop:'1em'}}>Submit</button>
+          <button type="submit" className="btn btn-primary" disabled={isSubmitting} style={{width:'100%',marginTop:'1em'}}>{isSubmitting ? 'Submitting...' : 'Submit'}</button>
         </form>
         {submitted && (
           <div className="success-message" style={{marginTop:'2em',color:'green',fontWeight:'bold'}}>

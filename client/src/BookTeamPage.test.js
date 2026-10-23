@@ -21,13 +21,15 @@ describe('BookTeamPage', () => {
     fireEvent.change(screen.getByLabelText('Best Time to Contact (optional)'), { target: { value: 'Evening' } });
     fireEvent.click(screen.getByRole('button', { name: 'Submit Booking Request' }));
 
-    expect(await screen.findByText(/team booking request has been submitted successfully/i)).toBeInTheDocument();
+    expect(await screen.findByText(/team booking request has been received/i)).toBeInTheDocument();
     const [, request] = global.fetch.mock.calls[0];
     expect(request.method).toBe('POST');
     expect(request.body.get('formType')).toBe('Book My Team');
     const extra = JSON.parse(request.body.get('extra'));
     expect(extra['Preferred Contact Method']).toBe('WhatsApp');
     expect(extra['Preferred Contact Time']).toBe('Evening');
+    expect(screen.getByLabelText('Name')).toHaveValue('');
+    expect(screen.getByLabelText('Contact Number')).toHaveValue('');
   });
 
   it('does not offer a farm photo upload', () => {

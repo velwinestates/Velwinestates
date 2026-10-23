@@ -36,12 +36,21 @@ This application is configured to send form submissions to `velwinestates@gmail.
    SMTP_HOST=smtp.gmail.com
    SMTP_PORT=587
    SEND_EMAILS=true
+   CUSTOMER_ACKNOWLEDGEMENT_TEMPLATE=Hello {name},\n\nThank you for contacting Velwin Estates. We have received your {formType} request and our team will get back to you soon.\n\nRegards,\nVelwin Estates
+   \n If Any Queries Contact +91 8110013838
    ```
 
    `SMTP_USER` and `SMTP_PASS` are required. The host and port above use Gmail
    SMTP; for another provider, use its SMTP host, port, and credentials. The
    server sends the submission notification to `TO_EMAIL` and a separate
-   acknowledgement to the user's submitted email address when provided.
+   acknowledgement directly to the user's submitted email address when provided.
+   This acknowledgement is sent by the website; Gmail's automatic reply setting
+   does not send it on the site's behalf. The API response includes delivery
+   status for both messages and a warning if either message cannot be delivered.
+   Edit `CUSTOMER_ACKNOWLEDGEMENT_TEMPLATE` to change the confirmation text.
+   Use `{name}` and `{formType}` for the customer's name and submitted form name;
+   write `\n` where you want a line break. If unset, the default message above is
+   used. Google Sheets synchronization and email delivery run concurrently.
 
    Keep these credentials out of source control. For the hosted site, add the
    same variables to the hosting provider's server environment and redeploy;

@@ -33,6 +33,11 @@ function AboutPage() {
             <h3>Veetrivel</h3>
             <p style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>Founder</p>
           </div>
+          <div className="team-member">
+            <img src={imageUrls.prasanth} alt="Prasanth K K" />
+            <h3>Prasanth K K</h3>
+            <p style={{ color: 'var(--primary-color)', fontWeight: 'bold' }}>Operations Manager </p>
+          </div>
         </div>
       </section>
     </div>

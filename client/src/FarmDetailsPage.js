@@ -20,6 +20,8 @@ export default function FarmDetailsPage() {
   });
   const [marker, setMarker] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState('');
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -41,12 +43,15 @@ export default function FarmDetailsPage() {
     return marker ? <Marker position={marker} /> : null;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    if (isSubmitting) return;
     if (!isValidPhone(form.contact)) {
       alert('Please enter a valid 10-digit phone number');
       return;
     }
+    setIsSubmitting(true);
+    setSubmissionError('');
     
     // Prepare email data with ALL fields for Google Sheets
     const emailData = {
@@ -70,48 +75,38 @@ export default function FarmDetailsPage() {
     };
 
     // Send email
-    fetch(apiUrl('/api/send-email'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(emailData),
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Farm details submitted successfully:', data);
+    try {
+      const response = await fetch(apiUrl('/api/send-email'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Farm details could not be submitted.');
+      }
+      console.log('Farm details submitted successfully:', result);
+      setForm({
+        ownerName: '',
+        email: '',
+        contact: '',
+        address: '',
+        area: '',
+        crop: '',
+        irrigationType: '',
+        notes: '',
+        location: null
+      });
+      setMarker(null);
       setSubmitted(true);
-      
-      // Store notification in sessionStorage for home page
-      if (typeof window !== 'undefined' && window.sessionStorage) {
-        sessionStorage.setItem('farmSubmitNotification', JSON.stringify({
-          show: true,
-          success: true,
-          message: `Thank you ${form.ownerName}! Your farm details have been submitted successfully. We'll contact you soon.`
-        }));
-      }
-      
-      // Redirect to home page after 1 second
-      setTimeout(() => {
-        navigate('/');
-      }, 1000);
-    })
-    .catch(error => {
+    } catch (error) {
       console.error('Error submitting farm details:', error);
-      
-      // Store error notification
-      if (typeof window !== 'undefined' && window.sessionStorage) {
-        sessionStorage.setItem('farmSubmitNotification', JSON.stringify({
-          show: true,
-          success: false,
-          message: 'There was an error submitting your farm details. Please try again.'
-        }));
-      }
-      
-      setTimeout(() => {
-        navigate('/');
-      }, 1000);
-    });
+      setSubmissionError(error.message || 'There was an error submitting your farm details. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -167,10 +162,11 @@ export default function FarmDetailsPage() {
             <textarea name="notes" value={form.notes} onChange={handleChange} style={{width:'100%',padding:'0.85rem 1rem',borderRadius:'10px',border:'2px solid #e0e0e0',fontSize:'1em',transition:'all 0.3s ease',outline:'none',background:'rgba(255,255,255,0.9)',minHeight:'60px',resize:'vertical'}} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
           </div>
           <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.75rem' }}>
-            <button type="submit" style={{ flex: 1, padding:'1rem', background:'linear-gradient(135deg, var(--primary-color), var(--primary-dark))', color:'white', border:'none', borderRadius:'10px', fontWeight:600, fontSize:'1.05em', cursor:'pointer', boxShadow:'0 4px 15px rgba(46,125,50,0.3)', transition:'all 0.3s ease' }} onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>Submit Farm Details</button>
+            <button type="submit" disabled={isSubmitting} style={{ flex: 1, padding:'1rem', background:'linear-gradient(135deg, var(--primary-color), var(--primary-dark))', color:'white', border:'none', borderRadius:'10px', fontWeight:600, fontSize:'1.05em', cursor:isSubmitting ? 'wait' : 'pointer', boxShadow:'0 4px 15px rgba(46,125,50,0.3)', transition:'all 0.3s ease' }} onMouseEnter={(e) => { if (!isSubmitting) e.target.style.transform = 'translateY(-2px)'; }} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>{isSubmitting ? 'Submitting...' : 'Submit Farm Details'}</button>
             <button type="button" onClick={() => navigate('/')} style={{ flex: 1, padding:'1rem', background:'#c62828', color:'white', border:'none', borderRadius:'10px', fontWeight:600, fontSize:'1.05em', cursor:'pointer' }}>Cancel</button>
           </div>
         </form>
+        {submissionError && <div role="alert" style={{ color: '#c62828', marginTop: '1rem', textAlign: 'center' }}>{submissionError}</div>}
         {submitted && <div style={{textAlign:'center',marginTop:'2rem',padding:'1.5rem',background:'rgba(21,128,61,0.1)',borderRadius:'10px',color:'var(--primary-color)'}}><div style={{fontSize:'2em',marginBottom:'0.5rem'}}>✓</div><div style={{fontWeight:600}}>Thank you! We received your farm details.</div></div>}
       </div>
     </div>

@@ -615,6 +615,13 @@
     padding: var(--spacing-md);
     width: 95%;
   }
+
+  .projects-page .gallery-project-card .project-info {
+    width: calc(100% - 2rem);
+    min-width: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
   
   .step-card,
   .trust-card {

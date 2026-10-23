@@ -36,6 +36,25 @@ function HomePage() {
         </div>
       </section>
 
+<section className="home-visit-band">
+        <div>
+          <span className="section-kicker">SITE VISIT & FARM CONSULTATION</span>
+          <h2>Get expert guidance for your land.</h2>
+          <p>Our team conducts on-site visits to evaluate your land, understand your
+      objectives, and discuss suitable solutions for your project. Site visits
+      are available by prior appointment only. The applicable consultation fee
+      must be paid in full in advance to confirm your booking.
+      All visit charges are fixed and strictly non-negotiable.</p>
+        </div>
+        <div className="home-visit-prices">
+          <span>Up to 25 km <strong>₹2,999</strong></span>
+          <span>26–50 km <strong>₹4,999</strong></span>
+          <span>51–75 km <strong>₹7,499</strong></span>
+          <span>76–100 km <strong>₹9,999</strong></span>
+          <Link to="/book-team" className="home-action-primary">Schedule a site visit <FaArrowRight aria-hidden="true" /></Link>
+        </div>
+      </section>
+
       <section className="what-we-do-section home-section">
         <div className="section-heading">
             <div className="section-heading-container">
@@ -74,8 +93,8 @@ function HomePage() {
           <div className="home-astrology-content">
             <p>
               Receive thoughtful, personalised guidance rooted in traditional astrology.
-              Consultations can cover birth-chart insights, important life questions, and
-              choosing auspicious timings for special occasions.
+              Consultations can cover birth-chart insights, important life questions, Gem 
+              Stones, and choosing auspicious timings for special occasions.
             </p>
           </div>
           <div className="home-astrology-contact">
@@ -141,18 +160,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="home-visit-band">
-        <div>
-          <span className="section-kicker">SITE VISIT & FARM CONSULTATION</span>
-          <h2>Start with a clear view of your land.</h2>
-          <p>Our team visits your site, understands your requirements, and discusses practical next steps. Advance booking is required.</p>
-        </div>
-        <div className="home-visit-prices">
-          <span>Up to 50 km <strong>₹4,999</strong></span>
-          <span>50–100 km <strong>₹9,999</strong></span>
-          <Link to="/book-team" className="home-action-primary">Book a site visit <FaArrowRight aria-hidden="true" /></Link>
-        </div>
-      </section>
+      
 
       <section className="home-final-cta">
         <span className="section-kicker">LET’S GROW TOGETHER</span>

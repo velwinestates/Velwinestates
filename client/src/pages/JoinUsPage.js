@@ -48,6 +48,7 @@ export default function JoinUsPage() {
 
   const [errors, setErrors] = useState({});
   const [submitStatus, setSubmitStatus] = useState({ show: false, success: false, message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -104,7 +105,8 @@ export default function JoinUsPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    if (!isSubmitting && validateForm()) {
+      setIsSubmitting(true);
       // Prepare email data
       const emailData = {
         formType: userType === 'farmer' ? 'Register as Farmer' : 'Register as Worker/Contractor',
@@ -147,29 +149,29 @@ export default function JoinUsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(emailData)
       })
-      .then(res => res.json())
+      .then(async res => {
+        const result = await res.json().catch(() => ({}));
+        if (!res.ok || !result.success) {
+          throw new Error(result.error || 'Registration could not be submitted.');
+        }
+        return result;
+      })
       .then(emailResult => {
         console.log('Registration submitted successfully:', emailResult);
-        // Check if there's an error in the response
-        if (emailResult.error) {
-          console.error('Server error:', emailResult.error);
-          setSubmitStatus({
-            show: true,
-            success: false,
-            message: 'Registration submitted, but there was an issue. Please contact us if you don\'t receive confirmation.'
-          });
-        } else {
-          setSubmitStatus({
-            show: true,
-            success: true,
-            message: `Thank you! Your registration as a ${userType} has been submitted successfully. We'll contact you soon.`
-          });
-          // Reset form after 3 seconds
-          setTimeout(() => {
-            resetForm();
-            setSubmitStatus({ show: false, success: false, message: '' });
-          }, 3000);
-        }
+        setFormData({
+          fullName: '', email: '', phone: '', address: '', city: '', state: '', pincode: '',
+          farmName: '', farmSize: '', cropTypes: '', farmingExperience: '', irrigationType: '', currentChallenges: '',
+          workerType: '', experience: '', skills: '', vehicleOwned: '', availability: '', previousWork: '', idProof: '', expectedSalary: ''
+        });
+        setErrors({});
+        setSubmitStatus({
+          show: true,
+          success: true,
+          message: `Thank you! Your registration as a ${userType} has been submitted successfully. We'll contact you soon.`
+        });
+        setTimeout(() => {
+          resetForm();
+        }, 3000);
       })
       .catch(err => {
         console.error('Failed to submit registration:', err);
@@ -178,6 +180,9 @@ export default function JoinUsPage() {
           success: false,
           message: 'There was a network error. Please check your connection and try again.'
         });
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
     }
   };
@@ -638,12 +643,14 @@ export default function JoinUsPage() {
                   fontSize: '18px',
                   transition: 'all 0.3s ease'
                 }}
-                disabled={submitStatus.show && submitStatus.success}
+                disabled={isSubmitting || (submitStatus.show && submitStatus.success)}
               >
-                {submitStatus.show && submitStatus.success 
+                {isSubmitting
+                  ? 'Submitting...'
+                  : (submitStatus.show && submitStatus.success
                   ? 'Registration Submitted ✓' 
                   : (userType === 'farmer' ? 'Register My Farm' : 'Apply as Partner')
-                }
+                )}
               </button>
             </div>
           </div>

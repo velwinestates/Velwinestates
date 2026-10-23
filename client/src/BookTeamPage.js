@@ -20,6 +20,7 @@ export default function BookTeamPage() {
   const [form, setForm] = useState(initialForm);
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmationEmailQueued, setConfirmationEmailQueued] = useState(false);
   const [notification, setNotification] = useState({ show: false, success: false, message: '' });
   const formRef = useRef(null);
 
@@ -66,7 +67,7 @@ export default function BookTeamPage() {
         body: payload
       });
       const result = await response.json().catch(() => ({}));
-      if (!response.ok) {
+      if (!response.ok || !result.success) {
         const error = new Error(result.error || 'Unable to submit booking request.');
         error.storedLocally = result.storedLocally === true;
         error.warning = result.warning;
@@ -76,10 +77,11 @@ export default function BookTeamPage() {
       formRef.current?.reset();
       setForm(initialForm);
       setSubmitted(true);
+      setConfirmationEmailQueued(Boolean(result.emailQueued && form.email));
       setNotification({
         show: true,
         success: true,
-        message: result.warning || `Thank you ${form.name}! Your team booking request has been submitted successfully. Our team will contact you soon!`
+        message: result.warning || `Thank you ${form.name}! Your team booking request has been received. Our team will contact you soon.${result.emailQueued && form.email ? ' A confirmation email is being processed.' : ''}`
       });
       setTimeout(() => setNotification({ show: false, success: false, message: '' }), 5000);
     } catch (error) {
@@ -184,7 +186,7 @@ export default function BookTeamPage() {
             {isSubmitting ? 'Submitting...' : 'Submit Booking Request'}
           </button>
         </form>
-        {submitted && <div role="status" style={{ color: 'var(--primary-color)', marginTop: 20, textAlign: 'center', fontWeight: 'bold' }}>Thank you! We received your details.</div>}
+        {submitted && <div role="status" style={{ color: 'var(--primary-color)', marginTop: 20, textAlign: 'center', fontWeight: 'bold' }}>Thank you! We received your details.{confirmationEmailQueued ? ' Your email confirmation is being processed.' : ''}</div>}
       </div>
       
       {/* Toast Notification */}

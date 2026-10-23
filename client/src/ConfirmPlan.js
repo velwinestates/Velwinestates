@@ -28,6 +28,7 @@ function ConfirmPlan() {
     return null;
   }
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState({ show: false, success: false, message: '' });
 
   const handleChange = (e) => {
@@ -35,13 +36,14 @@ function ConfirmPlan() {
     setForm(prev => ({ ...prev, [name]: name === 'phone' ? sanitizePhone(value) : value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     if (!isValidPhone(form.phone)) {
       alert('Please enter a valid 10-digit phone number');
       return;
     }
-    setSubmitted(true);
+    setIsSubmitting(true);
     
     // Prepare email data
     const emailData = {
@@ -60,26 +62,36 @@ function ConfirmPlan() {
       }
     };
 
-    // Send email
-    fetch(apiUrl('/api/send-email'), {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(emailData),
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+      const response = await fetch(apiUrl('/api/send-email'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to submit farm management plan.');
+      }
+
       console.log('Farm management plan submitted successfully:', data);
+      setForm({
+        name: '',
+        phone: '',
+        email: '',
+        landLocation: '',
+        landSize: '',
+        coordinates: null
+      });
+      setSubmitted(true);
       setNotification({ 
         show: true, 
         success: true, 
         message: `Thank you ${form.name}! Your ${planType} plan has been confirmed successfully. We'll guide you through the next steps!` 
       });
       
-      // Reset form after 3 seconds
       setTimeout(() => {
-        setForm({ name: '', phone: '', email: '', landLocation: '', landSize: '', coordinates: null });
         setSubmitted(false);
       }, 3000);
       
@@ -87,8 +99,7 @@ function ConfirmPlan() {
       setTimeout(() => {
         setNotification({ show: false, success: false, message: '' });
       }, 3000);
-    })
-    .catch(error => {
+    } catch (error) {
       console.error('Error submitting farm management plan:', error);
       setNotification({ 
         show: true, 
@@ -98,7 +109,9 @@ function ConfirmPlan() {
       setTimeout(() => {
         setNotification({ show: false, success: false, message: '' });
       }, 3000);
-    });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -150,7 +163,7 @@ function ConfirmPlan() {
               <FaCheckCircle style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary-color)', fontSize: '1.1em' }} />
               <input type="text" name="landSize" value={form.landSize} onChange={handleChange} placeholder="Land Size (in acres)" required style={{ width: '100%', padding: '0.85rem 1rem 0.85rem 3rem', borderRadius: '10px', border: '2px solid #e0e0e0', fontSize: '1em', transition: 'all 0.3s ease', outline: 'none', background: 'rgba(255,255,255,0.9)' }} onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'} onBlur={(e) => e.target.style.borderColor = '#e0e0e0'} />
             </div>
-            <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '1rem', borderRadius: 10, fontWeight: 600, fontSize: '1.05em', background: 'linear-gradient(135deg, var(--primary-color), var(--primary-dark))', color: 'white', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', boxShadow: '0 4px 15px rgba(46, 125, 50, 0.3)', marginTop: '0.5rem' }} onMouseEnter={(e) => e.target.style.transform = 'translateY(-2px)'} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>Confirm Plan</button>
+            <button type="submit" className="btn btn-primary" disabled={isSubmitting} style={{ width: '100%', padding: '1rem', borderRadius: 10, fontWeight: 600, fontSize: '1.05em', background: 'linear-gradient(135deg, var(--primary-color), var(--primary-dark))', color: 'white', border: 'none', cursor: isSubmitting ? 'wait' : 'pointer', transition: 'all 0.3s ease', boxShadow: '0 4px 15px rgba(46, 125, 50, 0.3)', marginTop: '0.5rem' }} onMouseEnter={(e) => { if (!isSubmitting) e.target.style.transform = 'translateY(-2px)'; }} onMouseLeave={(e) => e.target.style.transform = 'translateY(0)'}>{isSubmitting ? 'Submitting...' : 'Confirm Plan'}</button>
           </form>
         ) : (
           <div style={{ textAlign: 'center', padding: '2.5rem 0' }}>

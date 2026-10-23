@@ -20,6 +20,7 @@ export default function CompaniesPage() {
     quantity: 1
   });
   const [orderSubmitted, setOrderSubmitted] = useState(false);
+  const [isSubmittingOrder, setIsSubmittingOrder] = useState(false);
 
   const loadCompanies = () => {
     setLoading(true);
@@ -87,6 +88,8 @@ export default function CompaniesPage() {
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmittingOrder) return;
+    setIsSubmittingOrder(true);
     try {
       const orderData = {
         companyId: selectedProduct.companyId,
@@ -123,7 +126,10 @@ export default function CompaniesPage() {
         body: JSON.stringify(orderData)
       });
 
-      if (!response.ok) throw new Error('Failed to send order notification');
+      const emailResult = await response.json().catch(() => ({}));
+      if (!response.ok || !emailResult.success) {
+        throw new Error(emailResult.error || 'Failed to submit order notification');
+      }
       setOrderSubmitted(true);
       setOrderForm({ name: '', phone: '', email: '', address: '', quantity: 1 });
       setTimeout(() => {
@@ -133,6 +139,8 @@ export default function CompaniesPage() {
     } catch (error) {
       console.error('Error submitting order:', error);
       alert('Failed to submit order. Please check your connection and try again.');
+    } finally {
+      setIsSubmittingOrder(false);
     }
   };
 
@@ -643,7 +651,8 @@ export default function CompaniesPage() {
                       name="email"
                       value={orderForm.email}
                       onChange={handleOrderFormChange}
-                      style={{ 
+                      required
+                      style={{
                         width: '100%', 
                         padding: '0.7rem', 
                         borderRadius: 8, 
@@ -697,6 +706,7 @@ export default function CompaniesPage() {
 
                   <button
                     type="submit"
+                    disabled={isSubmittingOrder}
                     style={{
                       width: '100%',
                       background: 'var(--primary-color)',
@@ -706,13 +716,13 @@ export default function CompaniesPage() {
                       borderRadius: 8,
                       fontSize: '1.1rem',
                       fontWeight: 'bold',
-                      cursor: 'pointer',
+                      cursor: isSubmittingOrder ? 'wait' : 'pointer',
                       transition: 'background 0.3s ease'
                     }}
-                    onMouseEnter={e => e.target.style.background = 'var(--primary-dark)'}
+                    onMouseEnter={e => { if (!isSubmittingOrder) e.target.style.background = 'var(--primary-dark)'; }}
                     onMouseLeave={e => e.target.style.background = 'var(--primary-color)'}
                   >
-                    Place Order
+                    {isSubmittingOrder ? 'Submitting...' : 'Place Order'}
                   </button>
                 </form>
               </>

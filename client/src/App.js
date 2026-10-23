@@ -126,6 +126,7 @@ function App() {
   });
   const [projectSubmitted, setProjectSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingSoilTest, setIsSubmittingSoilTest] = useState(false);
 
   const handleProjectInput = (e) => {
     const { name, value } = e.target;
@@ -177,22 +178,26 @@ function App() {
     setSoilTestForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSoilTestSubmit = (e) => {
+  const handleSoilTestSubmit = async (e) => {
     e.preventDefault();
-    postToApi({
-      formType: 'Soil Test',
-      name: soilTestForm.name,
-      email: soilTestForm.email,
-      phone: soilTestForm.phone,
-      extra: { farmLocation: soilTestForm.farmLocation, farmSize: soilTestForm.farmSize }
-    }).then(() => {
+    setIsSubmittingSoilTest(true);
+    try {
+      await postToApi({
+        formType: 'Soil Test',
+        name: soilTestForm.name,
+        email: soilTestForm.email,
+        phone: soilTestForm.phone,
+        extra: { farmLocation: soilTestForm.farmLocation, farmSize: soilTestForm.farmSize }
+      });
       alert('Soil Test Scheduled! We will contact you soon.');
       setShowSoilTestModal(false);
       setSoilTestForm({ name: '', phone: '', email: '', farmLocation: '', farmSize: '' });
-    }).catch(err => {
+    } catch (err) {
       console.error(err);
       alert('Failed to schedule soil test. Please try again later.');
-    });
+    } finally {
+      setIsSubmittingSoilTest(false);
+    }
   };
 
   // helper to POST to backend
@@ -210,7 +215,11 @@ function App() {
         const errorText = await res.text();
         throw new Error(`Server error: ${res.status} - ${errorText}`);
       }
-      return res.json();
+      const result = await res.json();
+      if (!result.success) {
+        throw new Error(result.error || 'The server did not accept the submission.');
+      }
+      return result;
     } catch (error) {
       console.error('API Error:', error);
       throw error;
@@ -240,6 +249,7 @@ function App() {
         soilTestForm={soilTestForm}
         handleSoilTestChange={handleSoilTestChange}
         handleSoilTestSubmit={handleSoilTestSubmit}
+        isSubmittingSoilTest={isSubmittingSoilTest}
         showProjectForm={showProjectForm}
         setShowProjectForm={setShowProjectForm}
         projectForm={projectForm}
@@ -255,7 +265,7 @@ function App() {
 function AppContent({
   notification, isMenuOpen, setIsMenuOpen, currentSlide,
   showSoilTestModal, setShowSoilTestModal, soilTestForm, 
-  handleSoilTestChange, handleSoilTestSubmit, showProjectForm, 
+  handleSoilTestChange, handleSoilTestSubmit, isSubmittingSoilTest, showProjectForm, 
   setShowProjectForm, projectForm, handleProjectInput, 
   handleProjectSubmit, projectSubmitted, isSubmitting 
 }) {
@@ -539,8 +549,8 @@ function AppContent({
                     <input type="text" name="farmSize" value={soilTestForm.farmSize} onChange={handleSoilTestChange} required placeholder="e.g., 5" />
                   </label>
                   <div className="form-actions">
-                    <button type="submit" className="btn btn-primary">Submit</button>
-                    <button type="button" className="btn btn-secondary" onClick={() => setShowSoilTestModal(false)}>Cancel</button>
+                    <button type="submit" className="btn btn-primary" disabled={isSubmittingSoilTest}>{isSubmittingSoilTest ? 'Submitting...' : 'Submit'}</button>
+                    <button type="button" className="btn btn-secondary" onClick={() => setShowSoilTestModal(false)} disabled={isSubmittingSoilTest}>Cancel</button>
                   </div>
                 </form>
               </div>

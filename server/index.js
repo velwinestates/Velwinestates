@@ -1393,7 +1393,7 @@ app.post('/api/send-email', (req, res, next) => {
     const submission = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
       receivedAt: now,
-      toEmail: req.body?.toEmail || process.env.TO_EMAIL || 'velwinestates@gmail.com',
+      toEmail: process.env.TO_EMAIL || 'velwinestates@gmail.com',
       subject,
       payload: req.body?.payload || req.body,
       metadata: {
@@ -1410,6 +1410,75 @@ app.post('/api/send-email', (req, res, next) => {
 
     console.log('� Form submission received:', { formType, name, subject });
 
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+    const emailDeliveryPromise = (async () => {
+      let businessEmailSent = false;
+      let customerAcknowledgementSent = false;
+
+      if (!smtpUser || !smtpPass || process.env.SEND_EMAILS === 'false') {
+        console.warn('⚠️ SMTP is not configured; submission was stored but no email was sent');
+        return { businessEmailSent, customerAcknowledgementSent, smtpConfigured: false };
+      }
+
+      const fromEmail = process.env.FROM_EMAIL || smtpUser;
+      const notificationRecipient = process.env.TO_EMAIL || 'velwinestates@gmail.com';
+      const transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        port: Number(process.env.SMTP_PORT || 587),
+        secure: String(process.env.SMTP_PORT || '587') === '465',
+        auth: { user: smtpUser, pass: smtpPass }
+      });
+
+      const deliveries = [
+        transporter.sendMail({
+          from: fromEmail,
+          to: notificationRecipient,
+          replyTo: customerEmail || undefined,
+          subject,
+          text: JSON.stringify(removeEmptyFields(req.body), null, 2)
+        }).then(() => {
+          console.log('✅ Notification email sent');
+          businessEmailSent = true;
+        }).catch(emailError => {
+          console.error('❌ Notification email failed:', emailError.message);
+          warnings.push('Your request was saved, but the notification email to Velwin Estates could not be delivered.');
+        })
+      ];
+
+      if (customerEmail) {
+        const acknowledgementTemplate = process.env.CUSTOMER_ACKNOWLEDGEMENT_TEMPLATE
+          || 'Hello {name},\\n\\nThank you for contacting Velwin Estates. We have received your {formType} request and our team will get back to you soon.\\n\\nRegards,\\nVelwin Estates';
+        const acknowledgement = acknowledgementTemplate
+          .replace(/\\n/g, '\n')
+          .replace(/\{name\}/g, name !== 'Unknown' ? name : 'there')
+          .replace(/\{formType\}/g, formType);
+        deliveries.push(
+          transporter.sendMail({
+            from: fromEmail,
+            to: customerEmail,
+            replyTo: notificationRecipient,
+            subject: `We received your ${formType} request`,
+            text: acknowledgement
+          }).then(() => {
+            console.log('✅ Customer acknowledgement email sent');
+            customerAcknowledgementSent = true;
+          }).catch(emailError => {
+            console.error('❌ Customer acknowledgement email failed:', emailError.message);
+            warnings.push('Your request was saved, but the confirmation email could not be delivered to your email address.');
+          })
+        );
+      }
+
+      await Promise.all(deliveries);
+      return { businessEmailSent, customerAcknowledgementSent, smtpConfigured: true };
+    })();
+
+    const emailQueued = Boolean(smtpUser && smtpPass && process.env.SEND_EMAILS !== 'false');
+    if (!emailQueued) {
+      warnings.push('Your submission was saved, but email delivery is not configured.');
+    }
+    const backgroundWork = (async () => {
     // Send data to Google Sheets for storage
     const googleSheetsUrl = process.env.GOOGLE_SHEETS_URL;
     const googleSheetsSecret = process.env.GOOGLE_SHEETS_SECRET;
@@ -1500,54 +1569,24 @@ app.post('/api/send-email', (req, res, next) => {
       warnings.push('Your request was saved locally, but it could not be synced to the backup service. Our team will follow up.');
     }
 
-    const smtpUser = process.env.SMTP_USER;
-    const smtpPass = process.env.SMTP_PASS;
-    if (smtpUser && smtpPass && process.env.SEND_EMAILS !== 'false') {
-      const fromEmail = process.env.FROM_EMAIL || smtpUser;
-      const notificationRecipient = req.body?.toEmail || process.env.TO_EMAIL || 'velwinestates@gmail.com';
-      const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST || 'smtp.gmail.com',
-        port: Number(process.env.SMTP_PORT || 587),
-        secure: String(process.env.SMTP_PORT || '587') === '465',
-        auth: { user: smtpUser, pass: smtpPass }
-      });
-
-      try {
-        await transporter.sendMail({
-          from: fromEmail,
-          to: notificationRecipient,
-          replyTo: customerEmail || undefined,
-          subject,
-          text: JSON.stringify(removeEmptyFields(req.body), null, 2)
-        });
-        console.log('✅ Notification email sent');
-      } catch (emailError) {
-        console.error('❌ Notification email failed:', emailError.message);
-      }
-
-      if (customerEmail) {
-        try {
-          await transporter.sendMail({
-            from: fromEmail,
-            to: customerEmail,
-            replyTo: notificationRecipient,
-            subject: `We received your ${formType} request`,
-            text: `Hello${name !== 'Unknown' ? ` ${name}` : ''},\n\nThank you for contacting Velwin Estates. We have received your ${formType} request and our team will get back to you soon.\n\nRegards,\nVelwin Estates`
-          });
-          console.log('✅ Customer acknowledgement email sent');
-        } catch (emailError) {
-          console.error('❌ Customer acknowledgement email failed:', emailError.message);
-        }
-      }
-    } else {
-      console.warn('⚠️ SMTP is not configured; submission was stored but no email was sent');
-    }
-
+    const emailDelivery = await emailDeliveryPromise;
     console.log('✅ Submission stored locally and processing completed');
-    return res.json({
+    console.log('📨 Submission processing result:', {
+      submissionId: submission.id,
+      googleSheetsSaved,
+      ...emailDelivery
+    });
+    })();
+
+    backgroundWork.catch(error => {
+      console.error(`❌ Background processing failed for submission ${submission.id}:`, error.message);
+    });
+
+    return res.status(202).json({
       success: true,
-      message: 'Submission stored successfully',
-      storedLocally: !googleSheetsSaved,
+      message: 'Your submission was received and saved. Email notifications are processing.',
+      submissionId: submission.id,
+      emailQueued,
       warning: warnings.length ? warnings.join(' ') : undefined
     });
   } catch (error) {
